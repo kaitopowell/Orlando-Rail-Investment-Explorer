@@ -1,53 +1,129 @@
 import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
+import { addCountyLayers } from "./countyLayers";
+import type { Feature, Polygon, MultiPolygon } from "geojson";
 import { MapboxOverlay } from "@deck.gl/mapbox";
+import {
+  countyBounds,
+  frameStudyArea,
+  type Bounds,
+  type Counties,
+} from "./studyArea";
 
-const center: [number, number] = [-81.3792, 28.5383];
-export default function MapView() {
+export default function MapView({
+  sidebarOpen,
+  countiesVisible,
+}: {
+  sidebarOpen: boolean;
+  countiesVisible: boolean;
+}) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
+  const boundsRef = useRef<Bounds | null>(null);
+  const sidebarRef = useRef(sidebarOpen);
+  const countiesVisibleRef = useRef(countiesVisible);
+  const layersRef = useRef<ReturnType<typeof addCountyLayers> | null>(null);
+  useEffect(() => {
+    countiesVisibleRef.current = countiesVisible;
+    layersRef.current?.setVisible(countiesVisible);
+  }, [countiesVisible]);
   const [status, setStatus] = useState<"loading" | "ready" | "error">(
     "loading",
   );
+  const [dataError, setDataError] = useState(false);
   useEffect(() => {
-    if (!container.current) return;
-    let map: maplibregl.Map;
-    try {
-      map = new maplibregl.Map({
-        container: container.current,
-        center,
-        zoom: 10.2,
-        minZoom: 2,
-        maxZoom: 18,
-        style:
-          "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
-        attributionControl: false,
-      });
-    } catch {
-      setStatus("error");
-      return;
+    sidebarRef.current = sidebarOpen;
+    if (mapRef.current && boundsRef.current)
+      frameStudyArea(mapRef.current, boundsRef.current, sidebarOpen);
+  }, [sidebarOpen]);
+  useEffect(() => {
+    const controller = new AbortController();
+    let disposed = false;
+    let map: maplibregl.Map | undefined;
+    let timeout: number | undefined;
+    async function initialize() {
+      let data: Counties;
+      let outside: Feature<Polygon | MultiPolygon>;
+      try {
+        const response = await fetch("/data/counties.geojson", {
+          signal: controller.signal,
+        });
+        if (!response.ok) throw new Error("County data unavailable");
+        data = await response.json();
+        boundsRef.current = countyBounds(data);
+        const maskResponse = await fetch("/data/outside-counties.geojson", {
+          signal: controller.signal,
+        });
+        if (!maskResponse.ok) throw new Error("County mask unavailable");
+        outside = await maskResponse.json();
+      } catch {
+        if (!disposed) {
+          setDataError(true);
+          setStatus("error");
+        }
+        return;
+      }
+      if (disposed || !container.current) return;
+      try {
+        map = new maplibregl.Map({
+          container: container.current,
+          maxZoom: 18,
+          maxPitch: 0,
+          dragRotate: false,
+          touchPitch: false,
+          renderWorldCopies: false,
+          style:
+            "https://basemaps.cartocdn.com/gl/dark-matter-gl-style/style.json",
+          attributionControl: false,
+        });
+        map.touchZoomRotate.disableRotation();
+        mapRef.current = map;
+        frameStudyArea(map, boundsRef.current!, sidebarRef.current);
+        map.addControl(new MapboxOverlay({ interleaved: false, layers: [] }));
+        map.addControl(
+          new maplibregl.NavigationControl({ showCompass: false }),
+          "bottom-right",
+        );
+        map.addControl(
+          new maplibregl.AttributionControl({ compact: true }),
+          "bottom-right",
+        );
+        map.on("load", () => {
+          if (!map || disposed) return;
+          layersRef.current = addCountyLayers(
+            map,
+            data,
+            outside,
+            countiesVisibleRef.current,
+          );
+          setStatus("ready");
+        });
+        map.on("error", () => setStatus("error"));
+        map.on("resize", () => {
+          if (map && boundsRef.current)
+            frameStudyArea(map, boundsRef.current, sidebarRef.current);
+        });
+        // A development-only event lets browser tests inspect real camera constraints.
+        if (import.meta.env.DEV)
+          window.dispatchEvent(
+            new CustomEvent("orbit:map-ready", { detail: map }),
+          );
+        timeout = window.setTimeout(() => {
+          if (map && !map.isStyleLoaded()) setStatus("error");
+        }, 20000);
+      } catch {
+        setStatus("error");
+      }
     }
-    mapRef.current = map;
-    // Empty by design: validated analytical layers will be supplied here later.
-    const overlay = new MapboxOverlay({ interleaved: false, layers: [] });
-    map.addControl(overlay);
-    map.addControl(
-      new maplibregl.NavigationControl({ visualizePitch: true }),
-      "bottom-right",
-    );
-    map.addControl(
-      new maplibregl.AttributionControl({ compact: true }),
-      "bottom-right",
-    );
-    map.on("load", () => setStatus("ready"));
-    map.on("error", () => setStatus("error"));
-    const timeout = window.setTimeout(() => {
-      if (!map.isStyleLoaded()) setStatus("error");
-    }, 20000);
+    void initialize();
     return () => {
+      disposed = true;
+      controller.abort();
       window.clearTimeout(timeout);
+      layersRef.current?.destroy();
+      layersRef.current = null;
       mapRef.current = null;
-      map.remove();
+      map?.remove();
     };
   }, []);
   return (
@@ -63,31 +139,29 @@ export default function MapView() {
           ? "BASEMAP LIVE"
           : status === "loading"
             ? "LOADING BASEMAP"
-            : "BASEMAP UNAVAILABLE"}
+            : "MAP UNAVAILABLE"}
       </div>
       {status === "error" && (
         <div className="map-error" role="alert">
-          Map resources could not load. Check network access to CARTO and WebGL
-          support, then reload. No analytical data is shown.
+          {dataError
+            ? "County boundaries could not load. Reload to retry; the regional map is unavailable."
+            : "Map resources could not load. Check network access to CARTO and WebGL support, then reload."}
         </div>
       )}
       <button
         className="recenter"
-        onClick={() =>
-          mapRef.current?.flyTo({
-            center,
-            zoom: 10.2,
-            pitch: 0,
-            bearing: 0,
-            duration: window.matchMedia("(prefers-reduced-motion: reduce)")
-              .matches
-              ? 0
-              : 900,
-          })
-        }
+        disabled={dataError}
+        onClick={() => {
+          if (mapRef.current && boundsRef.current)
+            frameStudyArea(
+              mapRef.current,
+              boundsRef.current,
+              sidebarRef.current,
+            );
+        }}
         aria-label="Recenter map on Greater Orlando"
       >
-        ⌖ <span>ORLANDO</span>
+        ⌖ <span>FOUR COUNTIES</span>
       </button>
     </>
   );
