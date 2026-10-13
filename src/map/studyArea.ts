@@ -1,5 +1,6 @@
 import type { FeatureCollection, Polygon, MultiPolygon } from "geojson";
-import type { Map as MapLibreMap, LngLatBoundsLike } from "maplibre-gl";
+import { LngLat, type Map as MapLibreMap } from "maplibre-gl";
+import { orlandoLandmarks, framingConfig } from "../config/mapViews";
 
 export type Counties = FeatureCollection<
   Polygon | MultiPolygon,
@@ -35,36 +36,110 @@ export function countyBounds(data: Counties): Bounds {
   return bounds;
 }
 
-// Derive camera constraints from the geometry and available screen area, not fixed coordinates.
-export function frameStudyArea(
+export function paddedCountyBounds(bounds: Bounds): Bounds {
+  const dx =
+    (bounds[1][0] - bounds[0][0]) * framingConfig.countyBoundsPaddingRatio;
+  const dy =
+    (bounds[1][1] - bounds[0][1]) * framingConfig.countyBoundsPaddingRatio;
+  return [
+    [bounds[0][0] - dx, bounds[0][1] - dy],
+    [bounds[1][0] + dx, bounds[1][1] + dy],
+  ];
+}
+
+export function createMapFraming(
   map: MapLibreMap,
   bounds: Bounds,
-  sidebarOpen: boolean,
+  initialSidebarOpen: boolean,
 ) {
-  const mobile = map.getContainer().clientWidth <= 600;
-  const padding = {
-    top: 75,
-    bottom: 90,
-    left: mobile ? 28 : sidebarOpen ? 380 : 130,
-    right: mobile ? 28 : 70,
+  const limits = paddedCountyBounds(bounds);
+  const landmarks = Object.values(orlandoLandmarks);
+  const core: Bounds = [
+    [
+      Math.min(...landmarks.map((p) => p[0])),
+      Math.min(...landmarks.map((p) => p[1])),
+    ],
+    [
+      Math.max(...landmarks.map((p) => p[0])),
+      Math.max(...landmarks.map((p) => p[1])),
+    ],
+  ];
+  let sidebarOpen = initialSidebarOpen;
+  let mode: "orlando" | "counties" | "explore" = "orlando";
+  const clamp = (value: number, min: number, max: number) =>
+    Math.max(min, Math.min(max, value));
+  // Default maxBounds constraints force a viewport-filling zoom, clipping a tall
+  // region on ultrawide screens. Constrain the center instead; the persistent
+  // outside mask supplies letterboxing without revealing a neighboring world.
+  map.setTransformConstrain((center, zoom) => ({
+    center: new LngLat(
+      clamp(center.lng, limits[0][0], limits[1][0]),
+      clamp(center.lat, limits[0][1], limits[1][1]),
+    ),
+    zoom: clamp(zoom, map.getMinZoom(), map.getMaxZoom()),
+  }));
+  map.setMaxBounds(limits);
+  function camera(target: Bounds) {
+    const mobile =
+      map.getContainer().clientWidth <= framingConfig.mobileBreakpoint;
+    const p = framingConfig.padding;
+    return map.cameraForBounds(target, {
+      padding: {
+        top: p.top,
+        bottom: p.bottom,
+        left: mobile
+          ? p.mobileSide
+          : sidebarOpen
+            ? p.desktopSidebar
+            : p.desktopCollapsed,
+        right: mobile ? p.mobileSide : p.desktopRight,
+      },
+      bearing: 0,
+    });
+  }
+  function go(view: "orlando" | "counties", animate = true) {
+    mode = view;
+    const target = camera(view === "orlando" ? core : bounds);
+    if (target)
+      map.flyTo({
+        ...target,
+        pitch: 0,
+        duration:
+          animate &&
+          !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+            ? framingConfig.flightDuration
+            : 0,
+      });
+  }
+  function update(open = sidebarOpen) {
+    sidebarOpen = open;
+    const overview = camera(bounds);
+    if (!overview || overview.zoom === undefined) return;
+    map.setMinZoom(overview.zoom);
+    if (mode !== "explore") go(mode, false);
+  }
+  function onMove(event: object) {
+    if ("originalEvent" in event) mode = "explore";
+  }
+  function onResize() {
+    update();
+  }
+  function onOrientation() {
+    map.resize();
+    update();
+  }
+  map.on("movestart", onMove);
+  map.on("resize", onResize);
+  window.addEventListener("orientationchange", onOrientation);
+  update();
+  return {
+    update,
+    showOrlando: () => go("orlando"),
+    showCounties: () => go("counties"),
+    destroy() {
+      map.off("movestart", onMove);
+      map.off("resize", onResize);
+      window.removeEventListener("orientationchange", onOrientation);
+    },
   };
-  map.setMaxBounds(undefined);
-  map.setMinZoom(0);
-  map.fitBounds(bounds as LngLatBoundsLike, {
-    padding,
-    duration: 0,
-    bearing: 0,
-    pitch: 0,
-  });
-  const minZoom = map.getZoom();
-  // The fitted viewport already accounts for screen aspect ratio and sidebar padding.
-  // Expand it slightly so maxBounds never clips the initial fit on wide or narrow screens.
-  const visible = map.getBounds();
-  const dx = (visible.getEast() - visible.getWest()) * 0.12;
-  const dy = (visible.getNorth() - visible.getSouth()) * 0.12;
-  map.setMaxBounds([
-    [visible.getWest() - dx, visible.getSouth() - dy],
-    [visible.getEast() + dx, visible.getNorth() + dy],
-  ]);
-  map.setMinZoom(minZoom);
 }

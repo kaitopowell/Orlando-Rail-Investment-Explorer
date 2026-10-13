@@ -5,7 +5,7 @@ import type { Feature, Polygon, MultiPolygon } from "geojson";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import {
   countyBounds,
-  frameStudyArea,
+  createMapFraming,
   type Bounds,
   type Counties,
 } from "./studyArea";
@@ -21,6 +21,7 @@ export default function MapView({
   const mapRef = useRef<maplibregl.Map | null>(null);
   const boundsRef = useRef<Bounds | null>(null);
   const sidebarRef = useRef(sidebarOpen);
+  const framingRef = useRef<ReturnType<typeof createMapFraming> | null>(null);
   const countiesVisibleRef = useRef(countiesVisible);
   const layersRef = useRef<ReturnType<typeof addCountyLayers> | null>(null);
   useEffect(() => {
@@ -33,8 +34,7 @@ export default function MapView({
   const [dataError, setDataError] = useState(false);
   useEffect(() => {
     sidebarRef.current = sidebarOpen;
-    if (mapRef.current && boundsRef.current)
-      frameStudyArea(mapRef.current, boundsRef.current, sidebarOpen);
+    framingRef.current?.update(sidebarOpen);
   }, [sidebarOpen]);
   useEffect(() => {
     const controller = new AbortController();
@@ -78,7 +78,11 @@ export default function MapView({
         });
         map.touchZoomRotate.disableRotation();
         mapRef.current = map;
-        frameStudyArea(map, boundsRef.current!, sidebarRef.current);
+        framingRef.current = createMapFraming(
+          map,
+          boundsRef.current!,
+          sidebarRef.current,
+        );
         map.addControl(new MapboxOverlay({ interleaved: false, layers: [] }));
         map.addControl(
           new maplibregl.NavigationControl({ showCompass: false }),
@@ -99,10 +103,6 @@ export default function MapView({
           setStatus("ready");
         });
         map.on("error", () => setStatus("error"));
-        map.on("resize", () => {
-          if (map && boundsRef.current)
-            frameStudyArea(map, boundsRef.current, sidebarRef.current);
-        });
         // A development-only event lets browser tests inspect real camera constraints.
         if (import.meta.env.DEV)
           window.dispatchEvent(
@@ -120,6 +120,8 @@ export default function MapView({
       disposed = true;
       controller.abort();
       window.clearTimeout(timeout);
+      framingRef.current?.destroy();
+      framingRef.current = null;
       layersRef.current?.destroy();
       layersRef.current = null;
       mapRef.current = null;
@@ -148,21 +150,22 @@ export default function MapView({
             : "Map resources could not load. Check network access to CARTO and WebGL support, then reload."}
         </div>
       )}
-      <button
-        className="recenter"
-        disabled={dataError}
-        onClick={() => {
-          if (mapRef.current && boundsRef.current)
-            frameStudyArea(
-              mapRef.current,
-              boundsRef.current,
-              sidebarRef.current,
-            );
-        }}
-        aria-label="Recenter map on Greater Orlando"
-      >
-        ⌖ <span>FOUR COUNTIES</span>
-      </button>
+      <div className="view-controls" aria-label="Map views">
+        <button
+          disabled={dataError}
+          onClick={() => framingRef.current?.showOrlando()}
+          aria-label="Orlando"
+        >
+          ⌖ <span>ORLANDO</span>
+        </button>
+        <button
+          disabled={dataError}
+          onClick={() => framingRef.current?.showCounties()}
+          aria-label="Four counties"
+        >
+          ▧ <span>FOUR COUNTIES</span>
+        </button>
+      </div>
     </>
   );
 }
