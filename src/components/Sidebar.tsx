@@ -3,6 +3,8 @@ import { populationSource } from "../data/population";
 import CountyAttribution from "./CountyAttribution";
 import { plannedLayers } from "../data/layers";
 export default function Sidebar({
+  transitVisible,
+  onTransitToggle,
   open,
   onToggle,
   countiesVisible,
@@ -11,6 +13,8 @@ export default function Sidebar({
   populationStatus,
   onPopulationToggle,
 }: {
+  transitVisible: boolean;
+  onTransitToggle: () => void;
   open: boolean;
   onToggle: () => void;
   countiesVisible: boolean;
@@ -60,10 +64,10 @@ export default function Sidebar({
         <section className="layers">
           <div className="section-heading">
             <h2>Data layers</h2>
-            <span>02 LIVE / 03 PLANNED</span>
+            <span>03 LIVE / 02 PLANNED</span>
           </div>
           <p className="section-note" id="layer-note">
-            Explore county boundaries and ACS population density.
+            Explore boundaries, population density and existing rail.
           </p>
           <div className="layer-list">
             <label className="layer county-toggle">
@@ -96,6 +100,19 @@ export default function Sidebar({
                 aria-label="Population"
               />
             </label>
+            <label className="layer county-toggle">
+              <span className="layer-symbol">⌁</span>
+              <span className="layer-text">
+                <strong>Existing transit</strong>
+                <small>SunRail · Brightline (intercity)</small>
+              </span>
+              <input
+                type="checkbox"
+                checked={transitVisible}
+                onChange={onTransitToggle}
+                aria-label="Existing transit"
+              />
+            </label>
             {plannedLayers.map((layer) => (
               <label className="layer" key={layer.id}>
                 <span className="layer-symbol" aria-hidden="true">
@@ -125,6 +142,19 @@ export default function Sidebar({
                   : "Population layer available."}
           </p>
           <CountyAttribution />
+          <p className="county-attribution">
+            Transit:{" "}
+            <a href="https://corporate.sunrail.com/about-sunrail/gtfs-data-download/">
+              SunRail GTFS
+            </a>{" "}
+            ·{" "}
+            <a href="http://feed.gobrightline.com/bl_gtfs.zip">
+              Brightline GTFS
+            </a>{" "}
+            via <a href="https://www.transit.land/">Transitland</a>.<br />
+            Accessed 2026-10-13 · licenses not specified. Brightline is
+            intercity, not local baseline service.
+          </p>
           <p className="county-attribution">
             Population:{" "}
             <a href={populationSource.url} target="_blank" rel="noreferrer">

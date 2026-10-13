@@ -30,7 +30,7 @@ export default function PopulationOverlay({
   onStatus,
 }: {
   map: Map;
-  overlay: MapboxOverlay;
+  overlay: Pick<MapboxOverlay, "setProps">;
   enabled: boolean;
   onStatus: (status: PopulationStatus) => void;
 }) {

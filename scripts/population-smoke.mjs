@@ -55,7 +55,7 @@ try {
       await page.getByRole("button", { name: "Expand sidebar" }).click();
     assert.match(
       await page.locator(".section-heading").innerText(),
-      /02 LIVE \/ 03 PLANNED/,
+      /03 LIVE \/ 02 PLANNED/,
     );
     await page
       .getByRole("checkbox", { name: "Population", exact: true })
@@ -86,18 +86,18 @@ try {
     );
     assert.ok(
       await page.evaluate(() =>
-        window.solRDeck._deck.props.layers.some(
-          (l) => l.id === "population-columns",
-        ),
+        window.solRDeck._deck.props.layers
+          .flat(Infinity)
+          .some((l) => l.id === "population-columns"),
       ),
     );
     await page
       .getByRole("button", { name: "Toggle population 3D view" })
       .click();
     await page.waitForFunction(() =>
-      window.solRDeck._deck.props.layers.some(
-        (l) => l.id === "population-tracts" && l.props.extruded,
-      ),
+      window.solRDeck._deck.props.layers
+        .flat(Infinity)
+        .some((l) => l.id === "population-tracts" && l.props.extruded),
     );
     assert.equal(await page.evaluate(() => window.solRMap.getPitch()), 45);
     assert.match(
@@ -105,7 +105,7 @@ try {
       /Height and color mean density/,
     );
     const extrusions = await page.evaluate(() => {
-      const layers = window.solRDeck._deck.props.layers;
+      const layers = window.solRDeck._deck.props.layers.flat(Infinity);
       const tract = layers.find((l) => l.id === "population-tracts");
       const zero = tract.props.data.features.find(
         (f) => f.properties.pop_est === 0,
