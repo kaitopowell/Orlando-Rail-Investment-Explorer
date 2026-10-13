@@ -1,5 +1,4 @@
 import assert from "node:assert/strict";
-import { existsSync } from "node:fs";
 import { chromium } from "playwright";
 const browser = await chromium.launch({
   executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined,
@@ -80,14 +79,51 @@ try {
     );
     assert.equal(await page.evaluate(() => window.solRMap.getPitch()), 0);
     await page.waitForTimeout(250);
-    // One overview capture per device, after the zoom-scaled columns render.
-    const screenshot = `/tmp/sol-r-population-${name}.png`;
-    if (!process.env.SOL_R_REUSE_SCREENSHOTS || !existsSync(screenshot))
-      await page.screenshot({ path: screenshot });
+    assert.match(
+      await page.locator(".population-legend").innerText(),
+      /Column width adapts/,
+    );
+    assert.ok(
+      await page.evaluate(() =>
+        window.solRDeck._deck.props.layers.some(
+          (l) => l.id === "population-columns",
+        ),
+      ),
+    );
     await page
       .getByRole("button", { name: "Toggle population 3D view" })
       .click();
+    await page.waitForFunction(() =>
+      window.solRDeck._deck.props.layers.some(
+        (l) => l.id === "population-beam-core",
+      ),
+    );
     assert.equal(await page.evaluate(() => window.solRMap.getPitch()), 45);
+    assert.match(
+      await page.locator(".population-legend").innerText(),
+      /Height and brightness mean density/,
+    );
+    const beams = await page.evaluate(() => {
+      const layers = window.solRDeck._deck.props.layers;
+      const beam = layers.find((l) => l.id === "population-beam-core");
+      return {
+        count: beam.props.data.length,
+        pickable: beam.props.pickable,
+        blend: beam.props.parameters.blendColorDstFactor,
+        hasColumns: layers.some((l) => l.id === "population-columns"),
+        hasZero: beam.props.data.some((d) => d.tract.properties.pop_est === 0),
+      };
+    });
+    assert.deepEqual(beams, {
+      count: 489,
+      pickable: false,
+      blend: "one",
+      hasColumns: false,
+      hasZero: false,
+    });
+    // One 3D capture per device; no repeated overview screenshots.
+    await page.waitForTimeout(350);
+    await page.screenshot({ path: `/tmp/sol-r-beams-${name}.png` });
     // Verify real deck picking and actual click inspection, including the zero tract.
     for (const id of ["12069030102", "12095990000"]) {
       if (
@@ -103,7 +139,7 @@ try {
         window.solRMap.jumpTo({
           center: tractCentroid(f.geometry),
           zoom: 12,
-          pitch: 0,
+          pitch: 45,
         });
         return window.solRMap.project(tractCentroid(f.geometry));
       }, id);
@@ -194,7 +230,7 @@ try {
     await page.getByRole("button", { name: "Retry population" }).click();
     await page.getByLabel("Inspect tract", { exact: true }).waitFor();
     console.log(
-      `PASS ${name}: real columns, picking and click inspection including zero tract, legend, toggle cleanup, error and retry.`,
+      `PASS ${name}: 3D beams, 2D preservation, picking and click inspection including zero tract, legend, toggle cleanup, error and retry.`,
     );
     await page.close();
   }
