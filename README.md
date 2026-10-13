@@ -1,4 +1,6 @@
-# ORBIT — Orlando Rail Investment Explorer
+# SOL/R
+
+Seminole · Orange/Osceola · Lake · Rail
 
 A UCF COP4283 geographic research project exploring future rail investment in Greater Orlando. The current milestone adds a constrained four-county map and Census boundary layer; it does not produce investment recommendations.
 
@@ -22,6 +24,8 @@ npm run preview -- --host 0.0.0.0
 Full-screen MapLibre dark basemap constrained to Orange, Seminole, Lake, and Osceola counties, navigation and regional recenter controls, a default-on toggleable Census county layer, and accessible disabled placeholders for population, employment, income, and transit. Thin outlines have no visible fill; county names fade out between regional zoom and zoom 11. Hover or tap a county for its name and a subtle outline highlight. A persistent 99%-opaque dark mask hides the basemap and its labels outside the four counties. Turning the county layer off hides only outlines, county labels, and hover; the world mask and camera constraints stay active. An empty deck.gl overlay provides the integration boundary for future layers. No mock observations, demographic statistics, rail optimization, or Gaussian splatting are included.
 
 The visual direction follows the supplied description of Common Ground: restrained typography, a dark geographic canvas, subtle cyan accents, and a compact research interface. The reference page was not accessible from the development environment.
+
+See [Data sources and provenance](docs/DATA_SOURCES.md) for current geographic sources.
 
 ## Architecture
 

@@ -11,8 +11,8 @@ try {
     reducedMotion: "reduce",
   });
   await page.addInitScript(() => {
-    window.addEventListener("orbit:map-ready", (event) => {
-      window.orbitMap = event.detail;
+    window.addEventListener("sol-r:map-ready", (event) => {
+      window.solRMap = event.detail;
     });
   });
   const errors = [];
@@ -35,11 +35,11 @@ try {
       }),
     }),
   );
-  await page.goto(process.env.ORBIT_TEST_URL || "http://localhost:5173");
+  await page.goto(process.env.SOL_R_TEST_URL || "http://localhost:5173");
   await page.getByRole("status").filter({ hasText: "BASEMAP LIVE" }).waitFor();
   async function checkCamera() {
     const result = await page.evaluate(async () => {
-      const map = window.orbitMap;
+      const map = window.solRMap;
       const data = await (await fetch("/data/counties.geojson")).json();
       const points = data.features.flatMap((f) =>
         f.geometry.type === "Polygon"
@@ -94,7 +94,7 @@ try {
     name: "County boundaries",
   });
   assert.equal(await countiesToggle.isChecked(), true);
-  await page.waitForFunction(() => window.orbitMap.isSourceLoaded("counties"));
+  await page.waitForFunction(() => window.solRMap.isSourceLoaded("counties"));
   assert.equal(await page.locator(".county-label").count(), 4);
   const labelOpacity = await page
     .locator(".county-label")
@@ -105,7 +105,7 @@ try {
   const hoverPoint = await page.evaluate(async () => {
     const data = await (await fetch("/data/counties.geojson")).json();
     const orange = data.features.find((f) => f.properties.GEOID === "12095");
-    return window.orbitMap.project(orange.properties.label);
+    return window.solRMap.project(orange.properties.label);
   });
   await page.mouse.move(hoverPoint.x, hoverPoint.y);
   await page
@@ -115,22 +115,22 @@ try {
   assert.equal(
     await page.evaluate(
       () =>
-        window.orbitMap.getFeatureState({ source: "counties", id: "12095" })
+        window.solRMap.getFeatureState({ source: "counties", id: "12095" })
           .hover,
     ),
     true,
   );
-  await page.screenshot({ path: "/tmp/orbit-counties-desktop.png" });
+  await page.screenshot({ path: "/tmp/sol-r-counties-desktop.png" });
   await countiesToggle.uncheck();
   assert.equal(
     await page.evaluate(() =>
-      window.orbitMap.getLayoutProperty("county-outlines", "visibility"),
+      window.solRMap.getLayoutProperty("county-outlines", "visibility"),
     ),
     "none",
   );
   assert.equal(
     await page.evaluate(() =>
-      window.orbitMap.getPaintProperty("county-outside", "fill-opacity"),
+      window.solRMap.getPaintProperty("county-outside", "fill-opacity"),
     ),
     0.99,
   );
@@ -143,7 +143,7 @@ try {
     0,
   );
   await countiesToggle.check();
-  await page.evaluate(() => window.orbitMap.setZoom(12));
+  await page.evaluate(() => window.solRMap.setZoom(12));
   assert.equal(
     await page
       .locator(".county-label")
@@ -185,7 +185,7 @@ try {
   await page.getByRole("button", { name: "Collapse sidebar" }).click();
   await page.getByRole("button", { name: "Expand sidebar" }).click();
   await page.getByRole("button", { name: "Collapse sidebar" }).click();
-  await page.screenshot({ path: "/tmp/orbit-counties-mobile.png" });
+  await page.screenshot({ path: "/tmp/sol-r-counties-mobile.png" });
   // Also validate a fresh mobile load, including its default collapsed sidebar.
   await page.reload();
   await page.getByRole("status").filter({ hasText: "BASEMAP LIVE" }).waitFor();
@@ -208,7 +208,7 @@ try {
       .waitFor();
     const core = await page.evaluate(async () => {
       const { orlandoLandmarks } = await import("/src/config/mapViews.ts");
-      const map = window.orbitMap;
+      const map = window.solRMap;
       const left = innerWidth > 600 ? 352 : 0;
       return {
         zoom: map.getZoom(),
@@ -238,13 +238,13 @@ try {
         await import("/src/map/studyArea.ts");
       const data = await (await fetch("/data/counties.geojson")).json();
       const bounds = countyBounds(data);
-      const actual = window.orbitMap.getMaxBounds().toArray();
+      const actual = window.solRMap.getMaxBounds().toArray();
       const expected = paddedCountyBounds(bounds);
       return {
         actual,
         expected,
-        zoom: window.orbitMap.getZoom(),
-        min: window.orbitMap.getMinZoom(),
+        zoom: window.solRMap.getZoom(),
+        min: window.solRMap.getMinZoom(),
       };
     });
     assert.deepEqual(
@@ -256,7 +256,7 @@ try {
     await page.getByRole("button", { name: "Orlando", exact: true }).click();
     assert.ok(
       Math.abs(
-        (await page.evaluate(() => window.orbitMap.getZoom())) - core.zoom,
+        (await page.evaluate(() => window.solRMap.getZoom())) - core.zoom,
       ) < 0.001,
     );
     await page.evaluate(() =>
@@ -302,9 +302,9 @@ try {
   console.log(
     "PASS: missing county geometry fails closed with explicit message.",
   );
-  await page.screenshot({ path: "/tmp/orbit-mobile.png" });
+  await page.screenshot({ path: "/tmp/sol-r-mobile.png" });
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.screenshot({ path: "/tmp/orbit-desktop.png" });
+  await page.screenshot({ path: "/tmp/sol-r-desktop.png" });
 } finally {
   await browser.close();
 }
