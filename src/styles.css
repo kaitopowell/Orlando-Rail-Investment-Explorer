@@ -555,3 +555,52 @@ footer {
 .map-caption {
   z-index: 1;
 }
+
+.transit-panel {
+  position: absolute;
+  z-index: 3;
+  left: 370px;
+  bottom: 100px;
+  width: 260px;
+  padding: 14px;
+  background: rgba(9, 20, 25, 0.94);
+  border: 1px solid #365051;
+  border-radius: 10px;
+  font-size: 12px;
+  color: #b6cbc9;
+  max-height: 35vh;
+  overflow: auto;
+}
+.transit-panel h2 {
+  font-size: 14px;
+  margin: 0 0 10px;
+}
+.transit-legend {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.transit-panel select {
+  width: 100%;
+  background: #142329;
+  color: #d0e1de;
+  border: 1px solid #365051;
+  padding: 6px;
+  margin-top: 5px;
+}
+.transit-panel button {
+  background: #142329;
+  color: #d0e1de;
+  border: 1px solid #365051;
+  border-radius: 4px;
+  cursor: pointer;
+}
+@media (max-width: 600px) {
+  .transit-panel {
+    left: 12px;
+    bottom: 160px;
+    width: 230px;
+    max-height: 24vh;
+  }
+}

@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import PopulationOverlay, {
   type PopulationStatus,
 } from "../components/PopulationOverlay";
+import TransitOverlay from "../components/TransitOverlay";
+import { overlayChannels } from "./overlayChannels";
 import maplibregl from "maplibre-gl";
 import { addCountyLayers } from "./countyLayers";
 import type { Feature, Polygon, MultiPolygon } from "geojson";
@@ -18,7 +20,9 @@ export default function MapView({
   countiesVisible,
   populationVisible,
   onPopulationStatus,
+  transitVisible,
 }: {
+  transitVisible: boolean;
   sidebarOpen: boolean;
   countiesVisible: boolean;
   populationVisible: boolean;
@@ -26,7 +30,8 @@ export default function MapView({
 }) {
   const [scene, setScene] = useState<{
     map: maplibregl.Map;
-    overlay: MapboxOverlay;
+    overlay: Pick<MapboxOverlay, "setProps">;
+    transitOverlay: Pick<MapboxOverlay, "setProps">;
   } | null>(null);
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -122,7 +127,8 @@ export default function MapView({
             countiesVisibleRef.current,
           );
           layersRef.current.setInteractive(!populationVisibleRef.current);
-          setScene({ map, overlay });
+          const [populationOverlay, transitOverlay] = overlayChannels(overlay);
+          setScene({ map, overlay: populationOverlay, transitOverlay });
           setStatus("ready");
         });
         map.on("error", () => setStatus("error"));
@@ -180,6 +186,13 @@ export default function MapView({
           overlay={scene.overlay}
           enabled={populationVisible}
           onStatus={onPopulationStatus}
+        />
+      )}
+      {scene && (
+        <TransitOverlay
+          map={scene.map}
+          overlay={scene.transitOverlay}
+          enabled={transitVisible}
         />
       )}
       <div className="view-controls" aria-label="Map views">

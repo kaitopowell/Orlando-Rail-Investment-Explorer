@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "brightline_stations",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "stop_id": "MCO", "stop_code": null, "stop_name": "Orlando", "stop_desc": "Brightline Orlando Station at Orlando International Airport - Concourse C", "stop_lat": "28.411698", "stop_lon": "-81.307619", "stop_timezone": "America/New_York", "wheelchair_boarding": "1", "county": "Orange" }, "geometry": { "type": "Point", "coordinates": [ -81.307619, 28.411698 ] } }
+]
+}

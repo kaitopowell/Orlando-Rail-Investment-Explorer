@@ -80,7 +80,7 @@ try {
     .click();
   await checkCamera();
   assert.equal(await page.getByRole("checkbox").count(), 5);
-  for (const name of ["Employment", "Household income", "Existing transit"])
+  for (const name of ["Employment", "Household income"])
     assert.equal(
       await page.getByRole("checkbox", { name, exact: true }).isDisabled(),
       true,
@@ -154,7 +154,10 @@ try {
       .evaluate((el) => Number(el.style.opacity))) > 0,
   );
   assert.match(
-    await page.locator(".county-attribution").filter({ hasText: "Boundaries:" }).innerText(),
+    await page
+      .locator(".county-attribution")
+      .filter({ hasText: "Boundaries:" })
+      .innerText(),
     /2026-10-12, 23:11 America\/New_York/,
   );
   assert.equal(await page.locator("canvas.maplibregl-canvas").count(), 1);

@@ -12,10 +12,4 @@ export const plannedLayers = [
     description: "Economic context",
     symbol: "≋",
   },
-  {
-    id: "transit",
-    name: "Existing transit",
-    description: "Network and access",
-    symbol: "⌁",
-  },
 ] as const;

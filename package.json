@@ -12,7 +12,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test:smoke": "node scripts/smoke.mjs",
-    "test:population": "node --experimental-strip-types scripts/test-population.mjs && node scripts/population-smoke.mjs"
+    "test:population": "node --experimental-strip-types scripts/test-population.mjs && node scripts/population-smoke.mjs",
+    "test:transit": "node scripts/transit-smoke.mjs"
   },
   "dependencies": {
     "@deck.gl/core": "^9.2.0",

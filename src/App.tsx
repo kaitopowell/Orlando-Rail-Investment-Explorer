@@ -5,18 +5,25 @@ import Sidebar from "./components/Sidebar";
 export default function App() {
   const [open, setOpen] = useState(() => window.innerWidth > 600);
   const [countiesVisible, setCountiesVisible] = useState(true);
+  const [transitVisible, setTransitVisible] = useState(false);
   const [populationVisible, setPopulationVisible] = useState(false);
   const [populationStatus, setPopulationStatus] =
     useState<PopulationStatus>("off");
   return (
     <main>
       <MapView
+        transitVisible={transitVisible}
         sidebarOpen={open}
         countiesVisible={countiesVisible}
         populationVisible={populationVisible}
         onPopulationStatus={setPopulationStatus}
       />
       <Sidebar
+        transitVisible={transitVisible}
+        onTransitToggle={() => {
+          setTransitVisible(!transitVisible);
+          if (!transitVisible && window.innerWidth <= 600) setOpen(false);
+        }}
         populationVisible={populationVisible}
         populationStatus={populationStatus}
         onPopulationToggle={() => {
