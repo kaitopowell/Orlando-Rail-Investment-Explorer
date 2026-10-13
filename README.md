@@ -44,3 +44,11 @@ With the dev server running, run `npx playwright install chromium` once, then `n
 The smoke check explicitly substitutes an empty test-only map style to verify WebGL/deck.gl initialization, disabled layer controls, sidebar collapse and keyboard expansion, navigation buttons, mobile overflow, and resource-failure messaging. It does **not** validate live geographic tiles. No fixture data appears in the application.
 
 Current environment validation: TypeScript, production build, and browser smoke checks passed. Live CARTO requests returned a network-policy 403; external basemap rendering remains to be verified after the saved environment network additions are applied. Vite reports a large mapping-library bundle; future performance work should measure and split it as needed.
+
+## Four-county Census boundaries
+
+Source: [U.S. Census Bureau 2025 cartographic county boundaries, 1:500,000](https://www2.census.gov/geo/tiger/GENZ2025/shp/cb_2025_us_county_500k.zip). Vintage: **2025**. Original download date: **October 12, 2026 at 11:11 PM America/New_York**, supplied by the repository owner. The raw ZIP is supplied on `data/county-boundaries`; the pipeline never downloads data.
+
+Run `/usr/bin/python3 analysis/prepare_counties.py` from the repository (Python with GDAL/OGR bindings required; the cloud image already provides them). It filters GEOID 12069 (Lake), 12095 (Orange), 12097 (Osceola), and 12117 (Seminole), reprojects to NAD83 / UTM zone 17N, simplifies at 75 metres while preserving each geometry's topology, validates geometries, and exports WGS84 GeoJSON plus source metadata and a SHA-256 of the input ZIP to `public/data`. This cartographic product is for regional visualization, not surveying.
+
+Map bounds are computed from the exported coordinates. The initial fit and minimum zoom adapt to viewport size and sidebar width; the fitted extent plus 12% padding sets pan limits. Resize and recenter recalculate these limits. Mobile starts with the sidebar collapsed. Rotation/pitch are disabled to keep the constrained regional view predictable.

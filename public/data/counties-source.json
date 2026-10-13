@@ -1,0 +1,11 @@
+{
+  "source": "https://www2.census.gov/geo/tiger/GENZ2025/shp/cb_2025_us_county_500k.zip",
+  "year": 2025,
+  "downloadDate": "2026-10-12",
+  "downloadTime": "23:11",
+  "downloadTimezone": "America/New_York",
+  "downloadDateNote": "Download time supplied by the repository owner",
+  "sha256": "aa976c00b181939755d0da757f4c7c2dc0103c3b3b4530fb2a91c2bb62fc777c",
+  "simplificationMetres": 75,
+  "crs": "EPSG:4326"
+}
