@@ -1,0 +1,31 @@
+{
+  "name": "orbit-orlando-rail-explorer",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "check": "tsc --noEmit",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test:smoke": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "@deck.gl/core": "^9.2.0",
+    "@deck.gl/mapbox": "^9.2.0",
+    "maplibre-gl": "^5.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "playwright": "^1.64.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.0.0"
+  }
+}
