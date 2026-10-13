@@ -7,7 +7,8 @@ const browser = await chromium.launch({
 });
 try {
   const page = await browser.newPage({
-    viewport: { width: 1440, height: 1000 },
+    viewport: { width: 1440, height: 900 },
+    reducedMotion: "reduce",
   });
   await page.addInitScript(() => {
     window.addEventListener("orbit:map-ready", (event) => {
@@ -72,10 +73,11 @@ try {
       result.min > 5 && result.min < 12,
       "Regional, viewport-derived minimum zoom",
     );
-    await page
-      .getByRole("button", { name: "Recenter map on Greater Orlando" })
-      .click();
+    await page.getByRole("button", { name: "Four counties" }).click();
   }
+  await page
+    .getByRole("button", { name: "Four counties", exact: true })
+    .click();
   await checkCamera();
   assert.equal(await page.getByRole("checkbox").count(), 5);
   for (const name of [
@@ -128,9 +130,9 @@ try {
   );
   assert.equal(
     await page.evaluate(() =>
-      window.orbitMap.getLayoutProperty("county-outside", "visibility"),
+      window.orbitMap.getPaintProperty("county-outside", "fill-opacity"),
     ),
-    "none",
+    0.99,
   );
   assert.equal(await page.locator(".county-popup").count(), 0);
   assert.equal(
@@ -149,9 +151,7 @@ try {
       .evaluate((el) => Number(el.style.opacity)),
     0,
   );
-  await page
-    .getByRole("button", { name: "Recenter map on Greater Orlando" })
-    .click();
+  await page.getByRole("button", { name: "Four counties" }).click();
   assert.ok(
     (await page
       .locator(".county-label")
@@ -169,11 +169,12 @@ try {
   await page.keyboard.press("Enter");
   assert.equal(await page.locator("#sidebar-content").isVisible(), true);
   await page.getByRole("button", { name: "Zoom in", exact: true }).click();
-  await page
-    .getByRole("button", { name: "Recenter map on Greater Orlando" })
-    .click();
+  await page.getByRole("button", { name: "Four counties" }).click();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(250);
+  await page
+    .getByRole("button", { name: "Four counties", exact: true })
+    .click();
   await checkCamera();
   assert.equal(
     await page.evaluate(
@@ -189,7 +190,88 @@ try {
   await page.reload();
   await page.getByRole("status").filter({ hasText: "BASEMAP LIVE" }).waitFor();
   assert.equal(await page.locator("#sidebar-content").isVisible(), false);
+  await page
+    .getByRole("button", { name: "Four counties", exact: true })
+    .click();
   await checkCamera();
+  // Check fresh default views and both camera presets across three aspect ratios.
+  for (const [name, width, height] of [
+    ["phone", 390, 844],
+    ["laptop", 1440, 900],
+    ["ultrawide", 2560, 1080],
+  ]) {
+    await page.setViewportSize({ width, height });
+    await page.reload();
+    await page
+      .getByRole("status")
+      .filter({ hasText: "BASEMAP LIVE" })
+      .waitFor();
+    const core = await page.evaluate(async () => {
+      const { orlandoLandmarks } = await import("/src/config/mapViews.ts");
+      const map = window.orbitMap;
+      const left = innerWidth > 600 ? 352 : 0;
+      return {
+        zoom: map.getZoom(),
+        min: map.getMinZoom(),
+        visible: Object.values(orlandoLandmarks).every((p) => {
+          const point = map.project(p);
+          return (
+            point.x > left &&
+            point.x < innerWidth &&
+            point.y > 0 &&
+            point.y < innerHeight - 80
+          );
+        }),
+      };
+    });
+    assert.ok(core.visible, `${name}: all named Orlando anchors visible`);
+    assert.ok(
+      core.zoom > core.min + 1,
+      `${name}: Orlando opens closer than overview`,
+    );
+    await page
+      .getByRole("button", { name: "Four counties", exact: true })
+      .click();
+    await checkCamera();
+    const limits = await page.evaluate(async () => {
+      const { countyBounds, paddedCountyBounds } =
+        await import("/src/map/studyArea.ts");
+      const data = await (await fetch("/data/counties.geojson")).json();
+      const bounds = countyBounds(data);
+      const actual = window.orbitMap.getMaxBounds().toArray();
+      const expected = paddedCountyBounds(bounds);
+      return {
+        actual,
+        expected,
+        zoom: window.orbitMap.getZoom(),
+        min: window.orbitMap.getMinZoom(),
+      };
+    });
+    assert.deepEqual(
+      limits.actual,
+      limits.expected,
+      "Tight data-derived maxBounds on every aspect ratio",
+    );
+    assert.ok(Math.abs(limits.zoom - limits.min) < 0.001);
+    await page.getByRole("button", { name: "Orlando", exact: true }).click();
+    assert.ok(
+      Math.abs(
+        (await page.evaluate(() => window.orbitMap.getZoom())) - core.zoom,
+      ) < 0.001,
+    );
+    await page.evaluate(() =>
+      window.dispatchEvent(new Event("orientationchange")),
+    );
+    assert.equal(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+      true,
+    );
+    console.log(
+      `PASS: ${name} ${width}x${height}, default zoom ${core.zoom.toFixed(2)}, minimum ${core.min.toFixed(2)}`,
+    );
+  }
   assert.deepEqual(errors, []);
   console.log(
     "PASS: real county geometry, desktop/mobile camera constraints, default-on toggle, hover, label fade, dimming visibility, attribution, collapse/keyboard controls, no runtime exceptions.",
@@ -214,9 +296,7 @@ try {
     .filter({ hasText: "County boundaries could not load" })
     .waitFor();
   assert.equal(
-    await page
-      .getByRole("button", { name: "Recenter map on Greater Orlando" })
-      .isDisabled(),
+    await page.getByRole("button", { name: "Four counties" }).isDisabled(),
     true,
   );
   console.log(

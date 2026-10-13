@@ -259,10 +259,11 @@ footer {
 .status-dot.loading {
   background: #b6bfc3;
 }
-.recenter {
-  position: absolute;
-  bottom: 42px;
-  right: 60px;
+.view-controls {
+  display: flex;
+  gap: 8px;
+}
+.view-controls button {
   color: #c4d9dc;
   background: #142027;
   border: 1px solid #43555e;
@@ -270,7 +271,12 @@ footer {
   padding: 8px 12px;
   font-size: 20px;
 }
-.recenter span {
+.view-controls {
+  position: absolute;
+  bottom: 110px;
+  right: 60px;
+}
+.view-controls span {
   font-size: 9px;
   letter-spacing: 1px;
   margin-left: 6px;
@@ -279,7 +285,7 @@ footer {
 .map-caption {
   position: absolute;
   right: 30px;
-  bottom: 130px;
+  bottom: 200px;
   text-align: right;
   pointer-events: none;
   text-shadow: 0 2px 8px #000;
@@ -318,7 +324,7 @@ footer {
     left: 12px;
     top: 12px;
     width: min(300px, calc(100vw - 70px));
-    max-height: calc(100dvh - 92px);
+    max-height: calc(100dvh - 180px);
   }
   .collapsed {
     width: 91px;
@@ -359,9 +365,14 @@ footer {
     bottom: 90px;
     right: 12px;
   }
-  .recenter {
-    bottom: 43px;
-    right: 50px;
+  .view-controls {
+    bottom: 108px;
+    right: 48px;
+    gap: 6px;
+  }
+  .view-controls button {
+    padding: 8px;
+    font-size: 16px;
   }
 }
 @media (prefers-reduced-motion: reduce) {

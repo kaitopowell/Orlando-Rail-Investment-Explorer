@@ -2,7 +2,8 @@ import maplibregl from "maplibre-gl";
 import type { Feature, Polygon, MultiPolygon } from "geojson";
 import type { Counties } from "./studyArea";
 
-const layerIds = ["county-outside", "county-hit-area", "county-outlines"];
+// The outside mask is a world constraint, independent of the boundary toggle.
+const layerIds = ["county-hit-area", "county-outlines"];
 
 export function addCountyLayers(
   map: maplibregl.Map,
@@ -26,7 +27,7 @@ export function addCountyLayers(
     source: "outside-counties",
     paint: {
       "fill-color": "#03080c",
-      "fill-opacity": 0.3,
+      "fill-opacity": 0.99,
       "fill-antialias": false,
     },
   });
