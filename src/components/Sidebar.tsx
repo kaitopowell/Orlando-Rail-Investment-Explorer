@@ -1,10 +1,15 @@
+import CountyAttribution from "./CountyAttribution";
 import { plannedLayers } from "../data/layers";
 export default function Sidebar({
   open,
   onToggle,
+  countiesVisible,
+  onCountiesToggle,
 }: {
   open: boolean;
   onToggle: () => void;
+  countiesVisible: boolean;
+  onCountiesToggle: () => void;
 }) {
   return (
     <aside
@@ -47,12 +52,27 @@ export default function Sidebar({
         <section className="layers">
           <div className="section-heading">
             <h2>Data layers</h2>
-            <span>04 PLANNED</span>
+            <span>01 LIVE / 04 PLANNED</span>
           </div>
           <p className="section-note" id="layer-note">
-            Controls become available as source datasets are validated.
+            Explore the study area. Analytical layers await validated datasets.
           </p>
           <div className="layer-list">
+            <label className="layer county-toggle">
+              <span className="layer-symbol" aria-hidden="true">
+                ⌑
+              </span>
+              <span className="layer-text">
+                <strong>County boundaries</strong>
+                <small>Orange · Seminole · Lake · Osceola</small>
+              </span>
+              <input
+                type="checkbox"
+                checked={countiesVisible}
+                onChange={onCountiesToggle}
+                aria-label="County boundaries"
+              />
+            </label>
             {plannedLayers.map((layer) => (
               <label className="layer" key={layer.id}>
                 <span className="layer-symbol" aria-hidden="true">
@@ -74,6 +94,7 @@ export default function Sidebar({
           <p className="data-note">
             <span aria-hidden="true">○</span> No analytical datasets loaded.
           </p>
+          <CountyAttribution />
         </section>
         <section className="study">
           <p className="eyebrow">STUDY AREA</p>
@@ -83,7 +104,7 @@ export default function Sidebar({
           <p>
             Pan to explore. Scroll to zoom.
             <br />
-            Use the compass to reset orientation.
+            Recenter to see all four counties.
           </p>
         </section>
         <footer>

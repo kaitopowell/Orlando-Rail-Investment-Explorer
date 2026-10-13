@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import maplibregl from "maplibre-gl";
+import { addCountyLayers } from "./countyLayers";
+import type { Feature, Polygon, MultiPolygon } from "geojson";
 import { MapboxOverlay } from "@deck.gl/mapbox";
 import {
   countyBounds,
@@ -8,11 +10,23 @@ import {
   type Counties,
 } from "./studyArea";
 
-export default function MapView({ sidebarOpen }: { sidebarOpen: boolean }) {
+export default function MapView({
+  sidebarOpen,
+  countiesVisible,
+}: {
+  sidebarOpen: boolean;
+  countiesVisible: boolean;
+}) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const boundsRef = useRef<Bounds | null>(null);
   const sidebarRef = useRef(sidebarOpen);
+  const countiesVisibleRef = useRef(countiesVisible);
+  const layersRef = useRef<ReturnType<typeof addCountyLayers> | null>(null);
+  useEffect(() => {
+    countiesVisibleRef.current = countiesVisible;
+    layersRef.current?.setVisible(countiesVisible);
+  }, [countiesVisible]);
   const [status, setStatus] = useState<"loading" | "ready" | "error">(
     "loading",
   );
@@ -29,6 +43,7 @@ export default function MapView({ sidebarOpen }: { sidebarOpen: boolean }) {
     let timeout: number | undefined;
     async function initialize() {
       let data: Counties;
+      let outside: Feature<Polygon | MultiPolygon>;
       try {
         const response = await fetch("/data/counties.geojson", {
           signal: controller.signal,
@@ -36,6 +51,11 @@ export default function MapView({ sidebarOpen }: { sidebarOpen: boolean }) {
         if (!response.ok) throw new Error("County data unavailable");
         data = await response.json();
         boundsRef.current = countyBounds(data);
+        const maskResponse = await fetch("/data/outside-counties.geojson", {
+          signal: controller.signal,
+        });
+        if (!maskResponse.ok) throw new Error("County mask unavailable");
+        outside = await maskResponse.json();
       } catch {
         if (!disposed) {
           setDataError(true);
@@ -68,7 +88,16 @@ export default function MapView({ sidebarOpen }: { sidebarOpen: boolean }) {
           new maplibregl.AttributionControl({ compact: true }),
           "bottom-right",
         );
-        map.on("load", () => setStatus("ready"));
+        map.on("load", () => {
+          if (!map || disposed) return;
+          layersRef.current = addCountyLayers(
+            map,
+            data,
+            outside,
+            countiesVisibleRef.current,
+          );
+          setStatus("ready");
+        });
         map.on("error", () => setStatus("error"));
         map.on("resize", () => {
           if (map && boundsRef.current)
@@ -91,6 +120,8 @@ export default function MapView({ sidebarOpen }: { sidebarOpen: boolean }) {
       disposed = true;
       controller.abort();
       window.clearTimeout(timeout);
+      layersRef.current?.destroy();
+      layersRef.current = null;
       mapRef.current = null;
       map?.remove();
     };

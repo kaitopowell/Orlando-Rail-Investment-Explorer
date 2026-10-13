@@ -26,6 +26,7 @@ def main():
     to_metres = osr.CoordinateTransformation(source_crs, projected)
     to_wgs84 = osr.CoordinateTransformation(projected, target)
     features = []
+    coverage = None
     for record in layer:
         fips = record.GetField('GEOID')
         if fips not in FIPS:
@@ -36,6 +37,7 @@ def main():
         if geometry.IsEmpty() or not geometry.IsValid():
             raise ValueError(f'Invalid simplified geometry: {fips}')
         geometry.Transform(to_wgs84)
+        coverage = geometry.Clone() if coverage is None else coverage.Union(geometry)
         label = geometry.PointOnSurface()
         features.append({'type': 'Feature', 'id': fips, 'properties': {
             'GEOID': fips, 'NAME': record.GetField('NAME'),
@@ -46,6 +48,12 @@ def main():
     OUTPUT.mkdir(parents=True, exist_ok=True)
     result = {'type': 'FeatureCollection', 'features': features}
     (OUTPUT / 'counties.geojson').write_text(json.dumps(result, separators=(',', ':')) + '\n')
+    # This rectangle is the display world's extent, not invented county geometry.
+    world = ogr.CreateGeometryFromWkt('POLYGON((-180 -85,180 -85,180 85,-180 85,-180 -85))')
+    outside = world.Difference(coverage)
+    assert outside.IsValid() and not outside.IsEmpty()
+    mask = {'type': 'Feature', 'properties': {}, 'geometry': json.loads(outside.ExportToJson())}
+    (OUTPUT / 'outside-counties.geojson').write_text(json.dumps(mask, separators=(',', ':')) + '\n')
     metadata = {'source': SOURCE, 'year': 2025, 'downloadDate': '2026-10-12', 'downloadTime': '23:11',
                 'downloadTimezone': 'America/New_York',
                 'downloadDateNote': 'Download time supplied by the repository owner',
