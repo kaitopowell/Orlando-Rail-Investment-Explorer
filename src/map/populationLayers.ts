@@ -1,5 +1,6 @@
 import { ColumnLayer, GeoJsonLayer, ScatterplotLayer } from "@deck.gl/layers";
 import { columnRadiusPixels, densityFillAlpha } from "./populationVisuals";
+import { populationBeams } from "./populationBeams";
 import type { PickingInfo } from "@deck.gl/core";
 import {
   elevationForDensity,
@@ -16,6 +17,7 @@ export function populationLayers(
   onHover: (tract: Tract | null) => void,
   onSelect: (tract: Tract) => void,
   zoom: number,
+  is3D = false,
 ) {
   const radius = columnRadiusPixels(zoom);
   const maximum = Math.max(
@@ -55,40 +57,45 @@ export function populationLayers(
       onHover: hover,
       onClick,
     }),
-    new ScatterplotLayer<ColumnDatum>({
-      id: "population-glow",
-      data: columns,
-      getPosition: (d) => d.position,
-      radiusUnits: "pixels",
-      getRadius: radius * 1.6,
-      radiusMinPixels: 4,
-      radiusMaxPixels: 13,
-      getFillColor: [97, 224, 201, 28],
-      pickable: false,
-    }),
-    new ColumnLayer<ColumnDatum>({
-      id: "population-columns",
-      data: columns,
-      diskResolution: 12,
-      radius,
-      radiusUnits: "pixels",
-      extruded: true,
-      getPosition: (d) => d.position,
-      getElevation: (d) => elevationForDensity(d.tract.properties.density),
-      getFillColor: (d) =>
-        d.tract.properties.GEOID === highlighted
-          ? [181, 248, 228, 230]
-          : [104, 203, 183, 160],
-      material: {
-        ambient: 0.8,
-        diffuse: 0.3,
-        shininess: 12,
-        specularColor: [90, 150, 135],
-      },
-      pickable: true,
-      onHover: hover,
-      onClick,
-      updateTriggers: { getFillColor: highlighted },
-    }),
+    ...(is3D
+      ? populationBeams(columns, maximum)
+      : [
+          new ScatterplotLayer<ColumnDatum>({
+            id: "population-glow",
+            data: columns,
+            getPosition: (d) => d.position,
+            radiusUnits: "pixels",
+            getRadius: radius * 1.6,
+            radiusMinPixels: 4,
+            radiusMaxPixels: 13,
+            getFillColor: [97, 224, 201, 28],
+            pickable: false,
+          }),
+          new ColumnLayer<ColumnDatum>({
+            id: "population-columns",
+            data: columns,
+            diskResolution: 12,
+            radius,
+            radiusUnits: "pixels",
+            extruded: true,
+            getPosition: (d) => d.position,
+            getElevation: (d) =>
+              elevationForDensity(d.tract.properties.density),
+            getFillColor: (d) =>
+              d.tract.properties.GEOID === highlighted
+                ? [181, 248, 228, 230]
+                : [104, 203, 183, 160],
+            material: {
+              ambient: 0.8,
+              diffuse: 0.3,
+              shininess: 12,
+              specularColor: [90, 150, 135],
+            },
+            pickable: true,
+            onHover: hover,
+            onClick,
+            updateTriggers: { getFillColor: highlighted },
+          }),
+        ]),
   ];
 }

@@ -110,3 +110,18 @@ assert.equal(densityFillAlpha(400, 400), 32);
 console.log(
   "PASS: minimum/zoom-scaled radius and square-root tint, with missing density unshaded.",
 );
+
+const { beamColor, beamHeight, beamRamp } =
+  await import("../src/map/populationVisuals.ts");
+assert.equal(beamHeight(null), 0);
+assert.equal(beamHeight(0), 0);
+assert.equal(beamHeight(1), 45);
+assert.equal(beamHeight(100), 260);
+assert.equal(beamHeight(400) / beamHeight(100), 2);
+assert.deepEqual(beamColor(0, 400).slice(0, 3), [...beamRamp[0]]);
+assert.deepEqual(beamColor(100, 400).slice(0, 3), [...beamRamp[1]]);
+assert.deepEqual(beamColor(400, 400).slice(0, 3), [...beamRamp[2]]);
+assert.ok(beamColor(400, 400)[3] > beamColor(100, 400)[3]);
+console.log(
+  "PASS: 3D beam square-root height, minimum height, missing/zero suppression and shared density ramp.",
+);

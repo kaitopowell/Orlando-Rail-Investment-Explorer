@@ -9,6 +9,7 @@ import {
   type Tract,
 } from "../data/population";
 import {
+  beamRampCss,
   columnRadiusPixels,
   minorPopulationLabel,
   populationPitch,
@@ -36,6 +37,15 @@ export default function PopulationOverlay({
   const [hovered, setHovered] = useState<Tract | null>(null);
   const [selected, setSelected] = useState<Tract | null>(null);
   const [retry, setRetry] = useState(0);
+  const [is3D, setIs3D] = useState(() => map.getPitch() > 0);
+  useEffect(() => {
+    const update = () => setIs3D(map.getPitch() > 0);
+    map.on("pitch", update);
+    update();
+    return () => {
+      map.off("pitch", update);
+    };
+  }, [map]);
   const [zoom, setZoom] = useState(() => map.getZoom());
   useEffect(() => {
     if (!enabled) return;
@@ -113,11 +123,12 @@ export default function PopulationOverlay({
               setHovered,
               setSelected,
               zoom,
+              is3D,
             )
           : [],
     });
     return () => overlay.setProps({ layers: [] });
-  }, [enabled, data, columns, hovered, selected, overlay, zoom]);
+  }, [enabled, data, columns, hovered, selected, overlay, zoom, is3D]);
   useEffect(() => {
     // Apply after sidebar framing effects, which also move the camera on phones.
     const frame = requestAnimationFrame(() =>
@@ -166,18 +177,41 @@ export default function PopulationOverlay({
         <p role="status">Loading population tracts…</p>
       ) : (
         <>
-          <div className="population-legend">
-            <span aria-hidden="true">▁ ▃ ▆</span> Square-root scale
-            <br />
-            Display height (m) = 20 × √(people/km² land).
-            <br />
-            Tract tint: same square-root density scale.
-            <br />
-            Column width adapts to zoom (minimum {columnRadiusPixels(0)} px
-            radius).
-            <br />
-            Zero population: no column. Missing density: no column.
-          </div>
+          {is3D ? (
+            <div className="population-legend">
+              <div
+                aria-hidden="true"
+                style={{
+                  background: beamRampCss,
+                  height: 6,
+                  borderRadius: 3,
+                  marginBottom: 8,
+                }}
+              />
+              Low · teal → cyan → white · high
+              <br />
+              Square-root scale · people/km² land.
+              <br />
+              Height and brightness mean density.
+              <br />
+              Height (m) = max(45, 26 × √density).
+              <br />
+              Zero population or missing density: no beam.
+            </div>
+          ) : (
+            <div className="population-legend">
+              <span aria-hidden="true">▁ ▃ ▆</span> Square-root scale
+              <br />
+              Display height (m) = 20 × √(people/km² land).
+              <br />
+              Tract tint: same square-root density scale.
+              <br />
+              Column width adapts to zoom (minimum {columnRadiusPixels(0)} px
+              radius).
+              <br />
+              Zero population: no column. Missing density: no column.
+            </div>
+          )}
           <p className="population-hint">
             Hover to highlight. Click or tap any tract to inspect.
           </p>
