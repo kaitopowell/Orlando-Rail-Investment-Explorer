@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
 import { chromium } from "playwright";
 const browser = await chromium.launch({
   executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined,
@@ -95,35 +96,44 @@ try {
       .click();
     await page.waitForFunction(() =>
       window.solRDeck._deck.props.layers.some(
-        (l) => l.id === "population-beam-core",
+        (l) => l.id === "population-tracts" && l.props.extruded,
       ),
     );
     assert.equal(await page.evaluate(() => window.solRMap.getPitch()), 45);
     assert.match(
       await page.locator(".population-legend").innerText(),
-      /Height and brightness mean density/,
+      /Height and color mean density/,
     );
-    const beams = await page.evaluate(() => {
+    const extrusions = await page.evaluate(() => {
       const layers = window.solRDeck._deck.props.layers;
-      const beam = layers.find((l) => l.id === "population-beam-core");
+      const tract = layers.find((l) => l.id === "population-tracts");
+      const zero = tract.props.data.features.find(
+        (f) => f.properties.pop_est === 0,
+      );
       return {
-        count: beam.props.data.length,
-        pickable: beam.props.pickable,
-        blend: beam.props.parameters.blendColorDstFactor,
+        count: tract.props.data.features.length,
+        pickable: tract.props.pickable,
+        zeroHeight: tract.props.getElevation(zero),
         hasColumns: layers.some((l) => l.id === "population-columns"),
-        hasZero: beam.props.data.some((d) => d.tract.properties.pop_est === 0),
+        hasBeams: layers.some((l) => l.id.includes("beam")),
+        hasEdges: layers.some((l) => l.id === "population-roof-edges"),
+        lit: window.solRDeck._deck.props.effects.length > 0,
       };
     });
-    assert.deepEqual(beams, {
-      count: 489,
-      pickable: false,
-      blend: "one",
+    assert.deepEqual(extrusions, {
+      count: 490,
+      pickable: true,
+      zeroHeight: 0,
       hasColumns: false,
-      hasZero: false,
+      hasBeams: false,
+      hasEdges: true,
+      lit: true,
     });
     // One 3D capture per device; no repeated overview screenshots.
     await page.waitForTimeout(350);
-    await page.screenshot({ path: `/tmp/sol-r-beams-${name}.png` });
+    const screenshot = `/tmp/sol-r-extrusions-${name}.png`;
+    if (!process.env.SOL_R_REUSE_SCREENSHOTS || !existsSync(screenshot))
+      await page.screenshot({ path: screenshot });
     // Verify real deck picking and actual click inspection, including the zero tract.
     for (const id of ["12069030102", "12095990000"]) {
       if (
@@ -141,7 +151,16 @@ try {
           zoom: 12,
           pitch: 45,
         });
-        return window.solRMap.project(tractCentroid(f.geometry));
+        const { tractHeight } = await import("/src/map/populationVisuals.ts");
+        // Allow the deck viewport to synchronize after the MapLibre jump.
+        await new Promise((resolve) => setTimeout(resolve, 350));
+        const [x, y] = window.solRDeck._deck
+          .getViewports()[0]
+          .project([
+            ...tractCentroid(f.geometry),
+            tractHeight(f.properties.density),
+          ]);
+        return { x, y };
       }, id);
       await page.waitForTimeout(350);
       const pick = await page.evaluate(
@@ -230,7 +249,7 @@ try {
     await page.getByRole("button", { name: "Retry population" }).click();
     await page.getByLabel("Inspect tract", { exact: true }).waitFor();
     console.log(
-      `PASS ${name}: 3D beams, 2D preservation, picking and click inspection including zero tract, legend, toggle cleanup, error and retry.`,
+      `PASS ${name}: 3D extrusions, 2D preservation, picking and click inspection including zero tract, legend, toggle cleanup, error and retry.`,
     );
     await page.close();
   }

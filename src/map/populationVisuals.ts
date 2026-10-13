@@ -18,16 +18,19 @@ export function densityFillAlpha(
 export const minorPopulationLabel =
   /^(poi_|housenumber$|roadname_(minor|sec)$|place_(hamlet|suburbs|villages)$)/;
 
-// Shared by 3D beams, their bases, and the 3D legend. 2D encodings stay unchanged.
-export const beamRamp = [
-  [8, 95, 100],
+// Shared by extruded tracts and the 3D legend; 2D encodings stay unchanged.
+export const tractRamp = [
+  [8, 65, 70],
   [40, 219, 235],
-  [230, 255, 255],
+  [255, 244, 220],
 ] as const;
-export const beamRampCss = `linear-gradient(to right, ${beamRamp.map((c) => `rgb(${c.join(",")})`).join(",")})`;
-export const beamHeight = (density: number | null) =>
-  density !== null && density > 0 ? Math.max(45, 26 * Math.sqrt(density)) : 0;
-export function beamColor(
+export const tractRampCss = `linear-gradient(to right, ${tractRamp.map((c) => `rgb(${c.join(",")})`).join(",")})`;
+export const tractExaggeration = 4;
+export const tractHeight = (density: number | null) =>
+  density !== null && density > 0
+    ? 20 * tractExaggeration * Math.sqrt(density)
+    : 0;
+export function tractColor(
   density: number | null,
   maximum: number,
 ): [number, number, number, number] {
@@ -35,8 +38,8 @@ export function beamColor(
   const scaled = Math.min(1, t) * 2;
   const index = Math.min(1, Math.floor(scaled));
   const mix = scaled - index;
-  const rgb = beamRamp[index].map((value, channel) =>
-    Math.round(value + (beamRamp[index + 1][channel] - value) * mix),
+  const rgb = tractRamp[index].map((value, channel) =>
+    Math.round(value + (tractRamp[index + 1][channel] - value) * mix),
   );
-  return [rgb[0], rgb[1], rgb[2], Math.round(100 + 140 * Math.min(1, t))];
+  return [rgb[0], rgb[1], rgb[2], 190];
 }
