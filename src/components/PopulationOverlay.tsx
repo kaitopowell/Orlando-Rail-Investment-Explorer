@@ -8,6 +8,11 @@ import {
   type PopulationData,
   type Tract,
 } from "../data/population";
+import {
+  columnRadiusPixels,
+  minorPopulationLabel,
+  populationPitch,
+} from "../map/populationVisuals";
 import { populationLayers } from "../map/populationLayers";
 export type PopulationStatus = "off" | "loading" | "ready" | "error";
 const format = (value: number | null) =>
@@ -31,6 +36,37 @@ export default function PopulationOverlay({
   const [hovered, setHovered] = useState<Tract | null>(null);
   const [selected, setSelected] = useState<Tract | null>(null);
   const [retry, setRetry] = useState(0);
+  const [zoom, setZoom] = useState(() => map.getZoom());
+  useEffect(() => {
+    if (!enabled) return;
+    const labels = (map.getStyle().layers ?? [])
+      .filter(
+        (layer) =>
+          layer.type === "symbol" && minorPopulationLabel.test(layer.id),
+      )
+      .map((layer) => ({
+        id: layer.id,
+        visibility: map.getLayoutProperty(layer.id, "visibility") ?? "visible",
+      }));
+    function update() {
+      setZoom(Math.round(map.getZoom() * 10) / 10);
+      for (const label of labels)
+        if (map.getLayer(label.id))
+          map.setLayoutProperty(
+            label.id,
+            "visibility",
+            map.getZoom() >= 9 ? "none" : label.visibility,
+          );
+    }
+    update();
+    map.on("zoom", update);
+    return () => {
+      map.off("zoom", update);
+      for (const label of labels)
+        if (map.getLayer(label.id))
+          map.setLayoutProperty(label.id, "visibility", label.visibility);
+    };
+  }, [map, enabled]);
   const columns = useMemo(() => (data ? columnData(data) : []), [data]);
   useEffect(() => {
     if (!enabled) {
@@ -76,19 +112,24 @@ export default function PopulationOverlay({
               hovered?.properties.GEOID ?? selected?.properties.GEOID ?? null,
               setHovered,
               setSelected,
+              zoom,
             )
           : [],
     });
     return () => overlay.setProps({ layers: [] });
-  }, [enabled, data, columns, hovered, selected, overlay]);
+  }, [enabled, data, columns, hovered, selected, overlay, zoom]);
   useEffect(() => {
-    map.easeTo({
-      pitch: enabled ? 35 : 0,
-      duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? 0
-        : 600,
-    });
+    // Apply after sidebar framing effects, which also move the camera on phones.
+    const frame = requestAnimationFrame(() =>
+      map.easeTo({
+        pitch: enabled ? populationPitch : 0,
+        duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? 0
+          : 600,
+      }),
+    );
     return () => {
+      cancelAnimationFrame(frame);
       overlay.setProps({ layers: [] });
     };
   }, [enabled, map, overlay]);
@@ -106,7 +147,10 @@ export default function PopulationOverlay({
         <h2>Population density</h2>
         <button
           onClick={() =>
-            map.easeTo({ pitch: map.getPitch() > 0 ? 0 : 35, duration: 0 })
+            map.easeTo({
+              pitch: map.getPitch() > 0 ? 0 : populationPitch,
+              duration: 0,
+            })
           }
           aria-label="Toggle population 3D view"
         >
@@ -126,6 +170,11 @@ export default function PopulationOverlay({
             <span aria-hidden="true">▁ ▃ ▆</span> Square-root scale
             <br />
             Display height (m) = 20 × √(people/km² land).
+            <br />
+            Tract tint: same square-root density scale.
+            <br />
+            Column width adapts to zoom (minimum {columnRadiusPixels(0)} px
+            radius).
             <br />
             Zero population: no column. Missing density: no column.
           </div>

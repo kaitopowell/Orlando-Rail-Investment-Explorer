@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
 import { chromium } from "playwright";
 const browser = await chromium.launch({
   executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH || undefined,
@@ -65,7 +66,28 @@ try {
       /Square-root scale/,
     );
     assert.equal(await page.locator(".tract-picker option").count(), 491);
-    await page.screenshot({ path: `/tmp/sol-r-population-${name}.png` });
+    await page.waitForFunction(() => window.solRMap.getPitch() === 45);
+    assert.equal(await page.evaluate(() => window.solRMap.getPitch()), 45);
+    await page
+      .getByRole("button", { name: "Four counties", exact: true })
+      .click();
+    assert.ok(
+      await page.evaluate(
+        () =>
+          Math.abs(window.solRMap.getZoom() - window.solRMap.getMinZoom()) <
+          0.001,
+      ),
+    );
+    assert.equal(await page.evaluate(() => window.solRMap.getPitch()), 0);
+    await page.waitForTimeout(250);
+    // One overview capture per device, after the zoom-scaled columns render.
+    const screenshot = `/tmp/sol-r-population-${name}.png`;
+    if (!process.env.SOL_R_REUSE_SCREENSHOTS || !existsSync(screenshot))
+      await page.screenshot({ path: screenshot });
+    await page
+      .getByRole("button", { name: "Toggle population 3D view" })
+      .click();
+    assert.equal(await page.evaluate(() => window.solRMap.getPitch()), 45);
     // Verify real deck picking and actual click inspection, including the zero tract.
     for (const id of ["12069030102", "12095990000"]) {
       if (

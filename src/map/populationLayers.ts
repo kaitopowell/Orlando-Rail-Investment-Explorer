@@ -1,4 +1,5 @@
 import { ColumnLayer, GeoJsonLayer, ScatterplotLayer } from "@deck.gl/layers";
+import { columnRadiusPixels, densityFillAlpha } from "./populationVisuals";
 import type { PickingInfo } from "@deck.gl/core";
 import {
   elevationForDensity,
@@ -14,7 +15,13 @@ export function populationLayers(
   highlighted: string | null,
   onHover: (tract: Tract | null) => void,
   onSelect: (tract: Tract) => void,
+  zoom: number,
 ) {
+  const radius = columnRadiusPixels(zoom);
+  const maximum = Math.max(
+    0,
+    ...data.features.map((f) => f.properties.density ?? 0),
+  );
   const pick = (info: PickingInfo<Tract | ColumnDatum>) =>
     info.object && ("tract" in info.object ? info.object.tract : info.object);
   const onClick = (info: PickingInfo<Tract | ColumnDatum>) => {
@@ -31,13 +38,18 @@ export function populationLayers(
       pickable: true,
       filled: true,
       stroked: true,
-      // Almost transparent interiors provide hit testing for every tract, including zeros.
-      getFillColor: [101, 214, 199, 2],
+      // All polygons remain pickable, including zero-population and missing-density tracts.
+      getFillColor: (f) => [
+        78,
+        155,
+        145,
+        densityFillAlpha(f.properties.density, maximum),
+      ],
       getLineColor: (f) =>
         f.properties.GEOID === highlighted
           ? [172, 246, 229, 220]
-          : [119, 169, 166, 65],
-      getLineWidth: (f) => (f.properties.GEOID === highlighted ? 1.8 : 0.5),
+          : [119, 169, 166, 90],
+      getLineWidth: (f) => (f.properties.GEOID === highlighted ? 1.8 : 0.75),
       lineWidthUnits: "pixels",
       updateTriggers: { getLineColor: highlighted, getLineWidth: highlighted },
       onHover: hover,
@@ -47,10 +59,10 @@ export function populationLayers(
       id: "population-glow",
       data: columns,
       getPosition: (d) => d.position,
-      radiusUnits: "meters",
-      getRadius: 200,
-      radiusMinPixels: 2,
-      radiusMaxPixels: 12,
+      radiusUnits: "pixels",
+      getRadius: radius * 1.6,
+      radiusMinPixels: 4,
+      radiusMaxPixels: 13,
       getFillColor: [97, 224, 201, 28],
       pickable: false,
     }),
@@ -58,7 +70,8 @@ export function populationLayers(
       id: "population-columns",
       data: columns,
       diskResolution: 12,
-      radius: 100,
+      radius,
+      radiusUnits: "pixels",
       extruded: true,
       getPosition: (d) => d.position,
       getElevation: (d) => elevationForDensity(d.tract.properties.density),
