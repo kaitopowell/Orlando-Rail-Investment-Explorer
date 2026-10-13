@@ -1,11 +1,5 @@
-// Metadata only: no demographic, transit, or model data is included.
+// Remaining layers awaiting validated datasets.
 export const plannedLayers = [
-  {
-    id: "population",
-    name: "Population",
-    description: "Where people live",
-    symbol: "◉",
-  },
   {
     id: "employment",
     name: "Employment",

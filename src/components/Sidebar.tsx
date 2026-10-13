@@ -1,3 +1,5 @@
+import type { PopulationStatus } from "./PopulationOverlay";
+import { populationSource } from "../data/population";
 import CountyAttribution from "./CountyAttribution";
 import { plannedLayers } from "../data/layers";
 export default function Sidebar({
@@ -5,11 +7,17 @@ export default function Sidebar({
   onToggle,
   countiesVisible,
   onCountiesToggle,
+  populationVisible,
+  populationStatus,
+  onPopulationToggle,
 }: {
   open: boolean;
   onToggle: () => void;
   countiesVisible: boolean;
   onCountiesToggle: () => void;
+  populationVisible: boolean;
+  populationStatus: PopulationStatus;
+  onPopulationToggle: () => void;
 }) {
   return (
     <aside
@@ -52,10 +60,10 @@ export default function Sidebar({
         <section className="layers">
           <div className="section-heading">
             <h2>Data layers</h2>
-            <span>01 LIVE / 04 PLANNED</span>
+            <span>02 LIVE / 03 PLANNED</span>
           </div>
           <p className="section-note" id="layer-note">
-            Explore the study area. Analytical layers await validated datasets.
+            Explore county boundaries and ACS population density.
           </p>
           <div className="layer-list">
             <label className="layer county-toggle">
@@ -71,6 +79,21 @@ export default function Sidebar({
                 checked={countiesVisible}
                 onChange={onCountiesToggle}
                 aria-label="County boundaries"
+              />
+            </label>
+            <label className="layer county-toggle">
+              <span className="layer-symbol" aria-hidden="true">
+                ◉
+              </span>
+              <span className="layer-text">
+                <strong>Population</strong>
+                <small>ACS 2024 · density by tract</small>
+              </span>
+              <input
+                type="checkbox"
+                checked={populationVisible}
+                onChange={onPopulationToggle}
+                aria-label="Population"
               />
             </label>
             {plannedLayers.map((layer) => (
@@ -92,9 +115,24 @@ export default function Sidebar({
             ))}
           </div>
           <p className="data-note">
-            <span aria-hidden="true">○</span> No analytical datasets loaded.
+            <span aria-hidden="true">○</span>{" "}
+            {populationStatus === "ready"
+              ? "Population tracts loaded."
+              : populationStatus === "loading"
+                ? "Loading population…"
+                : populationStatus === "error"
+                  ? "Population unavailable. Retry on map."
+                  : "Population layer available."}
           </p>
           <CountyAttribution />
+          <p className="county-attribution">
+            Population:{" "}
+            <a href={populationSource.url} target="_blank" rel="noreferrer">
+              {populationSource.label}
+            </a>
+            <br />
+            Accessed 2026-10-13 · tract boundaries 2024.
+          </p>
         </section>
         <section className="study">
           <p className="eyebrow">STUDY AREA</p>

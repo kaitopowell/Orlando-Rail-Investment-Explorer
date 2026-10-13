@@ -12,6 +12,7 @@ export function addCountyLayers(
   initiallyVisible: boolean,
 ) {
   let visible = initiallyVisible;
+  let interactive = true;
   let hovered: string | number | undefined;
   const popup = new maplibregl.Popup({
     closeButton: false,
@@ -95,7 +96,7 @@ export function addCountyLayers(
     map.getCanvas().style.cursor = "";
   }
   function showCounty(event: maplibregl.MapLayerMouseEvent) {
-    if (!visible || !event.features?.length) return;
+    if (!visible || !interactive || !event.features?.length) return;
     clearHover();
     const feature = event.features[0];
     hovered = feature.id;
@@ -122,6 +123,10 @@ export function addCountyLayers(
   setVisible(initiallyVisible);
   return {
     setVisible,
+    setInteractive(next: boolean) {
+      interactive = next;
+      if (!next) clearHover();
+    },
     destroy() {
       map.off("zoom", updateLabels);
       map.off("mousemove", "county-hit-area", showCounty);
