@@ -97,3 +97,16 @@ assert.throws(() => parsePopulation(invalid));
 console.log(
   "PASS: centroid weighting/holes, square-root scale, real-data validation, 489 columns with zero tract retained for inspection.",
 );
+
+const { columnRadiusPixels, densityFillAlpha } =
+  await import("../src/map/populationVisuals.ts");
+assert.equal(columnRadiusPixels(7), 2.5);
+assert.ok(columnRadiusPixels(12) > columnRadiusPixels(8));
+assert.equal(columnRadiusPixels(20), 8);
+assert.equal(densityFillAlpha(null, 400), 0);
+assert.equal(densityFillAlpha(0, 400), 8);
+assert.equal(densityFillAlpha(100, 400), 20);
+assert.equal(densityFillAlpha(400, 400), 32);
+console.log(
+  "PASS: minimum/zoom-scaled radius and square-root tint, with missing density unshaded.",
+);
