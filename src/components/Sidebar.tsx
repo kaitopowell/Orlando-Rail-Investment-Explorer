@@ -21,7 +21,7 @@ export default function Sidebar({
           ◎
         </div>
         <div className="brand-name">
-          ORBIT<span>ORLANDO RAIL INVESTMENT EXPLORER</span>
+          SOL/R<span>Seminole · Orange/Osceola · Lake · Rail</span>
         </div>
         <button
           className="collapse"

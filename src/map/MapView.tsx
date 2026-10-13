@@ -106,7 +106,7 @@ export default function MapView({
         // A development-only event lets browser tests inspect real camera constraints.
         if (import.meta.env.DEV)
           window.dispatchEvent(
-            new CustomEvent("orbit:map-ready", { detail: map }),
+            new CustomEvent("sol-r:map-ready", { detail: map }),
           );
         timeout = window.setTimeout(() => {
           if (map && !map.isStyleLoaded()) setStatus("error");

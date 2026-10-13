@@ -14,7 +14,7 @@ export default function App() {
         onCountiesToggle={() => setCountiesVisible(!countiesVisible)}
       />
       <div className="map-caption">
-        <span>ORBIT / FIELD NOTES</span>
+        <span>SOL/R / FIELD NOTES</span>
         <p>
           Understanding place.
           <br />
