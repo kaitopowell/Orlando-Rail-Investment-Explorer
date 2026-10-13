@@ -16,7 +16,7 @@
 
 ## Camera anchors and future layers
 
-The approximate named coordinates in `src/config/mapViews.ts` configure the default camera only; they are not analytical observations. Population, employment, income, and transit controls remain placeholders in the frontend. The population dataset described below is now available for integration. No ridership estimates, infrastructure costs, or optimization results are supplied.
+The approximate named coordinates in `src/config/mapViews.ts` configure the default camera only; they are not analytical observations. Population is a live, optional frontend layer. Employment, income, and transit remain planned. No ridership estimates, infrastructure costs, or optimization results are supplied.
 
 ## Tract population pipeline
 
@@ -29,3 +29,9 @@ Run `/usr/bin/python3 analysis/prepare_population.py` (Python with GDAL/OGR bind
 Geometry is projected to NAD83 / UTM 17N, simplified with a 30-metre topology-preserving tolerance, checked for validity, and exported as WGS84 GeoJSON. Individual polygon topology is preserved; this display simplification is not a coverage model for spatial analysis. Sorted GEOIDs and deterministic JSON make repeated output reproducible. Output: `public/data/population_tracts.geojson`. The script prints tract totals, joined totals, county estimates, and signed differences (tract minus county); it never adjusts estimates to force agreement or sums tract margins of error.
 
 Validation on the supplied files: **490 matched tracts**, including **one zero-population tract**; no unmatched GEOIDs. County totals match exactly: Lake 412,924; Orange 1,471,937; Osceola 427,415; Seminole 481,470 (all differences zero). Run `/usr/bin/python3 -m unittest discover -s analysis -p 'test_*.py'` for identifier, missing-margin, zero-population, density, join-reporting, real-input, geometry, and reproducibility checks. Synthetic rows occur only in tests; no observations are invented in the exported dataset.
+
+## Population visualization
+
+The Population toggle fetches the generated local GeoJSON. deck.gl ColumnLayer places columns at area-weighted polygon centroids calculated in longitude/latitude coordinates, subtracting holes and weighting MultiPolygon parts by area. These are display locations, not population-weighted centers. Columns use a square-root scale: display height in metres = 20 × √(people/km² of land). No clipping, ranking, or population estimates are invented. Zero population and unavailable density produce no column; all tract polygons remain pickable. Missing margins and density are displayed as unavailable. The inspector displays the estimate ± its supplied margin of error and links the ACS 2024 five-year B01003 source (accessed 2026-10-13). The faint glow and outlines are display styling only.
+
+Enabling Population tilts the map to 35° to reveal column height; the 2D / 3D control toggles tilt, and disabling the layer restores a flat view. The tract selector also provides keyboard access to every tract, including zero-population tracts. `npm run test:population` runs data/centroid/scale checks plus phone/laptop browser tests; start the dev server first and set `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium` in the cloud environment.

@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from "react";
+import PopulationOverlay, {
+  type PopulationStatus,
+} from "../components/PopulationOverlay";
 import maplibregl from "maplibre-gl";
 import { addCountyLayers } from "./countyLayers";
 import type { Feature, Polygon, MultiPolygon } from "geojson";
@@ -13,15 +16,28 @@ import {
 export default function MapView({
   sidebarOpen,
   countiesVisible,
+  populationVisible,
+  onPopulationStatus,
 }: {
   sidebarOpen: boolean;
   countiesVisible: boolean;
+  populationVisible: boolean;
+  onPopulationStatus: (status: PopulationStatus) => void;
 }) {
+  const [scene, setScene] = useState<{
+    map: maplibregl.Map;
+    overlay: MapboxOverlay;
+  } | null>(null);
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const boundsRef = useRef<Bounds | null>(null);
   const sidebarRef = useRef(sidebarOpen);
   const framingRef = useRef<ReturnType<typeof createMapFraming> | null>(null);
+  const populationVisibleRef = useRef(populationVisible);
+  useEffect(() => {
+    populationVisibleRef.current = populationVisible;
+    layersRef.current?.setInteractive(!populationVisible);
+  }, [populationVisible]);
   const countiesVisibleRef = useRef(countiesVisible);
   const layersRef = useRef<ReturnType<typeof addCountyLayers> | null>(null);
   useEffect(() => {
@@ -68,7 +84,7 @@ export default function MapView({
         map = new maplibregl.Map({
           container: container.current,
           maxZoom: 18,
-          maxPitch: 0,
+          maxPitch: 45,
           dragRotate: false,
           touchPitch: false,
           renderWorldCopies: false,
@@ -83,7 +99,12 @@ export default function MapView({
           boundsRef.current!,
           sidebarRef.current,
         );
-        map.addControl(new MapboxOverlay({ interleaved: false, layers: [] }));
+        const overlay = new MapboxOverlay({ interleaved: false, layers: [] });
+        map.addControl(overlay);
+        if (import.meta.env.DEV)
+          window.dispatchEvent(
+            new CustomEvent("sol-r:deck-ready", { detail: overlay }),
+          );
         map.addControl(
           new maplibregl.NavigationControl({ showCompass: false }),
           "bottom-right",
@@ -100,6 +121,8 @@ export default function MapView({
             outside,
             countiesVisibleRef.current,
           );
+          layersRef.current.setInteractive(!populationVisibleRef.current);
+          setScene({ map, overlay });
           setStatus("ready");
         });
         map.on("error", () => setStatus("error"));
@@ -125,6 +148,7 @@ export default function MapView({
       layersRef.current?.destroy();
       layersRef.current = null;
       mapRef.current = null;
+      setScene(null);
       map?.remove();
     };
   }, []);
@@ -149,6 +173,14 @@ export default function MapView({
             ? "County boundaries could not load. Reload to retry; the regional map is unavailable."
             : "Map resources could not load. Check network access to CARTO and WebGL support, then reload."}
         </div>
+      )}
+      {scene && (
+        <PopulationOverlay
+          map={scene.map}
+          overlay={scene.overlay}
+          enabled={populationVisible}
+          onStatus={onPopulationStatus}
+        />
       )}
       <div className="view-controls" aria-label="Map views">
         <button
