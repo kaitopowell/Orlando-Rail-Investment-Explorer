@@ -20,3 +20,11 @@ Attribute map and data sources. Handle unavailable network resources visibly. Ne
 
 ## Validation
 Use Node 22.12+ (Node 24 supported), `npm ci`, `npm run check`, and `npm run build`. Start with `npm run dev -- --host 0.0.0.0`. Validate map interactions, sidebar collapse, keyboard controls, mobile layout, and map failure messaging in a browser. Keep README usage and limitations accurate.
+
+## Required task delivery workflow
+After implementing each task:
+1. Run the project's available tests, TypeScript checks, and production build. Currently these are `npm run test:smoke` (with the dev server running), `npm run check`, and `npm run build`. Use `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium` for the smoke test when using this environment's installed Chromium; otherwise install Playwright Chromium. Report actual outcomes and any warnings or limitations; do not claim fixture-based tests validate live basemap availability.
+2. Commit and push changes to a feature branch. Never push task changes directly to `main`.
+3. Automatically create a pull request targeting `main`, or update the existing PR for that feature branch. Include a concrete summary of changes and test results. No additional confirmation is needed to commit, push, or create the PR.
+4. If GitHub returns HTTP 403, identify the exact failing operation (including endpoint when available) and report the full error response, including status, response headers, and body. Never expose authorization headers, tokens, or other credentials. Distinguish a successful Git push from a failed GitHub API operation; do not imply a PR exists until creation is confirmed.
+5. Do not merge into `main` automatically. Leave the PR for review.
