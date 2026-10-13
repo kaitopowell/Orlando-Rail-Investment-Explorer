@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Map } from "maplibre-gl";
+import { AmbientLight, DirectionalLight, LightingEffect } from "@deck.gl/core";
 import type { MapboxOverlay } from "@deck.gl/mapbox";
 import {
   parsePopulation,
@@ -9,7 +10,8 @@ import {
   type Tract,
 } from "../data/population";
 import {
-  beamRampCss,
+  tractRampCss,
+  tractExaggeration,
   columnRadiusPixels,
   minorPopulationLabel,
   populationPitch,
@@ -77,6 +79,18 @@ export default function PopulationOverlay({
           map.setLayoutProperty(label.id, "visibility", label.visibility);
     };
   }, [map, enabled]);
+  const lighting = useMemo(
+    () =>
+      new LightingEffect({
+        ambient: new AmbientLight({ intensity: 0.85 }),
+        sun: new DirectionalLight({
+          direction: [-1, -2, -1],
+          intensity: 1.15,
+          color: [255, 244, 225],
+        }),
+      }),
+    [],
+  );
   const columns = useMemo(() => (data ? columnData(data) : []), [data]);
   useEffect(() => {
     if (!enabled) {
@@ -114,6 +128,7 @@ export default function PopulationOverlay({
   }, [enabled, data, retry, onStatus]);
   useEffect(() => {
     overlay.setProps({
+      effects: is3D ? [lighting] : [],
       layers:
         enabled && data
           ? populationLayers(
@@ -127,8 +142,18 @@ export default function PopulationOverlay({
             )
           : [],
     });
-    return () => overlay.setProps({ layers: [] });
-  }, [enabled, data, columns, hovered, selected, overlay, zoom, is3D]);
+    return () => overlay.setProps({ layers: [], effects: [] });
+  }, [
+    enabled,
+    data,
+    columns,
+    hovered,
+    selected,
+    overlay,
+    zoom,
+    is3D,
+    lighting,
+  ]);
   useEffect(() => {
     // Apply after sidebar framing effects, which also move the camera on phones.
     const frame = requestAnimationFrame(() =>
@@ -182,21 +207,21 @@ export default function PopulationOverlay({
               <div
                 aria-hidden="true"
                 style={{
-                  background: beamRampCss,
+                  background: tractRampCss,
                   height: 6,
                   borderRadius: 3,
                   marginBottom: 8,
                 }}
               />
-              Low · teal → cyan → white · high
+              Low · teal → cyan → warm white · high
               <br />
               Square-root scale · people/km² land.
               <br />
-              Height and brightness mean density.
+              Height and color mean density.
               <br />
-              Height (m) = max(45, 26 × √density).
+              Height = {tractExaggeration}× exaggeration: 80 × √density (m).
               <br />
-              Zero population or missing density: no beam.
+              Zero population or missing density: flat, dark tracts.
             </div>
           ) : (
             <div className="population-legend">

@@ -1,6 +1,15 @@
-import { ColumnLayer, GeoJsonLayer, ScatterplotLayer } from "@deck.gl/layers";
-import { columnRadiusPixels, densityFillAlpha } from "./populationVisuals";
-import { populationBeams } from "./populationBeams";
+import {
+  ColumnLayer,
+  GeoJsonLayer,
+  ScatterplotLayer,
+  PathLayer,
+} from "@deck.gl/layers";
+import {
+  columnRadiusPixels,
+  densityFillAlpha,
+  tractColor,
+  tractHeight,
+} from "./populationVisuals";
 import type { PickingInfo } from "@deck.gl/core";
 import {
   elevationForDensity,
@@ -39,26 +48,77 @@ export function populationLayers(
       data,
       pickable: true,
       filled: true,
-      stroked: true,
+      stroked: !is3D,
+      extruded: is3D,
+      getElevation: (f) =>
+        f.properties.pop_est === 0 ? 0 : tractHeight(f.properties.density),
+      material: is3D
+        ? {
+            ambient: 0.5,
+            diffuse: 0.65,
+            shininess: 18,
+            specularColor: [90, 125, 125],
+          }
+        : true,
       // All polygons remain pickable, including zero-population and missing-density tracts.
-      getFillColor: (f) => [
-        78,
-        155,
-        145,
-        densityFillAlpha(f.properties.density, maximum),
-      ],
+      getFillColor: (f) =>
+        is3D
+          ? tractColor(
+              f.properties.pop_est === 0 ? 0 : f.properties.density,
+              maximum,
+            )
+          : [78, 155, 145, densityFillAlpha(f.properties.density, maximum)],
       getLineColor: (f) =>
         f.properties.GEOID === highlighted
           ? [172, 246, 229, 220]
           : [119, 169, 166, 90],
       getLineWidth: (f) => (f.properties.GEOID === highlighted ? 1.8 : 0.75),
       lineWidthUnits: "pixels",
-      updateTriggers: { getLineColor: highlighted, getLineWidth: highlighted },
+      updateTriggers: {
+        getFillColor: [is3D, maximum],
+        getLineColor: highlighted,
+        getLineWidth: highlighted,
+      },
+      autoHighlight: is3D,
+      highlightColor: [180, 240, 225, 70],
       onHover: hover,
       onClick,
     }),
     ...(is3D
-      ? populationBeams(columns, maximum)
+      ? [
+          new PathLayer<{ path: [number, number, number][]; geoid: string }>({
+            id: "population-roof-edges",
+            data: data.features.flatMap((f) => {
+              const height =
+                f.properties.pop_est === 0
+                  ? 0
+                  : tractHeight(f.properties.density);
+              const polygons =
+                f.geometry.type === "Polygon"
+                  ? [f.geometry.coordinates]
+                  : f.geometry.coordinates;
+              return polygons.flatMap((polygon) =>
+                polygon.map((ring) => ({
+                  geoid: f.properties.GEOID,
+                  path: ring.map(([lng, lat]): [number, number, number] => [
+                    lng,
+                    lat,
+                    height + 1,
+                  ]),
+                })),
+              );
+            }),
+            getPath: (d) => d.path,
+            getColor: (d) =>
+              d.geoid === highlighted
+                ? [215, 255, 240, 230]
+                : [164, 226, 216, 140],
+            getWidth: (d) => (d.geoid === highlighted ? 1.5 : 0.65),
+            widthUnits: "pixels",
+            pickable: false,
+            updateTriggers: { getColor: highlighted, getWidth: highlighted },
+          }),
+        ]
       : [
           new ScatterplotLayer<ColumnDatum>({
             id: "population-glow",
