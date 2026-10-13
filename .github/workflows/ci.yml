@@ -1,0 +1,29 @@
+name: CI
+
+# run on every PR into main, and on pushes to main so the
+# main branch status stays visible
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      # pull the repo code onto the runner
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # npm ci installs exactly what's in the lockfile, so CI matches your machine
+      - run: npm ci
+
+      # same checks Codex runs before it opens a PR
+      - run: npm run check
+      - run: npm run build
