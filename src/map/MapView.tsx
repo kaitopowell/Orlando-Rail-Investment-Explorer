@@ -235,6 +235,9 @@ export default function MapView({
           map={scene.map}
           overlay={scene.equityOverlay}
           enabled={equityVisible}
+          compactLegend={
+            populationVisible || employmentVisible || transitVisible
+          }
         />
       )}
       {scene && (

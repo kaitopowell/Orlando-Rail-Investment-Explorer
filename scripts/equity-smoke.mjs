@@ -35,12 +35,23 @@ try {
         contentType: "application/json",
         body: JSON.stringify({
           version: 8,
-          sources: {},
+          sources: {
+            labels: {
+              type: "geojson",
+              data: { type: "FeatureCollection", features: [] },
+            },
+          },
           layers: [
             {
               id: "background",
               type: "background",
               paint: { "background-color": "#10171c" },
+            },
+            {
+              id: "place_city",
+              type: "symbol",
+              source: "labels",
+              layout: { "text-field": "City" },
             },
           ],
         }),
@@ -60,8 +71,78 @@ try {
     await expand();
     await page.getByRole("checkbox", { name: "Equity", exact: true }).check();
     await page.getByLabel("Inspect equity tract", { exact: true }).waitFor();
-    for (const measure of ["pct_poverty", "median_income", "pct_zero_vehicle"])
+    assert.equal(
+      await page.getByLabel("Equity classification").inputValue(),
+      "fixed",
+    );
+    assert.match(
+      await page.locator(".equity-headline").innerText(),
+      /Where do households have no car/,
+    );
+    for (const measure of [
+      "pct_poverty",
+      "median_income",
+      "pct_zero_vehicle",
+    ]) {
       await page.getByLabel("Equity measure").selectOption(measure);
+      for (const method of ["quantiles", "fixed"]) {
+        await page.getByLabel("Equity classification").selectOption(method);
+        const counts = await page
+          .locator(".equity-map-legend .equity-classes strong")
+          .allTextContents();
+        assert.equal(
+          counts.reduce((sum, s) => sum + parseInt(s), 0),
+          measure === "median_income" ? 487 : 488,
+        );
+      }
+    }
+    await page.getByRole("checkbox", { name: "Show household counts" }).check();
+    await page.waitForFunction(() =>
+      window.deck._deck.props.layers
+        .flat(Infinity)
+        .some((l) => l.id === "equity-household-counts"),
+    );
+    const countInfo = await page.evaluate(() => {
+      const layers = window.deck._deck.props.layers.flat(Infinity),
+        circles = layers.find((l) => l.id === "equity-household-counts");
+      const order = window.map.style._order;
+      return {
+        count: circles.props.data.length,
+        expected: layers
+          .find((l) => l.id === "equity-tracts")
+          .props.data.features.filter(
+            (f) => f.properties.hh_no_vehicle !== null,
+          ).length,
+        before: circles.props.beforeId,
+        below:
+          order.indexOf("deck-layer-group-before:place_city") <
+          order.indexOf("place_city"),
+      };
+    });
+    assert.equal(countInfo.count, countInfo.expected);
+    assert.equal(countInfo.before, "place_city");
+    assert.ok(countInfo.below);
+    assert.match(
+      await page.getByLabel("Equity map legend").innerText(),
+      /bigger circle means more households without a vehicle/,
+    );
+    const legendBox = await page.getByLabel("Equity map legend").boundingBox();
+    const panelBox = await page.locator(".equity-panel").boundingBox();
+    assert.ok(
+      legendBox.x >= 0 &&
+        legendBox.x + legendBox.width <= width &&
+        legendBox.y + legendBox.height <= height,
+    );
+    if (width < 600) assert.ok(panelBox.y + panelBox.height <= legendBox.y);
+    if (!existsSync(`work/equity-readability-${name}.png`))
+      await page.screenshot({ path: `work/equity-readability-${name}.png` });
+    await page
+      .getByRole("checkbox", { name: "Show household counts" })
+      .uncheck();
+    // Collapse the separate legend to leave the map unobstructed for picking.
+    await page
+      .getByRole("button", { name: "Collapse map legend", exact: true })
+      .click();
     for (const id of ["12095016515", "12095990000"]) {
       await page
         .getByLabel("Inspect equity tract", { exact: true })
@@ -190,8 +271,7 @@ try {
       ),
       true,
     );
-    if (!existsSync(`work/equity-${name}.png`))
-      await page.screenshot({ path: `work/equity-${name}.png` });
+
     assert.deepEqual(errors, []);
     console.log(
       `PASS Equity ${name}: measures, flags, flat 3D, independent demand/transit order, events and layout`,

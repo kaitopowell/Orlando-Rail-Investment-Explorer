@@ -79,3 +79,10 @@ blue-gray/teal ramp reserves orange/yellow for roughly the top 5% of hexagons.
 Soft lighting and interleaved rendering keep basemap labels above the pillars;
 Existing transit still draws on top. The 2D view, data, tract source and inspector
 are unchanged.
+
+Equity now opens with fixed-break classes, plain-language reading guidance and a
+separate map legend showing tract counts per class. Quantiles remains available.
+“Show household counts” adds proportional circles for no-vehicle households;
+color shows the selected share (or inverse income), while circle area shows the
+count. On phones the map legend collapses when other analytical panels open and
+can be reopened from its heading or the Equity panel.
