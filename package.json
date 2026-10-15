@@ -14,7 +14,8 @@
     "test:smoke": "node scripts/smoke.mjs",
     "test:population": "node --experimental-strip-types scripts/test-population.mjs && node scripts/population-smoke.mjs",
     "test:transit": "node scripts/transit-smoke.mjs",
-    "test:hexagons": "node scripts/hexagon-smoke.mjs"
+    "test:hexagons": "node scripts/hexagon-smoke.mjs",
+    "test:employment": "node scripts/employment-smoke.mjs"
   },
   "dependencies": {
     "@deck.gl/core": "^9.2.0",

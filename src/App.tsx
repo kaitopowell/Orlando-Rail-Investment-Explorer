@@ -6,12 +6,14 @@ export default function App() {
   const [open, setOpen] = useState(() => window.innerWidth > 600);
   const [countiesVisible, setCountiesVisible] = useState(true);
   const [transitVisible, setTransitVisible] = useState(false);
+  const [employmentVisible, setEmploymentVisible] = useState(false);
   const [populationVisible, setPopulationVisible] = useState(false);
   const [populationStatus, setPopulationStatus] =
     useState<PopulationStatus>("off");
   return (
     <main>
       <MapView
+        employmentVisible={employmentVisible}
         transitVisible={transitVisible}
         sidebarOpen={open}
         countiesVisible={countiesVisible}
@@ -19,6 +21,14 @@ export default function App() {
         onPopulationStatus={setPopulationStatus}
       />
       <Sidebar
+        employmentVisible={employmentVisible}
+        onEmploymentToggle={() => {
+          setEmploymentVisible(!employmentVisible);
+          if (!employmentVisible) {
+            setPopulationVisible(false);
+            if (window.innerWidth <= 600) setOpen(false);
+          }
+        }}
         transitVisible={transitVisible}
         onTransitToggle={() => {
           setTransitVisible(!transitVisible);
@@ -28,6 +38,7 @@ export default function App() {
         populationStatus={populationStatus}
         onPopulationToggle={() => {
           setPopulationVisible(!populationVisible);
+          if (!populationVisible) setEmploymentVisible(false);
           if (!populationVisible && window.innerWidth <= 600) setOpen(false);
         }}
         open={open}

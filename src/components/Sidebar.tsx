@@ -3,6 +3,8 @@ import { populationSource } from "../data/population";
 import CountyAttribution from "./CountyAttribution";
 import { plannedLayers } from "../data/layers";
 export default function Sidebar({
+  employmentVisible,
+  onEmploymentToggle,
   transitVisible,
   onTransitToggle,
   open,
@@ -13,6 +15,8 @@ export default function Sidebar({
   populationStatus,
   onPopulationToggle,
 }: {
+  employmentVisible: boolean;
+  onEmploymentToggle: () => void;
   transitVisible: boolean;
   onTransitToggle: () => void;
   open: boolean;
@@ -64,7 +68,7 @@ export default function Sidebar({
         <section className="layers">
           <div className="section-heading">
             <h2>Data layers</h2>
-            <span>03 LIVE / 02 PLANNED</span>
+            <span>04 LIVE / 01 PLANNED</span>
           </div>
           <p className="section-note" id="layer-note">
             Explore boundaries, population density and existing rail.
@@ -113,6 +117,19 @@ export default function Sidebar({
                 aria-label="Existing transit"
               />
             </label>
+            <label className="layer county-toggle">
+              <span className="layer-symbol">▦</span>
+              <span className="layer-text">
+                <strong>Employment</strong>
+                <small>LODES 2023 · jobs by workplace</small>
+              </span>
+              <input
+                type="checkbox"
+                checked={employmentVisible}
+                onChange={onEmploymentToggle}
+                aria-label="Employment"
+              />
+            </label>
             {plannedLayers.map((layer) => (
               <label className="layer" key={layer.id}>
                 <span className="layer-symbol" aria-hidden="true">
@@ -142,6 +159,13 @@ export default function Sidebar({
                   : "Population layer available."}
           </p>
           <CountyAttribution />
+          <p className="county-attribution">
+            <a href="https://lehd.ces.census.gov/data/lodes/LODES8/fl/wac/fl_wac_S000_JT00_2023.csv.gz">
+              Census LODES 8.4 (2023), jobs by workplace location.
+            </a>{" "}
+            Accessed 2026-10-15. Population and Employment open as alternative
+            3D demand views.
+          </p>
           <p className="county-attribution">
             Modeled population:{" "}
             <a href="https://data.humdata.org/organization/kontur">
