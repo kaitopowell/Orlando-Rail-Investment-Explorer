@@ -125,3 +125,26 @@ assert.equal(tractColor(400, 400)[3], 190);
 console.log(
   "PASS: 3D tract square-root height, 4x exaggeration, missing/zero suppression and shared density ramp.",
 );
+
+const { parseHexagons, hexHeight, hexColor } =
+  await import("../src/data/kontur.ts");
+const hexData = parseHexagons(
+  JSON.parse(
+    await (
+      await import("node:fs/promises")
+    ).readFile("public/data/kontur_h3_four_counties.geojson", "utf8"),
+  ),
+);
+assert.equal(hexData.features.length, 7896);
+for (const scale of ["sqrt", "linear", "log"]) {
+  assert.equal(hexHeight(0, 6000, scale, 1), 0);
+  assert.ok(Math.abs(hexHeight(6000, 6000, scale, 2) - 4000) < 1e-8);
+  assert.ok(hexHeight(10, 6000, scale, 1) < hexHeight(100, 6000, scale, 1));
+}
+assert.ok(Math.abs(hexHeight(1500, 6000, "sqrt", 1) - 1000) < 1e-8);
+assert.equal(hexHeight(1500, 6000, "linear", 1), 500);
+assert.notDeepEqual(hexColor(1, 6000), hexColor(6000, 6000));
+assert.throws(() => parseHexagons({ type: "FeatureCollection", features: [] }));
+console.log(
+  "PASS Kontur: 7896 supplied hexagons, selectable scales, exaggeration, ramp and validation",
+);

@@ -74,6 +74,9 @@ try {
     await page
       .getByRole("checkbox", { name: "Population", exact: true })
       .check();
+    await page
+      .getByLabel("Population source", { exact: true })
+      .selectOption("tracts");
     await page.getByLabel("Inspect tract", { exact: true }).waitFor();
     await page.waitForTimeout(700);
     const props = await page.evaluate(() => {

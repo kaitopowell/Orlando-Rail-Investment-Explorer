@@ -60,12 +60,21 @@ try {
     await page
       .getByRole("checkbox", { name: "Population", exact: true })
       .check();
+    await page
+      .getByLabel("Population source", { exact: true })
+      .selectOption("tracts");
     await page.getByLabel("Inspect tract", { exact: true }).waitFor();
     assert.match(
       await page.locator(".population-legend").innerText(),
       /Square-root scale/,
     );
-    assert.equal(await page.locator(".tract-picker option").count(), 491);
+    assert.equal(
+      await page
+        .getByLabel("Inspect tract", { exact: true })
+        .locator("option")
+        .count(),
+      491,
+    );
     await page.waitForFunction(() => window.solRMap.getPitch() === 45);
     assert.equal(await page.evaluate(() => window.solRMap.getPitch()), 45);
     await page
@@ -242,11 +251,17 @@ try {
       .getByRole("checkbox", { name: "Population", exact: true })
       .check();
     await page
+      .getByLabel("Population source", { exact: true })
+      .selectOption("tracts");
+    await page
       .getByRole("alert")
       .filter({ hasText: "Population data could not load" })
       .waitFor();
     await page.unroute("**/data/population_tracts.geojson");
     await page.getByRole("button", { name: "Retry population" }).click();
+    await page
+      .getByLabel("Population source", { exact: true })
+      .selectOption("tracts");
     await page.getByLabel("Inspect tract", { exact: true }).waitFor();
     console.log(
       `PASS ${name}: 3D extrusions, 2D preservation, picking and click inspection including zero tract, legend, toggle cleanup, error and retry.`,

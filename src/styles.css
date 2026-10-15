@@ -604,3 +604,25 @@ footer {
     max-height: 24vh;
   }
 }
+.population-panel .population-legend label {
+  display: block;
+  margin-top: 8px;
+}
+.population-panel input:not([type="range"]),
+.population-panel .population-legend select {
+  width: 100%;
+  background: #142329;
+  color: #d0e1de;
+  border: 1px solid #365051;
+  padding: 5px;
+  box-sizing: border-box;
+}
+.population-panel input[type="range"] {
+  width: 100%;
+  accent-color: #54c4b9;
+}
+@media (max-width: 600px) {
+  main:has(.transit-panel) .hexagon-panel {
+    max-height: calc(100dvh - 470px);
+  }
+}
