@@ -91,7 +91,7 @@ export default function Sidebar({
               </span>
               <span className="layer-text">
                 <strong>Population</strong>
-                <small>ACS 2024 · density by tract</small>
+                <small>ACS tracts · Kontur modeled hexagons</small>
               </span>
               <input
                 type="checkbox"
@@ -134,7 +134,7 @@ export default function Sidebar({
           <p className="data-note">
             <span aria-hidden="true">○</span>{" "}
             {populationStatus === "ready"
-              ? "Population tracts loaded."
+              ? "Population layer loaded."
               : populationStatus === "loading"
                 ? "Loading population…"
                 : populationStatus === "error"
@@ -142,6 +142,13 @@ export default function Sidebar({
                   : "Population layer available."}
           </p>
           <CountyAttribution />
+          <p className="county-attribution">
+            Modeled population:{" "}
+            <a href="https://data.humdata.org/organization/kontur">
+              Kontur Population · CC BY · Humanitarian Data Exchange
+            </a>
+            . Release 2023-11-01.
+          </p>
           <p className="county-attribution">
             Transit:{" "}
             <a href="https://corporate.sunrail.com/about-sunrail/gtfs-data-download/">
