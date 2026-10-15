@@ -1,9 +1,7 @@
-// Remaining layers awaiting validated datasets.
-export const plannedLayers = [
-  {
-    id: "income",
-    name: "Household income",
-    description: "Economic context",
-    symbol: "≋",
-  },
-] as const;
+// All supplied layers are live.
+export const plannedLayers: {
+  id: string;
+  name: string;
+  description: string;
+  symbol: string;
+}[] = [];

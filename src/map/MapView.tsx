@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import PopulationOverlay, {
   type PopulationStatus,
 } from "../components/PopulationOverlay";
+import EquityOverlay from "../components/EquityOverlay";
 import EmploymentOverlay from "../components/EmploymentOverlay";
 import TransitOverlay from "../components/TransitOverlay";
 import { overlayChannels } from "./overlayChannels";
@@ -17,6 +18,7 @@ import {
 } from "./studyArea";
 
 export default function MapView({
+  equityVisible,
   sidebarOpen,
   countiesVisible,
   populationVisible,
@@ -24,6 +26,7 @@ export default function MapView({
   transitVisible,
   employmentVisible,
 }: {
+  equityVisible: boolean;
   employmentVisible: boolean;
   transitVisible: boolean;
   sidebarOpen: boolean;
@@ -34,6 +37,7 @@ export default function MapView({
   const [scene, setScene] = useState<{
     map: maplibregl.Map;
     overlay: Pick<MapboxOverlay, "setProps">;
+    equityOverlay: Pick<MapboxOverlay, "setProps">;
     employmentOverlay: Pick<MapboxOverlay, "setProps">;
     transitOverlay: Pick<MapboxOverlay, "setProps">;
   } | null>(null);
@@ -56,9 +60,12 @@ export default function MapView({
   const framingRef = useRef<ReturnType<typeof createMapFraming> | null>(null);
   const populationVisibleRef = useRef(populationVisible);
   useEffect(() => {
-    populationVisibleRef.current = populationVisible || employmentVisible;
-    layersRef.current?.setInteractive(!populationVisible && !employmentVisible);
-  }, [populationVisible, employmentVisible]);
+    populationVisibleRef.current =
+      populationVisible || employmentVisible || equityVisible;
+    layersRef.current?.setInteractive(
+      !populationVisible && !employmentVisible && !equityVisible,
+    );
+  }, [populationVisible, employmentVisible, equityVisible]);
   const countiesVisibleRef = useRef(countiesVisible);
   const layersRef = useRef<ReturnType<typeof addCountyLayers> | null>(null);
   useEffect(() => {
@@ -143,11 +150,16 @@ export default function MapView({
             countiesVisibleRef.current,
           );
           layersRef.current.setInteractive(!populationVisibleRef.current);
-          const [populationOverlay, employmentOverlay, transitOverlay] =
-            overlayChannels(overlay);
+          const [
+            equityOverlay,
+            populationOverlay,
+            employmentOverlay,
+            transitOverlay,
+          ] = overlayChannels(overlay);
           setScene({
             map,
             overlay: populationOverlay,
+            equityOverlay,
             employmentOverlay,
             transitOverlay,
           });
@@ -201,6 +213,13 @@ export default function MapView({
             ? "County boundaries could not load. Reload to retry; the regional map is unavailable."
             : "Map resources could not load. Check network access to CARTO and WebGL support, then reload."}
         </div>
+      )}
+      {scene && (
+        <EquityOverlay
+          map={scene.map}
+          overlay={scene.equityOverlay}
+          enabled={equityVisible}
+        />
       )}
       {scene && (
         <PopulationOverlay

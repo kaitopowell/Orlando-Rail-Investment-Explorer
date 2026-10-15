@@ -634,3 +634,74 @@ footer {
 .employment-panel ol {
   padding-left: 16px;
 }
+
+.equity-panel {
+  left: 370px;
+  right: auto;
+  width: 280px;
+  max-height: calc(100dvh - 360px);
+}
+.equity-panel summary {
+  cursor: pointer;
+  color: #c3ff28;
+  font-weight: 600;
+  padding-bottom: 8px;
+}
+.equity-panel select {
+  width: 100%;
+  min-width: 0;
+  background: #13252b;
+  color: #d8e5e3;
+  margin: 8px 0;
+}
+.equity-classes {
+  list-style: none;
+  padding: 0;
+}
+.equity-classes li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 5px 0;
+}
+.equity-classes span {
+  width: 24px;
+  height: 12px;
+  border: 1px solid #65705f;
+}
+@media (max-width: 1000px) {
+  .equity-panel {
+    left: 12px;
+    top: 92px;
+    width: 230px;
+  }
+}
+@media (max-width: 600px) {
+  .equity-panel {
+    top: 92px;
+    right: 12px;
+    left: auto;
+    width: 246px;
+    max-height: calc(100dvh - 470px);
+  }
+  main:has(.equity-panel) .population-panel:not(.equity-panel) {
+    top: auto;
+    bottom: 86px;
+    max-height: 180px;
+  }
+  main:has(.equity-panel):has(.transit-panel)
+    .population-panel:not(.equity-panel) {
+    bottom: 300px;
+    max-height: 150px;
+  }
+  main:has(.population-panel:not(.equity-panel)) .equity-panel {
+    max-height: calc(100dvh - 575px);
+  }
+}
+
+.equity-panel summary {
+  position: sticky;
+  top: 0;
+  background: #0d171e;
+  z-index: 2;
+}

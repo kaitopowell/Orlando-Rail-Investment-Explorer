@@ -3,6 +3,8 @@ import { populationSource } from "../data/population";
 import CountyAttribution from "./CountyAttribution";
 import { plannedLayers } from "../data/layers";
 export default function Sidebar({
+  equityVisible,
+  onEquityToggle,
   employmentVisible,
   onEmploymentToggle,
   transitVisible,
@@ -15,6 +17,8 @@ export default function Sidebar({
   populationStatus,
   onPopulationToggle,
 }: {
+  equityVisible: boolean;
+  onEquityToggle: () => void;
   employmentVisible: boolean;
   onEmploymentToggle: () => void;
   transitVisible: boolean;
@@ -128,6 +132,19 @@ export default function Sidebar({
                 checked={employmentVisible}
                 onChange={onEmploymentToggle}
                 aria-label="Employment"
+              />
+            </label>
+            <label className="layer county-toggle">
+              <span className="layer-symbol">◒</span>
+              <span className="layer-text">
+                <strong>Equity</strong>
+                <small>ACS 2020–2024 · need indicators</small>
+              </span>
+              <input
+                type="checkbox"
+                aria-label="Equity"
+                checked={equityVisible}
+                onChange={onEquityToggle}
               />
             </label>
             {plannedLayers.map((layer) => (
