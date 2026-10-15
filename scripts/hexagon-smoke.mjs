@@ -122,6 +122,7 @@ try {
       /Widths are not to scale/,
     );
     const order = await page.evaluate(() => {
+      // getStyle() omits custom layers; this is MapLibre's actual render stack.
       const layers = window.map.style._order;
       const pillar = window.deck._deck.props.layers
         .flat(Infinity)
@@ -132,6 +133,7 @@ try {
           (id) => id === "deck-layer-group-before:place_city",
         ),
         labels: layers.indexOf("place_city"),
+        streets: layers.indexOf("road_label"),
         visible:
           window.map.getLayoutProperty("road_label", "visibility") ?? "visible",
         coverage: pillar.props.coverage,
@@ -139,6 +141,7 @@ try {
     });
     assert.equal(order.before, "place_city");
     assert.ok(order.index >= 0 && order.index < order.labels);
+    assert.ok(order.index < order.streets);
     assert.equal(order.visible, "visible");
     assert.equal(order.coverage, 0.35);
     const screenshot = `work/kontur-pillars-${name}.png`;
