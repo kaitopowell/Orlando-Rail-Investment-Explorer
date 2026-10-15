@@ -80,3 +80,13 @@ American Community Survey 5-year estimates 2020-2024 at the census tract level, 
 Method: shares are 100 times numerator divided by denominator, set to missing where the denominator is zero or the Census returned a negative not-available code; median income is capped by the Census at 250,001; small_base means fewer than 100 households, which is a project assumption and not a Census rule.
 
 Limitations: the shares are estimates with margins of error that are large for small tracts, a tract is an averaged unit, and the commute-to-work transit share is sparse and noisy and reflects existing service, so it is not used as an equity measure.
+
+### Kontur 3D display refinement
+
+Only the 3D Kontur view uses thin six-sided ColumnLayer pillars. Centers come from the supplied polygon vertices; a common radius is 99% of the smallest inscribed radius across the supplied hexagons, so every pillar fits inside its hexagon even at maximum width. The `coverage` multiplier defaults to 0.35 and is adjustable from 0.1 to 1. Widths are not to scale and do not encode population or land area. No source geometry or data is modified.
+
+The default height transform is now linear with 3× exaggeration: `2,000 m × 3 × population / maximum`. The supplied maximum of 6,000 people displays at 6,000 m, while the median of 85 people displays at 85 m. Square root and ln(1 + population), plus the existing exaggeration range, remain available. These are display heights, not building heights.
+
+3D colors interpolate from dim blue-gray (alpha 45/255) to teal (155/255) below the 95th percentile; only values at or above that threshold use orange to yellow (215/255 to 245/255). The threshold uses linear interpolation at `(n-1) × 0.95`, with tied values kept together, so approximately the upper 5% receive warm colors. Soft ambient and directional lighting separates pillar faces. The 2D ramp and full polygon footprints, tract rendering and inspector are unchanged.
+
+MapLibre 5 and deck.gl 9 support interleaved WebGL2 rendering. The shared overlay now uses this mode: 3D Kontur pillars (and Equity beneath them when enabled) are inserted before the first basemap symbol layer. City and street labels remain visible in the 3D Kontur view. Other demand views keep their existing ordering; transit remains last with depth comparison always. No fallback opacity slider is needed with this supported setup.

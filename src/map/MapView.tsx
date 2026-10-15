@@ -36,6 +36,7 @@ export default function MapView({
 }) {
   const [scene, setScene] = useState<{
     map: maplibregl.Map;
+    labelLayerId?: string;
     overlay: Pick<MapboxOverlay, "setProps">;
     equityOverlay: Pick<MapboxOverlay, "setProps">;
     employmentOverlay: Pick<MapboxOverlay, "setProps">;
@@ -127,8 +128,19 @@ export default function MapView({
           boundsRef.current!,
           sidebarRef.current,
         );
-        const overlay = new MapboxOverlay({ interleaved: false, layers: [] });
+        const overlay = new MapboxOverlay({ interleaved: true, layers: [] });
         map.addControl(overlay);
+        // MapLibre owns pointer gestures on the shared interleaved canvas.
+        // Forward its click/tap to the public picking API so inspectors keep
+        // working even when its gesture handler consumes the DOM click.
+        map.on("click", (event) => {
+          const info = overlay.pickObject({
+            x: event.point.x,
+            y: event.point.y,
+            radius: 2,
+          });
+          if (info?.object) info.layer?.onClick(info, event);
+        });
         if (import.meta.env.DEV)
           window.dispatchEvent(
             new CustomEvent("sol-r:deck-ready", { detail: overlay }),
@@ -150,14 +162,18 @@ export default function MapView({
             countiesVisibleRef.current,
           );
           layersRef.current.setInteractive(!populationVisibleRef.current);
+          const labelLayerId = map
+            .getStyle()
+            .layers.find((layer) => layer.type === "symbol")?.id;
           const [
             equityOverlay,
             populationOverlay,
             employmentOverlay,
             transitOverlay,
-          ] = overlayChannels(overlay);
+          ] = overlayChannels(overlay, labelLayerId);
           setScene({
             map,
+            labelLayerId,
             overlay: populationOverlay,
             equityOverlay,
             employmentOverlay,
@@ -226,6 +242,7 @@ export default function MapView({
           map={scene.map}
           overlay={scene.overlay}
           enabled={populationVisible}
+          beforeId={scene.labelLayerId}
           onStatus={onPopulationStatus}
         />
       )}

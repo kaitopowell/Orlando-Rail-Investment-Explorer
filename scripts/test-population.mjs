@@ -175,3 +175,62 @@ assert.ok(top[0].jobs >= top[1].jobs && top[1].jobs >= top[2].jobs);
 console.log(
   "PASS Employment: data contract, height, proportional circle area and sector ranking",
 );
+
+const { pillarDefaults, hexCenter, pillarRadius, warmThreshold, pillarColor } =
+  await import("../src/data/kontur3d.ts");
+assert.deepEqual(pillarDefaults, {
+  coverage: 0.35,
+  exaggeration: 3,
+  scale: "linear",
+});
+const threshold = warmThreshold(hexData),
+  maximum = Math.max(...hexData.features.map((f) => f.properties.population));
+const fraction =
+  hexData.features.filter((f) => f.properties.population >= threshold).length /
+  hexData.features.length;
+assert.ok(fraction >= 0.049 && fraction <= 0.051);
+assert.equal(
+  hexHeight(
+    maximum,
+    maximum,
+    pillarDefaults.scale,
+    pillarDefaults.exaggeration,
+  ),
+  6000,
+);
+assert.equal(
+  hexHeight(85, maximum, pillarDefaults.scale, pillarDefaults.exaggeration),
+  85,
+);
+assert.ok(pillarColor(1, threshold, maximum)[3] < 50);
+assert.ok(pillarColor(threshold - 1, threshold, maximum)[0] < 50);
+assert.ok(pillarColor(threshold, threshold, maximum)[0] > 240);
+assert.deepEqual(pillarColor(maximum, threshold, maximum), [255, 231, 80, 245]);
+const radius = pillarRadius(hexData);
+assert.ok(Number.isFinite(radius) && radius > 0);
+for (const f of hexData.features) {
+  const center = hexCenter(f),
+    ring = f.geometry.coordinates[0];
+  // Independently verify that the maximum-width pillar's vertices stay in the supplied polygon.
+  for (let angle = 0; angle < 6; angle++) {
+    const x =
+      center[0] +
+      (radius * Math.cos((angle * Math.PI) / 3)) /
+        (111195 * Math.cos((center[1] * Math.PI) / 180));
+    const y = center[1] + (radius * Math.sin((angle * Math.PI) / 3)) / 111195;
+    let inside = false;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const a = ring[i],
+        b = ring[j];
+      if (
+        a[1] > y !== b[1] > y &&
+        x < ((b[0] - a[0]) * (y - a[1])) / (b[1] - a[1]) + a[0]
+      )
+        inside = !inside;
+    }
+    assert.ok(inside);
+  }
+}
+console.log(
+  "PASS 3D pillars: linear peaks, 95th-percentile warm tail, low alpha and footprints inside all supplied hexagons",
+);

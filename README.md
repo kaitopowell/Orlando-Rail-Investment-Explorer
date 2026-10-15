@@ -72,3 +72,10 @@ Use the measure and tract selectors or click/tap a tract; collapse the Equity
 legend to make more room on small screens. Gray marks missing values, dimmer
 tracts have fewer than 100 households, and brighter colors indicate higher need
 (lower income for the income measure). Shares are estimates with sampling error.
+
+Kontur's 3D Population view defaults to thin pillars (column width 0.35), linear
+height and 3× exaggeration. Width is a display setting, not to scale. The new
+blue-gray/teal ramp reserves orange/yellow for roughly the top 5% of hexagons.
+Soft lighting and interleaved rendering keep basemap labels above the pillars;
+Existing transit still draws on top. The 2D view, data, tract source and inspector
+are unchanged.
