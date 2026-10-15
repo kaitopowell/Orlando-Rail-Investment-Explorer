@@ -148,3 +148,30 @@ assert.throws(() => parseHexagons({ type: "FeatureCollection", features: [] }));
 console.log(
   "PASS Kontur: 7896 supplied hexagons, selectable scales, exaggeration, ramp and validation",
 );
+
+const { parseEmployment, jobHeight, jobRadius, topSectors } =
+  await import("../src/data/employment.ts");
+const employment = parseEmployment(
+  JSON.parse(
+    await (
+      await import("node:fs/promises")
+    ).readFile("public/data/employment_tracts.geojson", "utf8"),
+  ),
+);
+assert.equal(employment.features.length, 490);
+assert.equal(
+  employment.features.reduce((sum, f) => sum + f.properties.jobs_total, 0),
+  1482556,
+);
+assert.equal(jobHeight(0, 100, "sqrt", 3), 0);
+assert.ok(Math.abs(jobHeight(100, 100, "sqrt", 3) - 12000) < 1e-8);
+assert.ok(
+  Math.abs(jobRadius(400, 400, 10) ** 2 / jobRadius(100, 400, 10) ** 2 - 4) <
+    1e-8,
+);
+const top = topSectors(employment.features[0].properties);
+assert.equal(top.length, 3);
+assert.ok(top[0].jobs >= top[1].jobs && top[1].jobs >= top[2].jobs);
+console.log(
+  "PASS Employment: data contract, height, proportional circle area and sector ranking",
+);

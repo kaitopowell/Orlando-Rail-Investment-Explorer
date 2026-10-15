@@ -626,3 +626,11 @@ footer {
     max-height: calc(100dvh - 470px);
   }
 }
+@media (max-width: 600px) {
+  main:has(.transit-panel) .employment-panel {
+    max-height: calc(100dvh - 470px);
+  }
+}
+.employment-panel ol {
+  padding-left: 16px;
+}

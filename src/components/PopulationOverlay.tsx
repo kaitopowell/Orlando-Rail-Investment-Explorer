@@ -160,21 +160,6 @@ export default function PopulationOverlay({
     source,
   ]);
   useEffect(() => {
-    // Apply after sidebar framing effects, which also move the camera on phones.
-    const frame = requestAnimationFrame(() =>
-      map.easeTo({
-        pitch: enabled ? populationPitch : 0,
-        duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? 0
-          : 600,
-      }),
-    );
-    return () => {
-      cancelAnimationFrame(frame);
-      overlay.setProps({ layers: [] });
-    };
-  }, [enabled, map, overlay]);
-  useEffect(() => {
     function escape(event: KeyboardEvent) {
       if (event.key === "Escape") setSelected(null);
     }

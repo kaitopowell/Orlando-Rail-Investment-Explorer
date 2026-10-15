@@ -80,7 +80,7 @@ try {
     .click();
   await checkCamera();
   assert.equal(await page.getByRole("checkbox").count(), 5);
-  for (const name of ["Employment", "Household income"])
+  for (const name of ["Household income"])
     assert.equal(
       await page.getByRole("checkbox", { name, exact: true }).isDisabled(),
       true,

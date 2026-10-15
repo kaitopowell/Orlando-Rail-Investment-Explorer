@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import PopulationOverlay, {
   type PopulationStatus,
 } from "../components/PopulationOverlay";
+import EmploymentOverlay from "../components/EmploymentOverlay";
 import TransitOverlay from "../components/TransitOverlay";
 import { overlayChannels } from "./overlayChannels";
 import maplibregl from "maplibre-gl";
@@ -21,7 +22,9 @@ export default function MapView({
   populationVisible,
   onPopulationStatus,
   transitVisible,
+  employmentVisible,
 }: {
+  employmentVisible: boolean;
   transitVisible: boolean;
   sidebarOpen: boolean;
   countiesVisible: boolean;
@@ -31,8 +34,21 @@ export default function MapView({
   const [scene, setScene] = useState<{
     map: maplibregl.Map;
     overlay: Pick<MapboxOverlay, "setProps">;
+    employmentOverlay: Pick<MapboxOverlay, "setProps">;
     transitOverlay: Pick<MapboxOverlay, "setProps">;
   } | null>(null);
+  useEffect(() => {
+    if (!scene) return;
+    const frame = requestAnimationFrame(() =>
+      scene.map.easeTo({
+        pitch: populationVisible || employmentVisible ? 45 : 0,
+        duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? 0
+          : 600,
+      }),
+    );
+    return () => cancelAnimationFrame(frame);
+  }, [scene, populationVisible, employmentVisible]);
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const boundsRef = useRef<Bounds | null>(null);
@@ -40,9 +56,9 @@ export default function MapView({
   const framingRef = useRef<ReturnType<typeof createMapFraming> | null>(null);
   const populationVisibleRef = useRef(populationVisible);
   useEffect(() => {
-    populationVisibleRef.current = populationVisible;
-    layersRef.current?.setInteractive(!populationVisible);
-  }, [populationVisible]);
+    populationVisibleRef.current = populationVisible || employmentVisible;
+    layersRef.current?.setInteractive(!populationVisible && !employmentVisible);
+  }, [populationVisible, employmentVisible]);
   const countiesVisibleRef = useRef(countiesVisible);
   const layersRef = useRef<ReturnType<typeof addCountyLayers> | null>(null);
   useEffect(() => {
@@ -127,8 +143,14 @@ export default function MapView({
             countiesVisibleRef.current,
           );
           layersRef.current.setInteractive(!populationVisibleRef.current);
-          const [populationOverlay, transitOverlay] = overlayChannels(overlay);
-          setScene({ map, overlay: populationOverlay, transitOverlay });
+          const [populationOverlay, employmentOverlay, transitOverlay] =
+            overlayChannels(overlay);
+          setScene({
+            map,
+            overlay: populationOverlay,
+            employmentOverlay,
+            transitOverlay,
+          });
           setStatus("ready");
         });
         map.on("error", () => setStatus("error"));
@@ -193,6 +215,13 @@ export default function MapView({
           map={scene.map}
           overlay={scene.transitOverlay}
           enabled={transitVisible}
+        />
+      )}
+      {scene && (
+        <EmploymentOverlay
+          map={scene.map}
+          overlay={scene.employmentOverlay}
+          enabled={employmentVisible}
         />
       )}
       <div className="view-controls" aria-label="Map views">
