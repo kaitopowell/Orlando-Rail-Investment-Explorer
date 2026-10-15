@@ -28,11 +28,13 @@ export default function PopulationOverlay({
   map,
   overlay,
   enabled,
+  beforeId,
   onStatus,
 }: {
   map: Map;
   overlay: Pick<MapboxOverlay, "setProps">;
   enabled: boolean;
+  beforeId?: string;
   onStatus: (status: PopulationStatus) => void;
 }) {
   const [source, setSource] = useState<"tracts" | "hexagons">("hexagons");
@@ -52,7 +54,7 @@ export default function PopulationOverlay({
   }, [map]);
   const [zoom, setZoom] = useState(() => map.getZoom());
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || (source === "hexagons" && is3D)) return;
     const labels = (map.getStyle().layers ?? [])
       .filter(
         (layer) =>
@@ -80,7 +82,7 @@ export default function PopulationOverlay({
         if (map.getLayer(label.id))
           map.setLayoutProperty(label.id, "visibility", label.visibility);
     };
-  }, [map, enabled]);
+  }, [map, enabled, source, is3D]);
   const lighting = useMemo(
     () =>
       new LightingEffect({
@@ -203,7 +205,7 @@ export default function PopulationOverlay({
         <HexPopulation
           overlay={overlay}
           is3D={is3D}
-          lighting={lighting}
+          beforeId={beforeId}
           onStatus={onStatus}
         />
       ) : (

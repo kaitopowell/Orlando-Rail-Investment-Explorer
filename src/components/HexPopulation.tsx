@@ -1,6 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
-import { GeoJsonLayer } from "@deck.gl/layers";
-import type { LightingEffect } from "@deck.gl/core";
+import { ColumnLayer, GeoJsonLayer } from "@deck.gl/layers";
+import {
+  AmbientLight,
+  DirectionalLight,
+  LightingEffect,
+  type PickingInfo,
+} from "@deck.gl/core";
+import {
+  pillarDefaults,
+  pillarRampCss,
+  hexCenter,
+  pillarRadius,
+  warmThreshold,
+  pillarColor,
+} from "../data/kontur3d";
 import type { MapboxOverlay } from "@deck.gl/mapbox";
 import {
   parseHexagons,
@@ -17,19 +30,34 @@ let cached: HexData | null = null;
 export default function HexPopulation({
   overlay,
   is3D,
-  lighting,
+  beforeId,
   onStatus,
 }: {
   overlay: Pick<MapboxOverlay, "setProps">;
   is3D: boolean;
-  lighting: LightingEffect;
+  beforeId?: string;
   onStatus: (status: PopulationStatus) => void;
 }) {
   const [data, setData] = useState<HexData | null>(cached),
     [error, setError] = useState(false),
     [retry, setRetry] = useState(0);
-  const [scale, setScale] = useState<HexScale>("sqrt"),
-    [exaggeration, setExaggeration] = useState(1);
+  const [scale, setScale] = useState<HexScale>(pillarDefaults.scale),
+    [exaggeration, setExaggeration] = useState(pillarDefaults.exaggeration),
+    [coverage, setCoverage] = useState(pillarDefaults.coverage);
+  const lighting = useMemo(
+    () =>
+      new LightingEffect({
+        ambient: new AmbientLight({ intensity: 0.8 }),
+        sun: new DirectionalLight({
+          direction: [-1, -2, -3],
+          intensity: 0.7,
+          color: [255, 244, 230],
+        }),
+      }),
+    [],
+  );
+  const radius = useMemo(() => (data ? pillarRadius(data) : 0), [data]);
+  const threshold = useMemo(() => (data ? warmThreshold(data) : 0), [data]);
   const [selected, setSelected] = useState<Hex | null>(null),
     [hovered, setHovered] = useState<Hex | null>(null),
     [query, setQuery] = useState("");
@@ -72,47 +100,104 @@ export default function HexPopulation({
       effects: is3D ? [lighting] : [],
       layers: data
         ? [
-            new GeoJsonLayer<HexProperties>({
-              id: "population-hexagons",
-              data,
-              extruded: is3D,
-              filled: true,
-              stroked: !is3D,
-              pickable: true,
-              getElevation: (f) =>
-                hexHeight(
-                  f.properties.population,
-                  maximum,
-                  scale,
-                  exaggeration,
-                ),
-              getFillColor: (f) => hexColor(f.properties.population, maximum),
-              getLineColor: [75, 154, 167, 70],
-              getLineWidth: 0.4,
-              lineWidthUnits: "pixels",
-              autoHighlight: true,
-              highlightColor: [255, 240, 170, 90],
-              material: {
-                ambient: 0.5,
-                diffuse: 0.65,
-                shininess: 18,
-                specularColor: [100, 130, 130],
-              },
-              onHover: (info) => setHovered((info.object as Hex) ?? null),
-              onClick: (info) => {
-                if (info.object) setSelected(info.object as Hex);
-                return true;
-              },
-              updateTriggers: {
-                getElevation: [scale, exaggeration, maximum],
-                getFillColor: maximum,
-              },
-            }),
+            ...(is3D
+              ? [
+                  new ColumnLayer<Hex, { beforeId?: string }>({
+                    id: "population-hexagon-pillars",
+                    data: data.features,
+                    beforeId,
+                    diskResolution: 6,
+                    radius,
+                    coverage,
+                    radiusUnits: "meters",
+                    getPosition: hexCenter,
+                    extruded: true,
+                    pickable: true,
+                    getElevation: (f) =>
+                      hexHeight(
+                        f.properties.population,
+                        maximum,
+                        scale,
+                        exaggeration,
+                      ),
+                    getFillColor: (f) =>
+                      pillarColor(f.properties.population, threshold, maximum),
+                    autoHighlight: true,
+                    highlightColor: [255, 240, 170, 90],
+                    material: {
+                      ambient: 0.65,
+                      diffuse: 0.6,
+                      shininess: 8,
+                      specularColor: [70, 85, 90],
+                    },
+                    onHover: (info: PickingInfo<Hex>) =>
+                      setHovered(info.object ?? null),
+                    onClick: (info: PickingInfo<Hex>) => {
+                      if (info.object) setSelected(info.object);
+                      return true;
+                    },
+                    updateTriggers: {
+                      getElevation: [scale, exaggeration, maximum],
+                      getFillColor: [threshold, maximum],
+                    },
+                  }),
+                ]
+              : [
+                  new GeoJsonLayer<HexProperties>({
+                    id: "population-hexagons",
+                    data,
+                    extruded: false,
+                    filled: true,
+                    stroked: true,
+                    pickable: true,
+                    getElevation: (f) =>
+                      hexHeight(
+                        f.properties.population,
+                        maximum,
+                        scale,
+                        exaggeration,
+                      ),
+                    getFillColor: (f) =>
+                      hexColor(f.properties.population, maximum),
+                    getLineColor: [75, 154, 167, 70],
+                    getLineWidth: 0.4,
+                    lineWidthUnits: "pixels",
+                    autoHighlight: true,
+                    highlightColor: [255, 240, 170, 90],
+                    material: {
+                      ambient: 0.5,
+                      diffuse: 0.65,
+                      shininess: 18,
+                      specularColor: [100, 130, 130],
+                    },
+                    onHover: (info) => setHovered((info.object as Hex) ?? null),
+                    onClick: (info) => {
+                      if (info.object) setSelected(info.object as Hex);
+                      return true;
+                    },
+                    updateTriggers: {
+                      getElevation: [scale, exaggeration, maximum],
+                      getFillColor: maximum,
+                    },
+                  }),
+                ]),
           ]
         : [],
     });
     return () => overlay.setProps({ layers: [], effects: [] });
-  }, [overlay, data, is3D, lighting, maximum, scale, exaggeration]);
+  }, [
+    overlay,
+    data,
+    is3D,
+    lighting,
+    maximum,
+    scale,
+    exaggeration,
+    coverage,
+    radius,
+    threshold,
+    beforeId,
+  ]);
   const display = (value: number | null) =>
     value === null
       ? "Unavailable"
@@ -123,7 +208,7 @@ export default function HexPopulation({
         <div
           aria-hidden="true"
           style={{
-            background: hexRampCss,
+            background: is3D ? pillarRampCss : hexRampCss,
             height: 6,
             borderRadius: 3,
             marginBottom: 8,
@@ -133,7 +218,15 @@ export default function HexPopulation({
         <br />
         Modeled estimate, Kontur Population · people per hexagon.
         <br />
-        Color: low blue → teal → orange → high yellow (square-root ramp).
+        {is3D ? (
+          <>
+            Color: dim, low-opacity blue-gray → teal; orange → yellow only at or
+            above the 95th percentile ({display(threshold)} people per hexagon).
+            Basemap labels draw above pillars.
+          </>
+        ) : (
+          "Color: low blue → teal → orange → high yellow (square-root ramp)."
+        )}
         <label>
           Height scale
           <select
@@ -158,9 +251,27 @@ export default function HexPopulation({
             onChange={(e) => setExaggeration(Number(e.target.value))}
           />
         </label>
+        {is3D && (
+          <label>
+            Column width: {coverage.toFixed(2)}
+            <input
+              aria-label="Column width"
+              type="range"
+              min="0.1"
+              max="1"
+              step="0.05"
+              value={coverage}
+              onChange={(e) => setCoverage(Number(e.target.value))}
+            />
+            Widths are not to scale; width is a display setting, not population
+            or land area.
+          </label>
+        )}
         Display height: 2,000 m × exaggeration × scaled population / scaled
         maximum.{" "}
-        {is3D ? "Extruded view." : "Flat view; height controls apply in 3D."}
+        {is3D
+          ? "Thin pillars; display metres are not building heights."
+          : "Flat view; height controls apply in 3D."}
       </div>
       {error ? (
         <p role="alert">

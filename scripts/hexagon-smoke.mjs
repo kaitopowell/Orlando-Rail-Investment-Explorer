@@ -35,12 +35,29 @@ try {
         contentType: "application/json",
         body: JSON.stringify({
           version: 8,
-          sources: {},
+          sources: {
+            labels: {
+              type: "geojson",
+              data: { type: "FeatureCollection", features: [] },
+            },
+          },
           layers: [
             {
               id: "background",
               type: "background",
               paint: { "background-color": "#10171c" },
+            },
+            {
+              id: "place_city",
+              type: "symbol",
+              source: "labels",
+              layout: { "text-field": "City" },
+            },
+            {
+              id: "road_label",
+              type: "symbol",
+              source: "labels",
+              layout: { "text-field": "Street" },
             },
           ],
         }),
@@ -68,7 +85,7 @@ try {
     await page.waitForFunction(() =>
       window.deck._deck.props.layers
         .flat(Infinity)
-        .some((l) => l.id === "population-hexagons" && l.props.extruded),
+        .some((l) => l.id === "population-hexagon-pillars" && l.props.extruded),
     );
     const loaded = Date.now() - start;
     assert.equal(
@@ -78,12 +95,10 @@ try {
     const info = await page.evaluate(() => {
       const l = window.deck._deck.props.layers
         .flat(Infinity)
-        .find((l) => l.id === "population-hexagons");
-      const f = l.props.data.features.find(
-        (f) => f.properties.population > 1000,
-      );
+        .find((l) => l.id === "population-hexagon-pillars");
+      const f = l.props.data.find((f) => f.properties.population > 1000);
       return {
-        count: l.props.data.features.length,
+        count: l.props.data.length,
         p: f.properties,
         center: f.geometry.coordinates[0]
           .slice(0, 6)
@@ -91,6 +106,48 @@ try {
       };
     });
     assert.equal(info.count, 7896);
+    assert.equal(
+      await page.getByLabel("Hexagon height scale").inputValue(),
+      "linear",
+    );
+    assert.equal(
+      await page
+        .getByLabel("Vertical exaggeration", { exact: true })
+        .inputValue(),
+      "3",
+    );
+    assert.equal(await page.getByLabel("Column width").inputValue(), "0.35");
+    assert.match(
+      await page.locator(".population-legend").innerText(),
+      /Widths are not to scale/,
+    );
+    const order = await page.evaluate(() => {
+      const layers = window.map.style._order;
+      const pillar = window.deck._deck.props.layers
+        .flat(Infinity)
+        .find((l) => l.id === "population-hexagon-pillars");
+      return {
+        before: pillar.props.beforeId,
+        index: layers.findIndex(
+          (id) => id === "deck-layer-group-before:place_city",
+        ),
+        labels: layers.indexOf("place_city"),
+        visible:
+          window.map.getLayoutProperty("road_label", "visibility") ?? "visible",
+        coverage: pillar.props.coverage,
+      };
+    });
+    assert.equal(order.before, "place_city");
+    assert.ok(order.index >= 0 && order.index < order.labels);
+    assert.equal(order.visible, "visible");
+    assert.equal(order.coverage, 0.35);
+    const screenshot = `work/kontur-pillars-${name}.png`;
+    if (!process.env.SOL_R_REUSE_SCREENSHOTS || !existsSync(screenshot))
+      await page.screenshot({ path: screenshot });
+
+    await page.getByLabel("Column width").focus();
+    await page.keyboard.press("ArrowRight");
+    assert.equal(await page.getByLabel("Column width").inputValue(), "0.4");
     await page.getByLabel("Inspect H3 ID").fill(info.p.h3);
     await page
       .getByRole("button", { name: "Inspect hexagon", exact: true })
@@ -114,6 +171,11 @@ try {
       window.deck._deck.props.layers
         .flat(Infinity)
         .some((l) => l.id === "population-hexagons" && !l.props.extruded),
+    );
+    assert.equal(await page.getByLabel("Column width").count(), 0);
+    assert.match(
+      await page.locator(".population-legend").innerText(),
+      /square-root ramp/,
     );
     await page
       .getByRole("button", { name: "Toggle population 3D view" })
@@ -141,8 +203,8 @@ try {
     const point = await page.evaluate(({ center, p }) => {
       const layer = window.deck._deck.props.layers
         .flat(Infinity)
-        .find((l) => l.id === "population-hexagons");
-      const f = layer.props.data.features.find((f) => f.properties.h3 === p.h3);
+        .find((l) => l.id === "population-hexagon-pillars");
+      const f = layer.props.data.find((f) => f.properties.h3 === p.h3);
       const [x, y] = window.deck._deck
         .getViewports()[0]
         .project([...center, layer.props.getElevation(f)]);
@@ -154,7 +216,7 @@ try {
           window.deck.pickObject({
             ...point,
             radius: 4,
-            layerIds: ["population-hexagons"],
+            layerIds: ["population-hexagon-pillars"],
           })?.object?.properties.h3,
         point,
       ),
@@ -165,9 +227,6 @@ try {
       .getByRole("button", { name: "Toggle population 3D view" })
       .click();
     await page.waitForTimeout(400);
-    const screenshot = `/tmp/sol-r-kontur-${name}.png`;
-    if (!process.env.SOL_R_REUSE_SCREENSHOTS || !existsSync(screenshot))
-      await page.screenshot({ path: screenshot });
     if (width < 600) {
       const hex = await page.locator(".hexagon-panel").boundingBox();
       const transit = await page.locator(".transit-panel").boundingBox();
