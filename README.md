@@ -64,3 +64,11 @@ The same script unions the simplified counties and subtracts that union from a d
 Run `/usr/bin/python3 analysis/test_counties.py` for four checks: exact FIPS/names, valid geometries and interior labels, mask exclusion of county interiors, and byte-for-byte reproducibility plus input checksum. Pipeline validated with GDAL 3.10.3. Outputs are committed, so frontend development requires no Python setup.
 
 Population validation (dev server running): `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:population`. This verifies scale/centroid calculations and real-data inspection on phone and laptop, including the zero-population tract, toggle cleanup, load failure, and retry.
+
+Equity is an independent layer with ACS 2020–2024 no-vehicle household share,
+poverty share and median household income. Its five-class quantile choropleth
+stays flat in both camera modes, below Population/Employment and transit.
+Use the measure and tract selectors or click/tap a tract; collapse the Equity
+legend to make more room on small screens. Gray marks missing values, dimmer
+tracts have fewer than 100 households, and brighter colors indicate higher need
+(lower income for the income measure). Shares are estimates with sampling error.

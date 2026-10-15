@@ -16,7 +16,7 @@
 
 ## Camera anchors and future layers
 
-The approximate named coordinates in `src/config/mapViews.ts` configure the default camera only; they are not analytical observations. Population is a live, optional frontend layer. Employment, income, and transit remain planned. No ridership estimates, infrastructure costs, or optimization results are supplied.
+The approximate named coordinates in `src/config/mapViews.ts` configure the default camera only; they are not analytical observations. Population, Employment, Equity, and Existing transit are live, optional frontend layers. No ridership estimates, infrastructure costs, or optimization results are supplied.
 
 ## Tract population pipeline
 
@@ -72,3 +72,11 @@ Limitations: jobs are counted at the employer’s location, jobs are not workers
 `/usr/bin/python3 analysis/prepare_employment.py` reads the supplied `data/processed/lodes_wac_tracts_2023.csv` with string GEOIDs and joins it to the 2024 polygons in `public/data/population_tracts.geojson`. It reports unmatched identifiers and fails on missing matches or duplicate/invalid IDs. It publishes `public/data/employment_tracts.geojson` with NAMELSAD as name, the supplied jobs counts/density and all 20 CNS sectors, plus a `point` longitude/latitude pair computed with OGR PointOnSurface and checked to be inside the actual polygon. Geometry is unchanged. Blank density remains null (the zero-jobs tract has zero land area). Tests verify 490 tracts, 11-character string GEOIDs, 1,482,556 jobs, sector totals, inside points and the sole zero-jobs tract `12095990000`.
 
 Employment opens in 3D and replaces Population as the active demand view; selecting Population replaces Employment. Transit remains independent and last in drawing order. The 3D display uses tapered, lit columns at representative points, 2.8-pixel base radii and additive base glows. Height = 4,000 display metres × exaggeration × transformed measure / transformed maximum. Defaults: total jobs, square root, 3× exaggeration. Linear and ln(1 + value), jobs/km² and 0.5×–6× exaggeration are selectable. A shared indigo/violet/magenta/pink/near-white ramp uses the square root of the normalized value. Zero-job tracts have no column but remain inspectable. In 2D, circles have area proportional to total jobs, with pixel radii scaled by zoom and additive blending; faint tract fill uses jobs/km². Display height is not building height. Inspector sector ranking follows CNS01–CNS20, with ties kept in that order.
+
+## Equity
+
+American Community Survey 5-year estimates 2020-2024 at the census tract level, tables B19013 (median household income), B08201 (household size by vehicles available, no-vehicle households), B17001 (poverty status) and B08301 (means of transportation to work), retrieved through the Census Data API at [https://api.census.gov/data/2024/acs/acs5](https://api.census.gov/data/2024/acs/acs5), accessed 2026-10-15, for Lake, Orange, Osceola and Seminole counties.
+
+Method: shares are 100 times numerator divided by denominator, set to missing where the denominator is zero or the Census returned a negative not-available code; median income is capped by the Census at 250,001; small_base means fewer than 100 households, which is a project assumption and not a Census rule.
+
+Limitations: the shares are estimates with margins of error that are large for small tracts, a tract is an averaged unit, and the commute-to-work transit share is sparse and noisy and reflects existing service, so it is not used as an equity measure.
