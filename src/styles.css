@@ -705,3 +705,24 @@ footer {
   background: #0d171e;
   z-index: 2;
 }
+
+.employment-panel input[type="checkbox"] {
+  width: auto;
+  margin-right: 6px;
+  accent-color: #dc68d4;
+}
+.employment-panel > .population-legend {
+  display: block;
+}
+.employment-panel > .population-legend > select {
+  display: block;
+  width: 100%;
+  background: #142329;
+  color: #d0e1de;
+  border: 1px solid #365051;
+  padding: 5px;
+}
+/* The taller block controls must stay above the decorative map caption. */
+.employment-blocks-panel {
+  z-index: 2;
+}

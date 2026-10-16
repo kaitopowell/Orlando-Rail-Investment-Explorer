@@ -17,13 +17,13 @@ export function overlayChannels(overlay: MapboxOverlay, labelLayerId?: string) {
         Boolean,
       ) as Layer<{ beforeId?: string }>[];
       const pillars = layers.some(
-        (layer) => layer.id === "population-hexagon-pillars",
+        (layer) => layer.id === "population-hexagon-pillars" || layer.id === "employment-block-needles",
       );
       overlay.setProps({
         // Equity stays below Population even when pillars move below map labels.
         // Other demand views and transit retain their top-of-basemap order.
         layers: layers.map((layer) =>
-          layer.id === "equity-tracts"
+          layer.id === "equity-tracts" || layer.id === "employment-block-needles"
             ? layer.clone({ beforeId: pillars ? labelLayerId : undefined })
             : layer,
         ),
