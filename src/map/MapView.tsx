@@ -4,6 +4,7 @@ import PopulationOverlay, {
 } from "../components/PopulationOverlay";
 import EquityOverlay from "../components/EquityOverlay";
 import EmploymentOverlay from "../components/EmploymentOverlay";
+import BusOverlay from "../components/BusOverlay";
 import TransitOverlay from "../components/TransitOverlay";
 import { overlayChannels } from "./overlayChannels";
 import maplibregl from "maplibre-gl";
@@ -18,6 +19,7 @@ import {
 } from "./studyArea";
 
 export default function MapView({
+  busVisible,
   equityVisible,
   sidebarOpen,
   countiesVisible,
@@ -26,6 +28,7 @@ export default function MapView({
   transitVisible,
   employmentVisible,
 }: {
+  busVisible: boolean;
   equityVisible: boolean;
   employmentVisible: boolean;
   transitVisible: boolean;
@@ -40,6 +43,7 @@ export default function MapView({
     overlay: Pick<MapboxOverlay, "setProps">;
     equityOverlay: Pick<MapboxOverlay, "setProps">;
     employmentOverlay: Pick<MapboxOverlay, "setProps">;
+    busOverlay: Pick<MapboxOverlay, "setProps">;
     transitOverlay: Pick<MapboxOverlay, "setProps">;
   } | null>(null);
   useEffect(() => {
@@ -62,11 +66,11 @@ export default function MapView({
   const populationVisibleRef = useRef(populationVisible);
   useEffect(() => {
     populationVisibleRef.current =
-      populationVisible || employmentVisible || equityVisible;
+      populationVisible || employmentVisible || equityVisible || busVisible;
     layersRef.current?.setInteractive(
-      !populationVisible && !employmentVisible && !equityVisible,
+      !populationVisible && !employmentVisible && !equityVisible && !busVisible,
     );
-  }, [populationVisible, employmentVisible, equityVisible]);
+  }, [populationVisible, employmentVisible, equityVisible, busVisible]);
   const countiesVisibleRef = useRef(countiesVisible);
   const layersRef = useRef<ReturnType<typeof addCountyLayers> | null>(null);
   useEffect(() => {
@@ -169,6 +173,7 @@ export default function MapView({
             equityOverlay,
             populationOverlay,
             employmentOverlay,
+            busOverlay,
             transitOverlay,
           ] = overlayChannels(overlay, labelLayerId);
           setScene({
@@ -177,6 +182,7 @@ export default function MapView({
             overlay: populationOverlay,
             equityOverlay,
             employmentOverlay,
+            busOverlay,
             transitOverlay,
           });
           setStatus("ready");
@@ -246,6 +252,8 @@ export default function MapView({
           onStatus={onPopulationStatus}
         />
       )}
+      <div className={busVisible ? "transit-stack" : undefined}>
+      {scene && <BusOverlay overlay={scene.busOverlay} enabled={busVisible}/>}
       {scene && (
         <TransitOverlay
           map={scene.map}
@@ -253,6 +261,7 @@ export default function MapView({
           enabled={transitVisible}
         />
       )}
+      </div>
       {scene && (
         <EmploymentOverlay
           map={scene.map}

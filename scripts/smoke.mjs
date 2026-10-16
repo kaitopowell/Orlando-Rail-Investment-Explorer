@@ -79,8 +79,8 @@ try {
     .getByRole("button", { name: "Four counties", exact: true })
     .click();
   await checkCamera();
-  assert.equal(await page.getByRole("checkbox").count(), 5);
-  for (const name of ["Equity"])
+  assert.equal(await page.getByRole("checkbox").count(), 6);
+  for (const name of ["Equity", "Bus baseline (LYNX)"])
     assert.equal(
       await page.getByRole("checkbox", { name, exact: true }).isDisabled(),
       false,
