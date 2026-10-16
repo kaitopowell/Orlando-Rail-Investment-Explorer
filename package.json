@@ -15,7 +15,7 @@
     "test:population": "node --experimental-strip-types scripts/test-population.mjs && node scripts/population-smoke.mjs",
     "test:transit": "node scripts/transit-smoke.mjs",
     "test:hexagons": "node scripts/hexagon-smoke.mjs",
-    "test:employment": "node scripts/employment-smoke.mjs",
+    "test:employment": "node --experimental-strip-types scripts/test-employment-blocks.mjs && node scripts/employment-smoke.mjs",
     "test:equity": "node --experimental-strip-types scripts/test-equity.mjs && node scripts/equity-smoke.mjs"
   },
   "dependencies": {

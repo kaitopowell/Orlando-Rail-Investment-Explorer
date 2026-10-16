@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Map } from "maplibre-gl";
 import type { MapboxOverlay } from "@deck.gl/mapbox";
 import { AmbientLight, DirectionalLight, LightingEffect } from "@deck.gl/core";
@@ -13,14 +13,35 @@ import {
   type JobMeasure,
 } from "../data/employment";
 import { employmentLayers } from "../map/employmentLayers";
-export default function EmploymentOverlay({
+import EmploymentBlocks from "./EmploymentBlocks";
+type Props = {map: Map; overlay: Pick<MapboxOverlay, "setProps">; enabled: boolean};
+export default function EmploymentOverlay(props: Props) {
+  const [source, setSource] = useState("blocks");
+  const [is3D, setIs3D] = useState(props.map.getPitch() > 0);
+  useEffect(() => {
+    const update = () => setIs3D(props.map.getPitch() > 0);
+    props.map.on("pitch", update);
+    return () => {props.map.off("pitch", update);};
+  }, [props.map]);
+  const control = is3D ? <label className="population-legend">3D source
+    <select aria-label="Employment 3D source" value={source} onChange={e => setSource(e.target.value)}>
+      <option value="blocks">Blocks (LODES, finest)</option><option value="tracts">Tracts (existing)</option>
+    </select></label> : null;
+  if (!props.enabled) return null;
+  return is3D && source === "blocks"
+    ? <EmploymentBlocks map={props.map} overlay={props.overlay} sourceControl={control}/>
+    : <TractEmploymentOverlay {...props} sourceControl={control}/>;
+}
+function TractEmploymentOverlay({
   map,
   overlay,
   enabled,
+  sourceControl,
 }: {
   map: Map;
   overlay: Pick<MapboxOverlay, "setProps">;
   enabled: boolean;
+  sourceControl: ReactNode;
 }) {
   const [data, setData] = useState<JobData | null>(null),
     [error, setError] = useState(false),
@@ -131,6 +152,7 @@ export default function EmploymentOverlay({
           2D / 3D
         </button>
       </header>
+      {sourceControl}
       <div className="population-legend">
         <div
           aria-hidden="true"

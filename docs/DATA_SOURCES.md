@@ -71,7 +71,7 @@ Limitations: jobs are counted at the employer’s location, jobs are not workers
 
 `/usr/bin/python3 analysis/prepare_employment.py` reads the supplied `data/processed/lodes_wac_tracts_2023.csv` with string GEOIDs and joins it to the 2024 polygons in `public/data/population_tracts.geojson`. It reports unmatched identifiers and fails on missing matches or duplicate/invalid IDs. It publishes `public/data/employment_tracts.geojson` with NAMELSAD as name, the supplied jobs counts/density and all 20 CNS sectors, plus a `point` longitude/latitude pair computed with OGR PointOnSurface and checked to be inside the actual polygon. Geometry is unchanged. Blank density remains null (the zero-jobs tract has zero land area). Tests verify 490 tracts, 11-character string GEOIDs, 1,482,556 jobs, sector totals, inside points and the sole zero-jobs tract `12095990000`.
 
-Employment opens in 3D and replaces Population as the active demand view; selecting Population replaces Employment. Transit remains independent and last in drawing order. The 3D display uses tapered, lit columns at representative points, 2.8-pixel base radii and additive base glows. Height = 4,000 display metres × exaggeration × transformed measure / transformed maximum. Defaults: total jobs, square root, 3× exaggeration. Linear and ln(1 + value), jobs/km² and 0.5×–6× exaggeration are selectable. A shared indigo/violet/magenta/pink/near-white ramp uses the square root of the normalized value. Zero-job tracts have no column but remain inspectable. In 2D, circles have area proportional to total jobs, with pixel radii scaled by zoom and additive blending; faint tract fill uses jobs/km². Display height is not building height. Inspector sector ranking follows CNS01–CNS20, with ties kept in that order.
+Employment opens in 3D and replaces Population as the active demand view; selecting Population replaces Employment. Transit remains independent and last in drawing order. The existing tract 3D source uses tapered, lit columns at representative points, 2.8-pixel base radii and additive base glows. Height = 4,000 display metres × exaggeration × transformed measure / transformed maximum. Defaults: total jobs, square root, 3× exaggeration. Linear and ln(1 + value), jobs/km² and 0.5×–6× exaggeration are selectable. A shared indigo/violet/magenta/pink/near-white ramp uses the square root of the normalized value. Zero-job tracts have no column but remain inspectable. In 2D, circles have area proportional to total jobs, with pixel radii scaled by zoom and additive blending; faint tract fill uses jobs/km². Display height is not building height. Inspector sector ranking follows CNS01–CNS20, with ties kept in that order.
 
 ## Equity
 
@@ -90,3 +90,41 @@ The default height transform is now linear with 3× exaggeration: `2,000 m × 3 
 3D colors interpolate from dim blue-gray (alpha 45/255) to teal (155/255) below the 95th percentile; only values at or above that threshold use orange to yellow (215/255 to 245/255). The threshold uses linear interpolation at `(n-1) × 0.95`, with tied values kept together, so approximately the upper 5% receive warm colors. Soft ambient and directional lighting separates pillar faces. The 2D ramp and full polygon footprints, tract rendering and inspector are unchanged.
 
 MapLibre 5 and deck.gl 9 support interleaved WebGL2 rendering. The shared overlay now uses this mode: 3D Kontur pillars (and Equity beneath them when enabled) are inserted before the first basemap symbol layer. City and street labels remain visible in the 3D Kontur view. Other demand views keep their existing ordering; transit remains last with depth comparison always. No fallback opacity slider is needed with this supported setup.
+
+### Employment block needles
+
+`data/processed/lodes_wac_blocks_2023.csv` is the supplied file from branch
+`data/employment-blocks`. `/usr/bin/python3 analysis/prepare_employment_blocks.py`
+publishes `public/data/employment_blocks.geojson` offline. `csv.DictReader` reads
+all IDs as strings; only jobs/sector counts and coordinates are converted.
+All 15,574 supplied blocks, 1,482,556 jobs, 20 CNS sectors, county names and tract
+IDs are preserved. Two supplied tract IDs differ from the first 11 characters of
+the block ID; the supplied mapping is preserved rather than recomputed.
+Points use the supplied `lon`/`lat`, originating in the LODES crosswalk internal
+point (`blklondd`, `blklatdd`). This point is guaranteed to be inside its block
+but is **not a centroid**. The publisher validates finite coordinates against the
+four-county bounding box from the committed county geometry, unique 15-character
+block IDs, 11-character tract IDs, county FIPS and sector totals. It sorts by
+block ID and writes deterministic UTF-8 GeoJSON. `analysis/test_employment_blocks.py`
+asserts the exact count and jobs sum, string IDs, bounds and byte reproducibility.
+No datasets are downloaded or synthesized; the tract data and 2D renderer are unchanged.
+
+The 3D source defaults to **Blocks (LODES, finest)**; **Tracts (existing)** retains
+the previous renderer. Blocks are symbolic 1.2-pixel-radius tapered needles with
+additive blending, an unlit bright base and alpha fading to zero at the tip.
+They render below the first basemap symbol layer when available; transit stays
+above demand layers. Opacity defaults to 65% and is adjustable. Colors preserve
+the indigo → violet → magenta → hot pink → near-white ramp using original job counts.
+Height uses square root (default), linear or ln(1 + jobs), with 3× exaggeration
+(default, range 0.5–6×). Height is `max(60 × exaggeration,
+4000 × exaggeration × transform(min(jobs, limit)) / transform(limit))` display
+metres. The minimum is a visibility floor, not an employment estimate or building height.
+
+Clipping defaults on. Its limit is the 99th percentile of **all block counts**,
+using linear interpolation at index `(n − 1) × 0.99` (type 7); off uses the actual
+maximum. The legend reports the number strictly above the cap, cap, actual maximum
+and maximum displayed value. For the supplied file this clips 156 needles at 1,511.54 jobs; the actual maximum is 84,289 jobs. Only displayed height is capped; colors and inspection
+retain original values. Hover/click inspection and keyboard block-ID lookup show
+block ID, supplied tract ID, county, jobs and the three largest CNS sectors (ties
+in CNS order). Attribution: “Census LODES 8.4 (2023), jobs by workplace location;
+block-level values include privacy noise”.

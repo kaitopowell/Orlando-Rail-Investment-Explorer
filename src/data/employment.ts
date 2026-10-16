@@ -74,7 +74,7 @@ export function jobColor(
   );
   return [c[0], c[1], c[2], 230];
 }
-export const topSectors = (p: JobProperties) =>
+export const topSectors = (p: { [key: `CNS${string}`]: number }) =>
   sectorNames
     .map((name, i) => ({
       name,
