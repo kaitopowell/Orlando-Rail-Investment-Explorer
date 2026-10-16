@@ -74,20 +74,13 @@ export default function Sidebar({
           </div>
         </section>
         <section className="layers">
-          <div className="section-heading">
-            <h2>Data layers</h2>
-            <span>{String(6).padStart(2, "0")} LIVE / {String(plannedLayers.length).padStart(2, "0")} PLANNED</span>
-          </div>
-          <p className="section-note" id="layer-note">
-            Explore boundaries, demand, equity and existing rail and bus service.
-          </p>
           <div className="layer-list">
             <label className="layer county-toggle">
               <span className="layer-symbol" aria-hidden="true">
                 ⌑
               </span>
               <span className="layer-text">
-                <strong>County boundaries</strong>
+                <strong>Boundaries</strong>
                 <small>Orange · Seminole · Lake · Osceola</small>
               </span>
               <input
@@ -97,95 +90,112 @@ export default function Sidebar({
                 aria-label="County boundaries"
               />
             </label>
-            <label className="layer county-toggle">
-              <span className="layer-symbol" aria-hidden="true">
-                ◉
-              </span>
-              <span className="layer-text">
-                <strong>Population</strong>
-                <small>ACS tracts · Kontur modeled hexagons</small>
-              </span>
-              <input
-                type="checkbox"
-                checked={populationVisible}
-                onChange={onPopulationToggle}
-                aria-label="Population"
-              />
-            </label>
-            <fieldset className="transit-group"><legend>Existing transit</legend>
-            <label className="layer county-toggle">
-              <span className="layer-symbol">⌁</span>
-              <span className="layer-text">
-                <strong>Rail · SunRail / Brightline</strong>
-                <small>SunRail · Brightline (intercity)</small>
-              </span>
-              <input
-                type="checkbox"
-                checked={transitVisible}
-                onChange={onTransitToggle}
-                aria-label="Existing transit"
-              />
-            </label>
-            <label className="layer county-toggle">
-              <span className="layer-symbol" aria-hidden="true">●</span>
-              <span className="layer-text"><strong>Bus baseline (LYNX)</strong><small>Scheduled peak frequency · Wednesday</small></span>
-              <input type="checkbox" aria-label="Bus baseline (LYNX)" checked={busVisible} onChange={onBusToggle}/>
-            </label>
-            </fieldset>
-            <label className="layer county-toggle">
-              <span className="layer-symbol">▦</span>
-              <span className="layer-text">
-                <strong>Employment</strong>
-                <small>LODES 2023 · jobs by workplace</small>
-              </span>
-              <input
-                type="checkbox"
-                checked={employmentVisible}
-                onChange={onEmploymentToggle}
-                aria-label="Employment"
-              />
-            </label>
-            <label className="layer county-toggle">
-              <span className="layer-symbol">◒</span>
-              <span className="layer-text">
-                <strong>Equity</strong>
-                <small>ACS 2020–2024 · need indicators</small>
-              </span>
-              <input
-                type="checkbox"
-                aria-label="Equity"
-                checked={equityVisible}
-                onChange={onEquityToggle}
-              />
-            </label>
-            {plannedLayers.map((layer) => (
-              <label className="layer" key={layer.id}>
+          </div>
+          <section aria-labelledby="data-layers-heading">
+            <div className="section-heading">
+              <h2 id="data-layers-heading">Data layers</h2>
+              <span>{String(6).padStart(2, "0")} LIVE / {String(plannedLayers.length).padStart(2, "0")} PLANNED</span>
+            </div>
+            <p className="section-note" id="layer-note">
+              Explore demand, jobs and need indicators by place.
+            </p>
+            <div className="layer-list">
+              <label className="layer county-toggle">
                 <span className="layer-symbol" aria-hidden="true">
-                  {layer.symbol}
+                  ◉
                 </span>
                 <span className="layer-text">
-                  <strong>{layer.name}</strong>
-                  <small>{layer.description}</small>
+                  <strong>Population</strong>
+                  <small>ACS tracts · Kontur modeled hexagons</small>
                 </span>
                 <input
                   type="checkbox"
-                  disabled
-                  aria-describedby="layer-note"
-                  aria-label={layer.name}
+                  checked={populationVisible}
+                  onChange={onPopulationToggle}
+                  aria-label="Population"
                 />
               </label>
-            ))}
-          </div>
-          <p className="data-note">
-            <span aria-hidden="true">○</span>{" "}
-            {populationStatus === "ready"
-              ? "Population layer loaded."
-              : populationStatus === "loading"
-                ? "Loading population…"
-                : populationStatus === "error"
-                  ? "Population unavailable. Retry on map."
-                  : "Population layer available."}
-          </p>
+              <label className="layer county-toggle">
+                <span className="layer-symbol">▦</span>
+                <span className="layer-text">
+                  <strong>Employment</strong>
+                  <small>LODES 2023 · jobs by workplace</small>
+                </span>
+                <input
+                  type="checkbox"
+                  checked={employmentVisible}
+                  onChange={onEmploymentToggle}
+                  aria-label="Employment"
+                />
+              </label>
+              <label className="layer county-toggle">
+                <span className="layer-symbol">◒</span>
+                <span className="layer-text">
+                  <strong>Equity</strong>
+                  <small>ACS 2020 to 2024 · need indicators</small>
+                </span>
+                <input
+                  type="checkbox"
+                  aria-label="Equity"
+                  checked={equityVisible}
+                  onChange={onEquityToggle}
+                />
+              </label>
+              {plannedLayers.map((layer) => (
+                <label className="layer" key={layer.id}>
+                  <span className="layer-symbol" aria-hidden="true">
+                    {layer.symbol}
+                  </span>
+                  <span className="layer-text">
+                    <strong>{layer.name}</strong>
+                    <small>{layer.description}</small>
+                  </span>
+                  <input
+                    type="checkbox"
+                    disabled
+                    aria-describedby="layer-note"
+                    aria-label={layer.name}
+                  />
+                </label>
+              ))}
+            </div>
+          </section>
+          <section className="transit-group" aria-labelledby="existing-transit-heading">
+            <div className="section-heading">
+              <h2 id="existing-transit-heading">Existing transit</h2>
+            </div>
+            <p className="section-note">Current rail and bus service.</p>
+            <div className="layer-list">
+              <label className="layer county-toggle">
+                <span className="layer-symbol">⌁</span>
+                <span className="layer-text">
+                  <strong>Rail · SunRail / Brightline</strong>
+                  <small>SunRail · Brightline (intercity)</small>
+                </span>
+                <input
+                  type="checkbox"
+                  checked={transitVisible}
+                  onChange={onTransitToggle}
+                  aria-label="Existing transit"
+                />
+              </label>
+              <label className="layer county-toggle">
+                <span className="layer-symbol" aria-hidden="true">●</span>
+                <span className="layer-text"><strong>Bus baseline (LYNX)</strong><small>Scheduled peak frequency · Wednesday</small></span>
+                <input type="checkbox" aria-label="Bus baseline (LYNX)" checked={busVisible} onChange={onBusToggle}/>
+              </label>
+            </div>
+          </section>
+          {populationVisible && populationStatus !== "off" && (
+            <p className="data-note">
+              <span aria-hidden="true">○</span>{" "}
+              {populationStatus === "ready"
+                ? "Population layer loaded."
+                : populationStatus === "loading"
+                  ? "Loading population…"
+                  : "Population unavailable. Retry on map."}
+            </p>
+          )}
           <CountyAttribution />
           <p className="county-attribution">
             <a href="https://lehd.ces.census.gov/data/lodes/LODES8/fl/wac/fl_wac_S000_JT00_2023.csv.gz">
