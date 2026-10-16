@@ -128,3 +128,48 @@ retain original values. Hover/click inspection and keyboard block-ID lookup show
 block ID, supplied tract ID, county, jobs and the three largest CNS sectors (ties
 in CNS order). Attribution: “Census LODES 8.4 (2023), jobs by workplace location;
 block-level values include privacy noise”.
+
+## Bus baseline (LYNX)
+
+LYNX (Central Florida Regional Transportation Authority) GTFS feed. Producer URL:
+http://gtfsrt.golynx.com/gtfsrt/google_transit.zip. Mobility Database listing:
+mdb-347. Accessed **2026-10-16**. SHA1:
+`951d151b999633151eba05207b7ca245e6f9f21c`. Feed validity:
+**2026-10-02 to 2026-12-12**. Raw file:
+`data/raw/lynx_gtfs_2026-10-16.zip`. License: **not specified in the Mobility Database listing**.
+
+Method (all project assumptions): representative weekday is Wednesday
+2026-10-14 (the nearest Wednesday without a holiday exception); peak windows are
+7 to 9 am and 4 to 6 pm; headway is the 240 peak minutes divided by departures on
+a stop’s best single route and direction; frequent thresholds are 15, 20 and 30
+minutes. Most stop times in the feed are blank for non-timepoint stops, so
+134,182 of 149,746 stop times were linearly interpolated by stop order between
+scheduled timepoints, and about 90 percent of peak departures are interpolated.
+The three LYMMO routes (60, 61 and 62) are excluded from the main measure and kept
+as a separate version. Stops were clipped to Lake, Orange, Osceola and Seminole
+counties using the 2025 county boundaries.
+
+Limitations: this is scheduled frequency, not observed reliability; frequency on
+one route does not mean the route goes where people need to travel; and
+intermediate stop times are estimates.
+
+`/usr/bin/python3 analysis/prepare_lynx.py` verifies the supplied ZIP checksum,
+reads `data/processed/lynx_stops_peak_headway.geojson`, preserves the requested
+properties (including null headways and string stop IDs), rounds point coordinates
+to five decimals and writes `public/data/lynx_stops.geojson` in stop-ID order.
+It prints county and mutually exclusive frequency-tier counts; it does not
+recompute the supplied schedules or download data. `analysis/test_lynx.py` checks
+fidelity, unique string IDs, county/bounds membership, non-LYMMO flag nesting and
+exact threshold equivalence, no-service nulls, and byte reproducibility without
+hard-coding stop counts.
+
+The independent Bus baseline toggle sits in Existing transit. The display defaults
+to ≤30 minutes, excludes LYMMO and hides infrequent stops. Thresholds select the
+frequent set; showing infrequent stops adds all other served stops as small dim
+blue-gray dots. No-peak-service stops remain hidden. The legend reports displayed
+counts with mutually exclusive ≤15, >15–20, >20–30 tiers and the selected-threshold
+infrequent tier. Opacity is adjustable. Demand layers draw below bus stops, rail
+above them, and demand/bus stay below basemap label layers when available. Bus
+toggling does not alter pitch. The inspector labels the supplied original
+best-route names and all-route departure count separately from the selected
+non-LYMMO headway/departure measure; separate non-LYMMO route names are not supplied.

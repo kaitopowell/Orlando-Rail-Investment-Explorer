@@ -55,7 +55,7 @@ try {
       await page.getByRole("button", { name: "Expand sidebar" }).click();
     assert.match(
       await page.locator(".section-heading").innerText(),
-      /04 LIVE \/ 01 PLANNED/,
+      /06 LIVE \/ 00 PLANNED/,
     );
     await page
       .getByRole("checkbox", { name: "Population", exact: true })

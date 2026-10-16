@@ -3,6 +3,7 @@ import MapView from "./map/MapView";
 import type { PopulationStatus } from "./components/PopulationOverlay";
 import Sidebar from "./components/Sidebar";
 export default function App() {
+  const [busVisible, setBusVisible] = useState(false);
   const [equityVisible, setEquityVisible] = useState(false);
   const [open, setOpen] = useState(() => window.innerWidth > 600);
   const [countiesVisible, setCountiesVisible] = useState(true);
@@ -14,6 +15,7 @@ export default function App() {
   return (
     <main>
       <MapView
+        busVisible={busVisible}
         equityVisible={equityVisible}
         employmentVisible={employmentVisible}
         transitVisible={transitVisible}
@@ -23,6 +25,10 @@ export default function App() {
         onPopulationStatus={setPopulationStatus}
       />
       <Sidebar
+        busVisible={busVisible}
+        onBusToggle={() => {
+          setBusVisible(!busVisible);
+        }}
         equityVisible={equityVisible}
         onEquityToggle={() => {
           setEquityVisible(!equityVisible);

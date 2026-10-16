@@ -726,3 +726,70 @@ footer {
 .employment-blocks-panel {
   z-index: 2;
 }
+
+.transit-group {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.transit-group legend {
+  font-size: 10px;
+  color: #8ca5aa;
+  padding: 10px 0 0;
+}
+.transit-stack {
+  position: absolute;
+  z-index: 3;
+  left: 370px;
+  bottom: 100px;
+  width: 290px;
+  max-height: 45vh;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.transit-stack .transit-panel {
+  position: static;
+  box-sizing: border-box;
+  width: 100%;
+  max-height: none;
+  overflow: visible;
+  flex-shrink: 0;
+}
+.bus-panel label { display: block; margin: 8px 0; }
+.bus-panel input[type="range"] { width: 100%; accent-color: #58d6ff; }
+.bus-panel input[type="checkbox"] { accent-color: #58d6ff; }
+.bus-panel h3 { font-size: 12px; }
+.bus-panel dd { margin: 3px 0 8px; }
+.bus-legend { list-style: none; padding: 0; line-height: 1.8; }
+@media (max-width: 600px) {
+  .transit-stack {
+    left: 12px;
+    bottom: 160px;
+    width: 246px;
+    max-height: 24vh;
+  }
+  main:has(.bus-panel) .population-panel:not(.equity-panel) {
+    max-height: calc(100dvh - 470px);
+  }
+}
+/* Share vertical space when bus, equity and demand cards are all open. */
+@media (min-width: 601px) {
+  main:has(.bus-panel) .equity-panel,
+  main:has(.equity-panel) .transit-stack {
+    max-height: calc((100dvh - 202px) / 2);
+  }
+}
+@media (max-width: 600px) {
+  main:has(.bus-panel):has(.population-panel:not(.equity-panel)) .equity-panel,
+  main:has(.bus-panel):has(.equity-panel) .population-panel:not(.equity-panel),
+  main:has(.equity-panel):has(.population-panel:not(.equity-panel)) .transit-stack {
+    max-height: calc((100dvh - 276px) / 3);
+  }
+  main:has(.bus-panel):has(.equity-panel) .population-panel:not(.equity-panel) {
+    top: calc(104px + (100dvh - 276px) / 3);
+    bottom: auto;
+  }
+}

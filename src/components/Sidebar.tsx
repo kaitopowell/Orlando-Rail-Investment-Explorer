@@ -3,6 +3,8 @@ import { populationSource } from "../data/population";
 import CountyAttribution from "./CountyAttribution";
 import { plannedLayers } from "../data/layers";
 export default function Sidebar({
+  busVisible,
+  onBusToggle,
   equityVisible,
   onEquityToggle,
   employmentVisible,
@@ -17,6 +19,8 @@ export default function Sidebar({
   populationStatus,
   onPopulationToggle,
 }: {
+  busVisible: boolean;
+  onBusToggle: () => void;
   equityVisible: boolean;
   onEquityToggle: () => void;
   employmentVisible: boolean;
@@ -72,10 +76,10 @@ export default function Sidebar({
         <section className="layers">
           <div className="section-heading">
             <h2>Data layers</h2>
-            <span>04 LIVE / 01 PLANNED</span>
+            <span>{String(6).padStart(2, "0")} LIVE / {String(plannedLayers.length).padStart(2, "0")} PLANNED</span>
           </div>
           <p className="section-note" id="layer-note">
-            Explore boundaries, population density and existing rail.
+            Explore boundaries, demand, equity and existing rail and bus service.
           </p>
           <div className="layer-list">
             <label className="layer county-toggle">
@@ -108,10 +112,11 @@ export default function Sidebar({
                 aria-label="Population"
               />
             </label>
+            <fieldset className="transit-group"><legend>Existing transit</legend>
             <label className="layer county-toggle">
               <span className="layer-symbol">⌁</span>
               <span className="layer-text">
-                <strong>Existing transit</strong>
+                <strong>Rail · SunRail / Brightline</strong>
                 <small>SunRail · Brightline (intercity)</small>
               </span>
               <input
@@ -121,6 +126,12 @@ export default function Sidebar({
                 aria-label="Existing transit"
               />
             </label>
+            <label className="layer county-toggle">
+              <span className="layer-symbol" aria-hidden="true">●</span>
+              <span className="layer-text"><strong>Bus baseline (LYNX)</strong><small>Scheduled peak frequency · Wednesday</small></span>
+              <input type="checkbox" aria-label="Bus baseline (LYNX)" checked={busVisible} onChange={onBusToggle}/>
+            </label>
+            </fieldset>
             <label className="layer county-toggle">
               <span className="layer-symbol">▦</span>
               <span className="layer-text">
@@ -202,6 +213,11 @@ export default function Sidebar({
             via <a href="https://www.transit.land/">Transitland</a>.<br />
             Accessed 2026-10-13 · licenses not specified. Brightline is
             intercity, not local baseline service.
+          </p>
+          <p className="county-attribution">
+            Bus: <a href="http://gtfsrt.golynx.com/gtfsrt/google_transit.zip">LYNX GTFS</a> · Mobility Database mdb-347.
+            Accessed 2026-10-16. License not specified in the listing.
+            Scheduled service, not observed reliability.
           </p>
           <p className="county-attribution">
             Population:{" "}
