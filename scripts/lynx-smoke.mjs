@@ -19,7 +19,7 @@ try {
     const expand=async()=>{const b=page.getByRole('button',{name:'Expand sidebar'});if(await b.isVisible())await b.click();};
     const collapse=async()=>{const b=page.getByRole('button',{name:'Collapse sidebar'});if(await b.isVisible())await b.click();};
     await expand();
-    assert.ok((await page.locator('.section-heading').innerText()).includes('06 LIVE / 00 PLANNED'));
+    assert.ok((await page.getByRole('region', {name:'Data layers',exact:true}).locator('.section-heading').innerText()).includes('06 LIVE / 00 PLANNED'));
     await page.getByRole('checkbox',{name:'Bus baseline (LYNX)',exact:true}).check();
     await page.getByLabel('Inspect bus stop',{exact:true}).waitFor();
     assert.equal(await page.evaluate(()=>window.map.getPitch()),0);

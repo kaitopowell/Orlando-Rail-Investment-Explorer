@@ -37,6 +37,32 @@ try {
   );
   await page.goto(process.env.SOL_R_TEST_URL || "http://localhost:5173");
   await page.getByRole("status").filter({ hasText: "BASEMAP LIVE" }).waitFor();
+  async function checkSidebar() {
+    const sidebar = page.getByRole("complementary", { name: "Explorer controls" });
+    const data = sidebar.getByRole("region", { name: "Data layers", exact: true });
+    const transit = sidebar.getByRole("region", { name: "Existing transit", exact: true });
+    const names = async (scope) => scope.getByRole("checkbox").evaluateAll(
+      (inputs) => inputs.map((input) => input.getAttribute("aria-label")),
+    );
+    assert.deepEqual(await names(sidebar), [
+      "County boundaries", "Population", "Employment", "Equity", "Existing transit", "Bus baseline (LYNX)",
+    ]);
+    assert.deepEqual(await names(data), ["Population", "Employment", "Equity"]);
+    assert.deepEqual(await names(transit), ["Existing transit", "Bus baseline (LYNX)"]);
+    assert.deepEqual(await sidebar.locator(".layers h2").allTextContents(), ["Data layers", "Existing transit"]);
+    assert.equal(await sidebar.locator(".layers > .layer-list strong").innerText(), "Boundaries");
+    assert.equal(await data.locator(".section-note").innerText(), "Explore demand, jobs and need indicators by place.");
+    assert.equal(await transit.locator(".section-note").innerText(), "Current rail and bus service.");
+    assert.match(await data.locator(".section-heading").innerText(), /06 LIVE \/ 00 PLANNED/);
+    assert.equal(await sidebar.locator(".data-note").count(), 0, "No stale Population status while off");
+    for (const toggle of await sidebar.getByRole("checkbox").all()) {
+      await toggle.scrollIntoViewIfNeeded();
+      const box = await toggle.boundingBox();
+      assert.ok(box && box.x >= 0 && box.x + box.width <= page.viewportSize().width);
+    }
+    await page.getByRole("button", { name: "Collapse sidebar" }).scrollIntoViewIfNeeded();
+    console.log(`PASS sidebar grouping, order, counter, off-status and controls at ${page.viewportSize().width}px`);
+  }
   async function checkCamera() {
     const result = await page.evaluate(async () => {
       const map = window.solRMap;
@@ -79,6 +105,7 @@ try {
     .getByRole("button", { name: "Four counties", exact: true })
     .click();
   await checkCamera();
+  await checkSidebar();
   assert.equal(await page.getByRole("checkbox").count(), 6);
   for (const name of ["Equity", "Bus baseline (LYNX)"])
     assert.equal(
@@ -170,6 +197,7 @@ try {
   await page.getByRole("button", { name: "Four counties" }).click();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.waitForTimeout(250);
+  await checkSidebar();
   await page
     .getByRole("button", { name: "Four counties", exact: true })
     .click();

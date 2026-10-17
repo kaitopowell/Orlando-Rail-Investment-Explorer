@@ -54,7 +54,7 @@ try {
     if (width < 600)
       await page.getByRole("button", { name: "Expand sidebar" }).click();
     assert.match(
-      await page.locator(".section-heading").innerText(),
+      await page.getByRole("region", { name: "Data layers", exact: true }).locator(".section-heading").innerText(),
       /06 LIVE \/ 00 PLANNED/,
     );
     await page
