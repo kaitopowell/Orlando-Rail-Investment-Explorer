@@ -1,16 +1,8 @@
 import { GeoJsonLayer, ScatterplotLayer, TextLayer } from "@deck.gl/layers";
 import type { PickingInfo } from "@deck.gl/core";
 import { services, type TransitItem } from "../data/transit";
+import {TRANSIT_STYLE, TRANSIT_ALPHA_BLEND, transitRadiusScale, transitGlowShader} from "./transitStyle";
 const onTop = { depthCompare: "always", depthWriteEnabled: false } as const;
-const additive = {
-  ...onTop,
-  blend: true,
-  blendColorOperation: "add",
-  blendColorSrcFactor: "src-alpha",
-  blendColorDstFactor: "one",
-  blendAlphaSrcFactor: "one",
-  blendAlphaDstFactor: "one-minus-src-alpha",
-} as const;
 class Glow extends ScatterplotLayer<TransitItem> {
   static layerName = "TransitGlow";
   getShaders() {
@@ -20,7 +12,7 @@ class Glow extends ScatterplotLayer<TransitItem> {
       inject: {
         ...shaders.inject,
         "fs:DECKGL_FILTER_COLOR":
-          "color.a *= pow(max(0.0, 1.0 - length(geometry.uv)), 2.0);",
+          transitGlowShader(TRANSIT_STYLE.rail.glowRadiusFactor),
       },
     };
   }
@@ -47,24 +39,20 @@ export function transitLayers(
     return [p[0], p[1], 5];
   };
   return [
-    ...[
-      { id: "glow", width: 15, alpha: 22 },
-      { id: "halo", width: 7, alpha: 60 },
-      { id: "core", width: 2, alpha: 240 },
-    ].map(
+    ...TRANSIT_STYLE.rail.passes.map(
       (pass) =>
         new GeoJsonLayer<TransitItem["properties"]>({
           id: `transit-${pass.id}`,
           data: { type: "FeatureCollection" as const, features: lines },
-          parameters: additive,
+          parameters: TRANSIT_ALPHA_BLEND,
           getLineColor: (f) => [
             ...(pass.id === "core"
               ? services[f.properties.service].core
               : services[f.properties.service].color),
-            highlighted === f.properties.id ? 255 : pass.alpha,
+            pass.id === "core" && highlighted === f.properties.id ? TRANSIT_STYLE.rail.highlightAlpha : pass.alpha,
           ],
           getLineWidth: (f) =>
-            pass.width + (highlighted === f.properties.id ? 1.5 : 0),
+            pass.width + (highlighted === f.properties.id ? TRANSIT_STYLE.rail.highlightWidth : 0),
           lineWidthUnits: "pixels",
           pickable: pass.id === "halo",
           ...events,
@@ -77,25 +65,27 @@ export function transitLayers(
     new Glow({
       id: "transit-station-glow",
       data: stations,
-      parameters: additive,
+      parameters: TRANSIT_ALPHA_BLEND,
       getPosition: position,
       radiusUnits: "pixels",
-      getRadius: 14 * pulse,
-      getFillColor: (f) => [...services[f.properties.service].color, 150],
+      radiusScale: transitRadiusScale(zoom),
+      getRadius: TRANSIT_STYLE.rail.radius * TRANSIT_STYLE.rail.glowRadiusFactor * pulse,
+      getFillColor: (f) => [...services[f.properties.service].color, TRANSIT_STYLE.rail.glowAlpha],
       pickable: false,
     }),
     new ScatterplotLayer<TransitItem>({
       id: "transit-stations",
       data: stations,
-      parameters: onTop,
+      parameters: TRANSIT_ALPHA_BLEND,
       getPosition: position,
       radiusUnits: "pixels",
-      getRadius: (f) => (f.properties.id === highlighted ? 5 : 3.5),
+      radiusScale: transitRadiusScale(zoom),
+      getRadius: (f) => (f.properties.id === highlighted ? TRANSIT_STYLE.rail.highlightRadius : TRANSIT_STYLE.rail.radius),
       stroked: true,
       lineWidthUnits: "pixels",
-      getLineWidth: 1,
-      getLineColor: [255, 250, 225, 240],
-      getFillColor: (f) => [...services[f.properties.service].core, 255],
+      getLineWidth: TRANSIT_STYLE.rail.lineWidth,
+      getLineColor: (f) => [...services[f.properties.service].color, TRANSIT_STYLE.rail.lineAlpha],
+      getFillColor: (f) => [...services[f.properties.service].color, TRANSIT_STYLE.rail.fillAlpha],
       pickable: true,
       ...events,
       updateTriggers: { getRadius: highlighted },

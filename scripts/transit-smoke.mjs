@@ -86,12 +86,16 @@ try {
         depth: ls.find((l) => l.id === "transit-core").props.parameters
           .depthCompare,
         glow: ls.find((l) => l.id === "transit-station-glow").props.getRadius,
+        blend: ls.find((l) => l.id === "transit-stations").props.parameters.blendColorDstFactor,
+        before: ls.find((l) => l.id === "transit-stations").props.beforeId,
       };
     });
     assert.deepEqual(props, {
       last: "transit-station-labels",
       depth: "always",
-      glow: 14,
+      glow: 2.6 * 2.2,
+      blend: "one-minus-src-alpha",
+      before: "county-outlines",
     });
     await page.getByRole("button", { name: "Close transit details" }).click();
     // Actual station pick/click above Population, with UI kept away from the target.

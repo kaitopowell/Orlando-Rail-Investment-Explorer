@@ -1,13 +1,21 @@
 import {useEffect, useMemo, useState} from "react";
+import type {Map} from "maplibre-gl";
+import {busColors, TRANSIT_STYLE} from "../map/transitStyle";
 import type {MapboxOverlay} from "@deck.gl/mapbox";
-import {busColors, busDefinition, busNote, busSelection, headway, meets, parseLynx,
+import {busDefinition, busNote, busSelection, headway, meets, parseLynx,
   type BusTier, type LynxData, type LynxStop, type Threshold} from "../data/lynx";
 import {lynxLayers} from "../map/lynxLayers";
 const fmt = (value: number | null) => value === null ? "No peak service" : value.toLocaleString("en-US", {maximumFractionDigits: 2});
-export default function BusOverlay({overlay, enabled}: {overlay: Pick<MapboxOverlay,"setProps">; enabled: boolean}) {
+export default function BusOverlay({map, overlay, enabled}: {map: Map; overlay: Pick<MapboxOverlay,"setProps">; enabled: boolean}) {
+  const [zoom, setZoom] = useState(map.getZoom());
+  useEffect(() => {
+    const update = () => setZoom(map.getZoom());
+    map.on("zoom", update);
+    return () => { map.off("zoom", update); };
+  }, [map]);
   const [data,setData] = useState<LynxData | null>(null), [error,setError] = useState(false), [retry,setRetry] = useState(0);
   const [threshold,setThreshold] = useState<Threshold>(30), [includeLymmo,setIncludeLymmo] = useState(false);
-  const [showInfrequent,setShowInfrequent] = useState(false), [opacity,setOpacity] = useState(.8);
+  const [showInfrequent,setShowInfrequent] = useState(false), [opacity,setOpacity] = useState<number>(TRANSIT_STYLE.bus.defaultOpacity);
   const [hovered,setHovered] = useState<LynxStop | null>(null), [selected,setSelected] = useState<LynxStop | null>(null);
   useEffect(() => {
     if (!enabled || data) return;
@@ -22,10 +30,10 @@ export default function BusOverlay({overlay, enabled}: {overlay: Pick<MapboxOver
     [data,threshold,includeLymmo,showInfrequent]);
   useEffect(() => {setHovered(null);setSelected(null);}, [enabled,threshold,includeLymmo,showInfrequent]);
   useEffect(() => {
-    overlay.setProps({layers: enabled && selection ? lynxLayers(selection.stops,threshold,includeLymmo,opacity,
+    overlay.setProps({layers: enabled && selection ? lynxLayers(selection.stops,threshold,includeLymmo,opacity,zoom,
       hovered?.properties.stop_id ?? selected?.properties.stop_id ?? null,setHovered,setSelected) : []});
     return () => overlay.setProps({layers:[]});
-  }, [overlay,enabled,selection,threshold,includeLymmo,opacity,hovered,selected]);
+  }, [overlay,enabled,selection,threshold,includeLymmo,opacity,zoom,hovered,selected]);
   if (!enabled) return null;
   const p = (selected ?? hovered)?.properties;
   const tiers: [BusTier,string][] = [[15,"≤15 min"],[20,">15–20 min"],[30,">20–30 min"],["infrequent",`Served, >${threshold} min`]];
