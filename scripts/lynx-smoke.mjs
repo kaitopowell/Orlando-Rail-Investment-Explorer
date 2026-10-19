@@ -27,6 +27,19 @@ try {
     assert.equal(await page.getByLabel('Include LYMMO',{exact:true}).isChecked(),false);
     assert.equal(await page.getByLabel('Show infrequent stops',{exact:true}).isChecked(),false);
     await collapse();
+    const styling=await page.evaluate(()=>{
+      const layers=window.deck._deck.props.layers.flat(Infinity);
+      const core=layers.find(l=>l.id==='lynx-stops'), glow=layers.find(l=>l.id==='lynx-glow');
+      return {blend:core.props.parameters.blendColorDstFactor, glowBlend:glow.props.parameters.blendColorDstFactor,
+        maxRadius:Math.max(...core.props.data.map(f=>core.props.getRadius(f)*core.props.radiusScale)),
+        maxGlowAlpha:Math.max(...glow.props.data.map(f=>glow.props.getFillColor(f)[3])),
+        opacity:core.props.opacity};
+    });
+    assert.equal(styling.blend,'one-minus-src-alpha');
+    assert.equal(styling.glowBlend,'one-minus-src-alpha');
+    assert.ok(styling.maxRadius<3);
+    assert.ok(styling.maxGlowAlpha<32);
+    assert.equal(styling.opacity,.65);
     const source=await page.evaluate(async()=> (await (await fetch('/data/lynx_stops.geojson')).json()).features);
     for(const include of [false,true]) {
       await page.getByLabel('Include LYMMO',{exact:true}).setChecked(include);
@@ -61,6 +74,10 @@ try {
       return info?.object?.properties.stop_id;
     },target);
     assert.ok(picked);
+    const radiusAt15=await page.evaluate(()=>window.deck._deck.props.layers.flat(Infinity).find(l=>l.id==='lynx-stops').props.radiusScale);
+    await page.evaluate(()=>window.map.jumpTo({zoom:8}));
+    await page.waitForFunction(high=>window.deck._deck.props.layers.flat(Infinity).find(l=>l.id==='lynx-stops').props.radiusScale<high,radiusAt15);
+    await page.evaluate(()=>window.map.jumpTo({zoom:15}));
     await page.getByLabel('Bus stop details',{exact:true}).waitFor();
     await page.getByRole('button',{name:'Close bus stop details'}).click();
     await expand();
@@ -83,7 +100,7 @@ try {
     assert.ok(order.findIndex(l=>l.id==='equity-tracts')<bus);
     assert.ok(order.findIndex(l=>l.id==='transit-core')>bus);
     assert.equal(order.at(-1).id,'transit-station-labels');
-    for(const l of order.filter(l=>!l.id.startsWith('transit-')))assert.equal(l.before,'test-labels');
+    for(const l of order)assert.equal(l.before,'test-labels');
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
     await page.getByLabel('Bus frequent threshold').selectOption('30');
     const cards = await page.evaluate(() => [".equity-panel", ".employment-panel", ".transit-stack"].map(selector => {

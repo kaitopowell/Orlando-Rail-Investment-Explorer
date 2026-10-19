@@ -10,10 +10,6 @@ export type LynxProperties = {
 export type LynxStop = Feature<Point, LynxProperties>;
 export type LynxData = FeatureCollection<Point, LynxProperties>;
 export type BusTier = Threshold | "infrequent";
-export const busColors: Record<BusTier, [number, number, number, number]> = {
-  15: [232,251,255,255], 20: [88,214,255,245], 30: [45,140,255,230], infrequent: [83,111,138,85],
-};
-export const busRadii: Record<BusTier, number> = {15: 4.5, 20: 3.5, 30: 2.5, infrequent: 1.5};
 export const busDefinition = "scheduled headway = 4 peak hours (7 to 9 am and 4 to 6 pm) divided by departures on the stop’s best single route and direction, on a representative Wednesday";
 export const busNote = "Scheduled service from the GTFS feed, not observed reliability";
 export const headway = (p: LynxProperties, includeLymmo: boolean) => includeLymmo ? p.headway_best_route_min : p.headway_best_nonlymmo_min;

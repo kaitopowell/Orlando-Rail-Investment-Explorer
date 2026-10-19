@@ -20,14 +20,14 @@ export function overlayChannels(overlay: MapboxOverlay, labelLayerId?: string) {
       const pillars = layers.some(
         (layer) => layer.id === "population-hexagon-pillars" || layer.id === "employment-block-needles",
       );
-      const busActive = layers.some(layer => layer.id === "lynx-stops");
+      const transitActive = layers.some(layer => layer.id === "lynx-stops" || layer.id.startsWith("transit-"));
       overlay.setProps({
         // Equity stays below Population even when pillars move below map labels.
-        // Other demand views and transit retain their top-of-basemap order.
+        // Without transit, retain the existing demand-layer placement.
         layers: layers.map((layer) =>
-          // When bus is active, all demand layers share its below-label slot,
+          // Transit and demand share a slot below labels and county outlines,
           // preserving demand < bus < rail order even across overlay updates.
-          busActive && !layer.id.startsWith("transit-")
+          transitActive
             ? layer.clone({ beforeId: labelLayerId })
             : layer.id === "equity-tracts" || layer.id === "employment-block-needles"
               ? layer.clone({ beforeId: pillars ? labelLayerId : undefined })

@@ -168,7 +168,7 @@ export default function MapView({
           layersRef.current.setInteractive(!populationVisibleRef.current);
           const labelLayerId = map
             .getStyle()
-            .layers.find((layer) => layer.type === "symbol")?.id;
+            .layers.find((layer) => layer.type === "symbol" || layer.id === "county-outlines")?.id;
           const [
             equityOverlay,
             populationOverlay,
@@ -253,7 +253,7 @@ export default function MapView({
         />
       )}
       <div className={busVisible ? "transit-stack" : undefined}>
-      {scene && <BusOverlay overlay={scene.busOverlay} enabled={busVisible}/>}
+      {scene && <BusOverlay map={scene.map} overlay={scene.busOverlay} enabled={busVisible}/>}
       {scene && (
         <TransitOverlay
           map={scene.map}
