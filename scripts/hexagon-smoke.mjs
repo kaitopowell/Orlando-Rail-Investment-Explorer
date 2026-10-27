@@ -108,7 +108,7 @@ try {
     assert.equal(info.count, 7896);
     assert.equal(
       await page.getByLabel("Hexagon height scale").inputValue(),
-      "linear",
+      "sqrt",
     );
     assert.equal(
       await page
@@ -137,6 +137,11 @@ try {
         visible:
           window.map.getLayoutProperty("road_label", "visibility") ?? "visible",
         coverage: pillar.props.coverage,
+        radius: pillar.props.radius * pillar.props.coverage,
+        units: pillar.props.radiusUnits,
+        blend: pillar.props.parameters.blendColorDstFactor,
+        material: pillar.props.material,
+        shader: pillar.getShaders().inject["fs:DECKGL_FILTER_COLOR"],
       };
     });
     assert.equal(order.before, "place_city");
@@ -144,6 +149,11 @@ try {
     assert.ok(order.index < order.streets);
     assert.equal(order.visible, "visible");
     assert.equal(order.coverage, 0.35);
+    assert.ok(Math.abs(order.radius-1.2)<1e-10);
+    assert.equal(order.units, "pixels");
+    assert.equal(order.blend, "one-minus-src-alpha");
+    assert.equal(order.material, false);
+    assert.match(order.shader, /needleFraction/);
     const screenshot = `work/kontur-pillars-${name}.png`;
     if (!process.env.SOL_R_REUSE_SCREENSHOTS || !existsSync(screenshot))
       await page.screenshot({ path: screenshot });
@@ -151,6 +161,7 @@ try {
     await page.getByLabel("Column width").focus();
     await page.keyboard.press("ArrowRight");
     assert.equal(await page.getByLabel("Column width").inputValue(), "0.4");
+    await page.waitForFunction(()=>window.deck._deck.props.layers.flat(Infinity).find(l=>l.id==='population-hexagon-pillars').props.coverage===.4);
     await page.getByLabel("Inspect H3 ID").fill(info.p.h3);
     await page
       .getByRole("button", { name: "Inspect hexagon", exact: true })
@@ -176,6 +187,15 @@ try {
         .some((l) => l.id === "population-hexagons" && !l.props.extruded),
     );
     assert.equal(await page.getByLabel("Column width").count(), 0);
+    const circles=await page.evaluate(()=>{
+      const l=window.deck._deck.props.layers.flat(Infinity).find(l=>l.id==='population-hexagons');
+      const f=l.props.data.find(f=>f.properties.population>1000);
+      l.props.onHover({object:f});l.props.onClick({object:f});
+      return {count:l.props.data.length, h3:f.properties.h3, before:l.props.beforeId, radius:l.props.getRadius(f), alpha:l.props.getFillColor(f)[3]};
+    });
+    assert.equal(circles.count,7896);assert.equal(circles.before,'place_city');assert.ok(circles.radius>0);assert.equal(circles.alpha,95);
+    assert.match(await page.getByLabel('Hexagon details',{exact:true}).innerText(),new RegExp(circles.h3));
+    await page.getByRole('button',{name:'Close hexagon details'}).click();
     assert.match(
       await page.locator(".population-legend").innerText(),
       /square-root ramp/,
@@ -210,7 +230,7 @@ try {
       const f = layer.props.data.find((f) => f.properties.h3 === p.h3);
       const [x, y] = window.deck._deck
         .getViewports()[0]
-        .project([...center, layer.props.getElevation(f)]);
+        .project([...center, layer.props.getElevation(f) * .2]);
       return { x, y };
     }, info);
     assert.equal(
@@ -254,6 +274,25 @@ try {
         () => document.documentElement.scrollWidth <= innerWidth,
       ),
     );
+    // Both demand sources remain enabled and inspectable in both modes.
+    await expand();
+    await page.getByRole('checkbox',{name:'Employment',exact:true}).check();
+    await page.getByRole('button',{name:'Inspect employment block',exact:true}).waitFor();
+    assert.equal(await page.getByRole('checkbox',{name:'Population',exact:true,includeHidden:true}).isChecked(),true);
+    for(const pitch of [0,45]) {
+      await page.evaluate(p=>window.map.jumpTo({pitch:p}),pitch);
+      await page.waitForFunction(is3D=>{
+        const ids=window.deck._deck.props.layers.flat(Infinity).map(l=>l.id);
+        return ids.includes(is3D?'population-hexagon-pillars':'population-hexagons') && ids.includes(is3D?'employment-block-needles':'employment-circles');
+      },pitch>0);
+      assert.ok(await page.evaluate(()=>window.deck._deck.props.layers.flat(Infinity).every(l=>l.props.beforeId==='place_city')));
+    }
+    const stack=await page.locator('.demand-comparison').boundingBox();
+    assert.ok(stack.x>=0 && stack.x+stack.width<=width && stack.y>=0 && stack.y+stack.height<=height);
+    await page.getByLabel('Employment opacity').scrollIntoViewIfNeeded();
+    await page.getByLabel('Employment opacity').fill('0.5');
+    await page.getByLabel('Column width').scrollIntoViewIfNeeded();
+    await page.getByLabel('Column width').fill('0.5');
     assert.deepEqual(errors, []);
     console.log(
       `PASS Kontur ${name}: loaded ${loaded}ms; count, source switch, scales, inspector, picking, modes and transit order`,

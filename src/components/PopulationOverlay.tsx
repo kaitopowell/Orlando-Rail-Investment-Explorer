@@ -54,11 +54,11 @@ export default function PopulationOverlay({
   }, [map]);
   const [zoom, setZoom] = useState(() => map.getZoom());
   useEffect(() => {
-    if (!enabled || (source === "hexagons" && is3D)) return;
+    if (!enabled) return;
     const labels = (map.getStyle().layers ?? [])
       .filter(
         (layer) =>
-          layer.type === "symbol" && minorPopulationLabel.test(layer.id),
+          source === "tracts" && layer.type === "symbol" && minorPopulationLabel.test(layer.id),
       )
       .map((layer) => ({
         id: layer.id,
@@ -205,6 +205,7 @@ export default function PopulationOverlay({
         <HexPopulation
           overlay={overlay}
           is3D={is3D}
+          zoom={zoom}
           beforeId={beforeId}
           onStatus={onStatus}
         />

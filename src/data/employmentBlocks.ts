@@ -1,3 +1,4 @@
+import { DEMAND_STYLE } from "../map/demandStyle.ts";
 import type { Feature, FeatureCollection, Point } from "geojson";
 import { jobHeight, type JobScale } from "./employment.ts";
 export const blockSource = "Census LODES 8.4 (2023), jobs by workplace location; block-level values include privacy noise";
@@ -39,5 +40,5 @@ export function blockStats(data: BlockData) {
 export function needleHeight(value: number, maximum: number, cap: number, clip: boolean, scale: JobScale, exag: number) {
   const limit = clip ? cap : maximum;
   // A display floor keeps small workplace counts visible; values are never changed.
-  return Math.max(60 * exag, jobHeight(Math.min(value, limit), limit, scale, exag));
+  return Math.max(DEMAND_STYLE.minimumHeight * exag, jobHeight(Math.min(value, limit), limit, scale, exag));
 }

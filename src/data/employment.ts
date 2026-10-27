@@ -1,3 +1,4 @@
+import { demandHeight, demandRadius } from "../map/demandStyle.ts";
 import type {
   FeatureCollection,
   Feature,
@@ -47,21 +48,8 @@ export const jobRamp = [
   [255, 240, 253],
 ] as const;
 export const jobRampCss = `linear-gradient(to right,${jobRamp.map((c) => `rgb(${c.join(",")})`).join(",")})`;
-const transform = (v: number, s: JobScale) =>
-  s === "linear" ? v : s === "log" ? Math.log1p(v) : Math.sqrt(v);
-export const jobHeight = (
-  value: number,
-  max: number,
-  scale: JobScale,
-  exag: number,
-) =>
-  max > 0 ? (4000 * exag * transform(value, scale)) / transform(max, scale) : 0;
-export const jobRadius = (jobs: number, max: number, zoom: number) =>
-  max > 0
-    ? 30 *
-      Math.sqrt(jobs / max) *
-      Math.max(0.7, Math.min(1.6, 1 + (zoom - 10) * 0.12))
-    : 0;
+export const jobHeight = demandHeight;
+export const jobRadius = demandRadius;
 export function jobColor(
   value: number,
   max: number,

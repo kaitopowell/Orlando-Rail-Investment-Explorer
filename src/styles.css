@@ -793,3 +793,24 @@ footer {
     bottom: auto;
   }
 }
+
+/* Split available space so both demand controls stay visible and independently scrollable. */
+.demand-comparison {
+  position: absolute; z-index: 2; top: 78px; right: 28px; width: 270px;
+  height: calc(100dvh - 290px); max-height: calc(100dvh - 290px); overflow: hidden;
+  display: flex; flex-direction: column; gap: 8px;
+}
+main .demand-comparison > .population-panel {
+  position: static; inset: auto; width: 100%; box-sizing: border-box;
+  max-height: none; min-height: 0; overflow: auto; flex: 1 1 0;
+}
+.hexagon-panel { z-index: 2; }
+@media (max-width: 600px) {
+  .demand-comparison { top: 92px; right: 12px; width: 246px; max-height: calc(100dvh - 280px); }
+  main:has(.transit-panel) .demand-comparison { max-height: calc(100dvh - 470px); }
+  main:has(.equity-panel) .demand-comparison { top: auto; bottom: 86px; max-height: 180px; }
+  main:has(.equity-panel):has(.transit-panel) .demand-comparison { bottom: 300px; max-height: 150px; }
+  main:has(.bus-panel):has(.equity-panel) .demand-comparison {
+    top: calc(104px + (100dvh - 276px) / 3); bottom: auto; max-height: calc((100dvh - 276px) / 3);
+  }
+}
