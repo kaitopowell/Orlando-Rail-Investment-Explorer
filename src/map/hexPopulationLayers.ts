@@ -1,9 +1,10 @@
 import { ScatterplotLayer } from "@deck.gl/layers";
 import type { PickingInfo } from "@deck.gl/core";
 import { DemandNeedles } from "./DemandNeedles";
-import { DEMAND_STYLE, demandAlphaBlend, demandRadius } from "./demandStyle";
+import { DEMAND_STYLE, demandAlphaBlend } from "./demandStyle";
 import { hexCenter, pillarDefaults } from "../data/kontur3d";
-import { hexColor, hexHeight, type Hex, type HexData, type HexScale } from "../data/kontur";
+import { type Hex, type HexData, type HexScale } from "../data/kontur";
+import { POPULATION_DISPLAY as STYLE, populationDisplayValue, populationDisplayHeight, populationDisplayColor, populationDisplayRadius, type PopulationDisplaySettings } from "./populationDisplay";
 class SoftPopulationCircles extends ScatterplotLayer<Hex> {
   static layerName = "SoftPopulationCircles";
   getShaders() {
@@ -13,9 +14,12 @@ class SoftPopulationCircles extends ScatterplotLayer<Hex> {
     }};
   }
 }
-export function hexPopulationLayers(data: HexData, is3D: boolean, zoom: number, maximum: number,
+export function hexPopulationLayers(data: HexData, is3D: boolean, zoom: number, settings: PopulationDisplaySettings,
   scale: HexScale, exaggeration: number, width: number, beforeId: string | undefined,
   hover: (f: Hex | null) => void, select: (f: Hex) => void) {
+  const display = (f: Hex) => populationDisplayValue(f.properties.population, settings, scale);
+  const triggers = [settings.floor, settings.ceiling, settings.gamma, scale];
+  // Keep every original feature in the pickable layer, including almost invisible lows.
   const common = {
     data: data.features, beforeId, getPosition: hexCenter,
     pickable: true, autoHighlight: true, highlightColor: [84, 218, 192, 90] as [number, number, number, number],
@@ -23,17 +27,34 @@ export function hexPopulationLayers(data: HexData, is3D: boolean, zoom: number, 
     onHover: (info: PickingInfo<Hex>) => hover(info.object ?? null),
     onClick: (info: PickingInfo<Hex>) => { if (info.object) select(info.object); return true; },
   };
-  return is3D ? [new DemandNeedles<Hex>({
-    ...common, id: "population-hexagon-pillars", radiusUnits: "pixels",
-    radius: DEMAND_STYLE.needleRadius / pillarDefaults.coverage, coverage: width,
-    diskResolution: DEMAND_STYLE.needleSides, extruded: true, material: false, opacity: DEMAND_STYLE.opacity,
-    getElevation: f => hexHeight(f.properties.population, maximum, scale, exaggeration),
-    getFillColor: f => hexColor(f.properties.population, maximum),
-    updateTriggers: {getElevation: [scale, exaggeration, maximum], getFillColor: maximum},
-  })] : [new SoftPopulationCircles({
-    ...common, id: "population-hexagons", radiusUnits: "pixels",
-    getRadius: f => demandRadius(f.properties.population, maximum, zoom),
-    getFillColor: f => {const c = hexColor(f.properties.population, maximum); return [c[0], c[1], c[2], DEMAND_STYLE.circleAlpha];},
-    updateTriggers: {getRadius: [zoom, maximum], getFillColor: maximum},
-  })];
+  const spikes = {
+    ...common, radiusUnits: "pixels" as const,
+    radius: STYLE.needleRadius / pillarDefaults.coverage, coverage: width,
+    diskResolution: DEMAND_STYLE.needleSides, extruded: true, material: false as const, opacity: STYLE.needleOpacity,
+    getElevation: (f: Hex) => populationDisplayHeight(display(f), exaggeration),
+    getFillColor: (f: Hex) => populationDisplayColor(display(f), STYLE.needleAlpha),
+    updateTriggers: {getElevation: [...triggers, exaggeration], getFillColor: triggers},
+  };
+  const circles = {
+    ...common, radiusUnits: "pixels" as const,
+    getRadius: (f: Hex) => populationDisplayRadius(display(f), zoom),
+    getFillColor: (f: Hex) => populationDisplayColor(display(f), STYLE.circleAlpha),
+    updateTriggers: {getRadius: [...triggers, zoom], getFillColor: triggers},
+  };
+  const glow = {
+    data: data.features.filter(f=>f.properties.population>=settings.glowFloor),
+    pickable: false, autoHighlight: false,
+    getFillColor: (f: Hex): [number,number,number,number] => [45,242,197, STYLE.glowAlpha*Math.pow(display(f),2)],
+  };
+  // Upper-tail halos share Employment's taper/fade. Source-over bounds their
+  // accumulation at the cyan-green palette, instead of additive RGB clipping.
+  return is3D ? [
+    new DemandNeedles<Hex>({...spikes, ...glow, id: "population-hexagon-needle-glow",
+      radius: spikes.radius*STYLE.glowWidth}),
+    new DemandNeedles<Hex>({...spikes, id: "population-hexagon-pillars"}),
+  ] : [
+    new SoftPopulationCircles({...circles, ...glow, id: "population-hexagon-circle-glow",
+      getRadius: f => populationDisplayRadius(display(f),zoom)*STYLE.circleGlowWidth}),
+    new SoftPopulationCircles({...circles, id: "population-hexagons"}),
+  ];
 }

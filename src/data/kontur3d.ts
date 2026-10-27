@@ -1,5 +1,6 @@
+import { POPULATION_DISPLAY } from "../map/populationDisplay.ts";
 import type { Hex } from "./kontur";
-export const pillarDefaults = { coverage: 0.35, exaggeration: 3, scale: "sqrt" as const };
+export const pillarDefaults = { coverage: 0.35, exaggeration: POPULATION_DISPLAY.exaggeration, scale: "sqrt" as const };
 export const hexCenter = (hex: Hex): [number, number] => {
   const ring = hex.geometry.coordinates[0].slice(0, -1);
   return ring.reduce<[number, number]>(
