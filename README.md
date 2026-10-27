@@ -73,17 +73,21 @@ legend to make more room on small screens. Gray marks missing values, dimmer
 tracts have fewer than 100 households, and brighter colors indicate higher need
 (lower income for the income measure). Shares are estimates with sampling error.
 
-Kontur's Population view shares Employment's tapered needle shader and display
-scaling. In 3D, symbolic 1.2-pixel base radii (at width 0.35) fade toward transparent
-tips, with square-root height by default and 3× exaggeration. Height is 4,000 m ×
-exaggeration × transformed population / transformed maximum, with a 60 m ×
-exaggeration floor for positive values. Linear and log scales and width remain
-selectable. In 2D, soft translucent circles use area proportional to population
-and zoom-scaled radii. A sequential dark-teal → cyan-green ramp represents the
-square root of population in both views, without a percentile split or white
-endpoint. Normal alpha blending bounds overlaps. These are display encodings,
-not building heights or new metrics. Basemap labels stay above the data.
-Population and Employment can be enabled together; their controls share a
-scrollable stack. The Kontur data, H3 IDs, centers and inspection fields are
-unchanged: modeled estimates, not measured counts. The ACS tract source remains
-available with its existing rendering and inspector.
+Kontur Population uses a display-only emphasis curve to reveal hotspots. The
+emphasis slider ranges from a 40th- to an 80th-percentile floor and power 1.6–4;
+default 50% uses the 60th-percentile floor and power 2.8. The ceiling is the
+95th percentile. Values below the floor map to at most 0.002; values above the
+ceiling map to 1. The selected linear, square-root or normalized-log transform
+is applied before the power curve. Height, color and opacity share that result.
+This changes the display, never the modeled population values.
+
+In 3D, tapered needles share Employment's tip-fading shader, with 0.8-pixel
+base radii at width 0.35. Height is 4,000 display metres × exaggeration × display
+value, with an 8 m × exaggeration floor for positive values; default exaggeration
+is 1×. In 2D, small soft circles use the same display value for radius and color.
+Only the top 10% receive a faint halo. A very-dark-teal → neon cyan-green ramp
+and bounded alpha blending prevent Population overlaps from clipping to white.
+Basemap labels stay above the data. Controls and inspectors remain usable with
+Employment enabled. All 7,896 source hexagons remain inspectable, including faint
+low values; the H3 IDs, centers and data are unchanged. These are modeled estimates,
+not measured counts. The ACS tract rendering remains unchanged.

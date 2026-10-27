@@ -1,4 +1,3 @@
-import { demandHeight, DEMAND_STYLE, populationColor, populationRamp, populationRampCss } from "../map/demandStyle.ts";
 import type { FeatureCollection, Feature, Polygon } from "geojson";
 export type HexProperties = {
   h3: string;
@@ -10,11 +9,7 @@ export type HexProperties = {
 export type Hex = Feature<Polygon, HexProperties>;
 export type HexData = FeatureCollection<Polygon, HexProperties>;
 export type HexScale = "sqrt" | "linear" | "log";
-export const hexRamp = populationRamp;
-export const hexRampCss = populationRampCss;
-export const hexHeight = (population: number, maximum: number, scale: HexScale, exaggeration: number) =>
-  population > 0 ? Math.max(DEMAND_STYLE.minimumHeight * exaggeration, demandHeight(population, maximum, scale, exaggeration)) : 0;
-export const hexColor = populationColor;
+export { populationRampCss as hexRampCss } from "../map/populationDisplay.ts";
 export function parseHexagons(value: unknown): HexData {
   const data = value as HexData;
   if (

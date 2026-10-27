@@ -126,7 +126,7 @@ console.log(
   "PASS: 3D tract square-root height, 4x exaggeration, missing/zero suppression and shared density ramp.",
 );
 
-const { parseHexagons, hexHeight, hexColor } =
+const { parseHexagons } =
   await import("../src/data/kontur.ts");
 const hexData = parseHexagons(
   JSON.parse(
@@ -136,14 +136,6 @@ const hexData = parseHexagons(
   ),
 );
 assert.equal(hexData.features.length, 7896);
-for (const scale of ["sqrt", "linear", "log"]) {
-  assert.equal(hexHeight(0, 6000, scale, 1), 0);
-  assert.ok(Math.abs(hexHeight(6000, 6000, scale, 2) - 8000) < 1e-8);
-  assert.ok(hexHeight(10, 6000, scale, 1) < hexHeight(100, 6000, scale, 1));
-}
-assert.ok(Math.abs(hexHeight(1500, 6000, "sqrt", 1) - 2000) < 1e-8);
-assert.equal(hexHeight(1500, 6000, "linear", 1), 1000);
-assert.notDeepEqual(hexColor(1, 6000), hexColor(6000, 6000));
 assert.throws(() => parseHexagons({ type: "FeatureCollection", features: [] }));
 console.log(
   "PASS Kontur: 7896 supplied hexagons, selectable scales, exaggeration, ramp and validation",
@@ -177,36 +169,45 @@ console.log(
 );
 
 const { pillarDefaults, hexCenter } = await import("../src/data/kontur3d.ts");
-const { populationRamp, demandHeight, demandRadius, DEMAND_STYLE } = await import("../src/map/demandStyle.ts");
-assert.deepEqual(pillarDefaults, {coverage: .35, exaggeration: 3, scale: "sqrt"});
-assert.equal(jobHeight, demandHeight);
-assert.equal(jobRadius, demandRadius);
-const maximum = Math.max(...hexData.features.map(f => f.properties.population));
-for (const scale of ["linear", "sqrt", "log"]) {
-  assert.equal(hexHeight(maximum, maximum, scale, 3), 12000);
-  assert.ok(Math.abs(hexHeight(1, maximum, scale, 3) / hexHeight(1, maximum, scale, 1) - 3) < 1e-12);
-  assert.equal(hexHeight(0, maximum, scale, 3), 0);
+const { demandHeight, demandRadius } = await import("../src/map/demandStyle.ts");
+const { POPULATION_DISPLAY: style, populationValues, displayQuantile, populationDisplaySettings,
+  populationDisplayValue, populationDisplayHeight, populationDisplayRadius, populationDisplayColor } = await import("../src/map/populationDisplay.ts");
+assert.deepEqual(pillarDefaults,{coverage:.35,exaggeration:1,scale:'sqrt'});
+assert.equal(jobHeight,demandHeight);assert.equal(jobRadius,demandRadius);
+const snapshot=JSON.stringify(hexData), values=populationValues(hexData), defaults=populationDisplaySettings(values,50);
+assert.ok(Math.abs(defaults.floor-176)<1e-9);assert.equal(defaults.ceiling,1447);
+assert.equal(displayQuantile([0,10],.95),9.5);
+for(const emphasis of [0,50,100]) for(const scale of ['sqrt','linear','log']) {
+  const settings=populationDisplaySettings(values,emphasis);
+  const displayed=values.map(v=>populationDisplayValue(v,settings,scale));
+  assert.ok(displayed.every((v,i)=>v>=0&&v<=1&&(!i||v>=displayed[i-1])));
+  assert.ok(values.filter(v=>v<=settings.floor).every(v=>populationDisplayValue(v,settings,scale)<=style.lowValueFloor+1e-12));
+  assert.ok(values.filter(v=>v>=settings.ceiling).every(v=>Math.abs(populationDisplayValue(v,settings,scale)-1)<1e-12));
+  assert.equal(populationDisplayValue(0,settings,scale),0);
+  for(const t of [0,.002,.25,1]) {
+    assert.equal(populationDisplayHeight(t,2),2*populationDisplayHeight(t,1));
+    assert.ok(populationDisplayColor(t,style.needleAlpha)[3]<=style.needleAlpha);
+  }
 }
-assert.equal(hexHeight(.001, maximum, "linear", 3), DEMAND_STYLE.minimumHeight * 3);
-// Population uses the same proportional-circle encoding as Employment.
-assert.equal(demandRadius(400, 400, 10) ** 2 / demandRadius(100, 400, 10) ** 2, 4);
-assert.ok(demandRadius(100, 400, 8) < demandRadius(100, 400, 12));
-// Approximate perceptual lightness in OKLab: sequential, nearly even steps.
-function lightness(rgb) {
-  const [r,g,b] = rgb.map(v => (v /= 255) <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4);
-  return .2104542553 * Math.cbrt(.4122214708*r+.5363325363*g+.0514459929*b)
-    + .793617785 * Math.cbrt(.2119034982*r+.6806995451*g+.1073969566*b)
-    - .0040720468 * Math.cbrt(.0883024619*r+.2817188376*g+.6299787005*b);
-}
-const steps=populationRamp.slice(1).map((c,i)=>lightness(c)-lightness(populationRamp[i]));
-assert.ok(steps.every(s=>s>.08 && s<.14));
-for(const color of populationRamp) {
-  assert.ok(color[1]>color[2] && color[2]>color[0]);
-  assert.ok(Math.max(...color)<240);
+const low=populationDisplaySettings(values,0), high=populationDisplaySettings(values,100);
+for(const v of values) assert.ok(populationDisplayValue(v,high,'sqrt')<=populationDisplayValue(v,low,'sqrt')+1e-12);
+assert.ok(populationDisplayHeight(.002,1)<=8);
+assert.equal(populationDisplayHeight(1,1),4000);
+assert.ok(populationDisplayRadius(1,10)<10);
+assert.ok(populationDisplayRadius(.002,10)<1);
+assert.ok(populationDisplayRadius(.5,8)<populationDisplayRadius(.5,12));
+for(const settings of [populationDisplaySettings([],50),populationDisplaySettings([5,5,5],50)])
+  assert.ok(Number.isFinite(populationDisplayValue(5,settings,'sqrt')));
+// Every source-over overlap stays bounded by the cyan-green ceiling, including halos.
+for(const t of [0,.002,.2,.5,1]) {
+  const c=populationDisplayColor(t,style.needleAlpha), a=c[3]/255;
+  let rgb=[12,20,28];
+  for(let n=0;n<10000;n++) rgb=rgb.map((v,i)=>c[i]*a+v*(1-a));
+  assert.ok(rgb[0]<50 && rgb[1]<=243 && rgb[2]<200);
 }
 for(const f of hexData.features) {
   const ring=f.geometry.coordinates[0].slice(0,-1), center=hexCenter(f);
   for(let axis=0;axis<2;axis++) assert.ok(Math.abs(center[axis]-ring.reduce((n,p)=>n+p[axis],0)/ring.length)<1e-10);
-  assert.equal(typeof f.properties.h3,'string');
 }
-console.log("PASS Population style: shared Employment scaling, minimum height, proportional circles, sequential teal ramp and unchanged hexagon centers");
+assert.equal(JSON.stringify(hexData),snapshot);
+console.log('PASS Population contrast: real-data quantiles, monotonic emphasis/scales, faint lows, capped highs, bounded overlap, small circles, original features/centers');

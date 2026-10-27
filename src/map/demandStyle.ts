@@ -15,13 +15,3 @@ export const demandAlphaBlend = {
   blendColorDstFactor: "one-minus-src-alpha", blendAlphaSrcFactor: "one",
   blendAlphaDstFactor: "one-minus-src-alpha", depthWriteEnabled: false, depthCompare: "always",
 } as const;
-export const populationRamp = [
-  [10, 64, 58], [17, 99, 89], [28, 137, 121], [49, 177, 156], [84, 218, 192],
-] as const;
-export const populationRampCss = `linear-gradient(to right, ${populationRamp.map(c => `rgb(${c.join(",")})`).join(",")})`;
-export function populationColor(value: number, maximum: number): [number, number, number, number] {
-  const t = maximum > 0 ? Math.min(1, Math.sqrt(Math.max(0, value) / maximum)) * (populationRamp.length - 1) : 0;
-  const i = Math.min(populationRamp.length - 2, Math.floor(t)), f = t - i;
-  const rgb = populationRamp[i].map((v, c) => Math.round(v + (populationRamp[i + 1][c] - v) * f));
-  return [rgb[0], rgb[1], rgb[2], 230];
-}

@@ -114,7 +114,7 @@ try {
       await page
         .getByLabel("Vertical exaggeration", { exact: true })
         .inputValue(),
-      "3",
+      "1",
     );
     assert.equal(await page.getByLabel("Column width").inputValue(), "0.35");
     assert.match(
@@ -149,11 +149,30 @@ try {
     assert.ok(order.index < order.streets);
     assert.equal(order.visible, "visible");
     assert.equal(order.coverage, 0.35);
-    assert.ok(Math.abs(order.radius-1.2)<1e-10);
+    assert.ok(Math.abs(order.radius-.8)<1e-10);
     assert.equal(order.units, "pixels");
     assert.equal(order.blend, "one-minus-src-alpha");
     assert.equal(order.material, false);
     assert.match(order.shader, /needleFraction/);
+    const emphasisSnapshot=async value=>{
+      await page.getByLabel('Population display emphasis',{exact:true}).fill(value);
+      await page.waitForTimeout(150);
+      return page.evaluate(()=>{
+        const ls=window.deck._deck.props.layers.flat(Infinity), core=ls.find(l=>l.id==='population-hexagon-pillars'), glow=ls.find(l=>l.id==='population-hexagon-needle-glow');
+        const f=core.props.data.find(f=>f.properties.population>=400 && f.properties.population<500);
+        return {id:f.properties.h3, value:f.properties.population, height:core.props.getElevation(f), color:core.props.getFillColor(f),
+          count:core.props.data.length, glowCount:glow.props.data.length, glowPickable:glow.props.pickable, glowBlend:glow.props.parameters.blendColorDstFactor};
+      });
+    };
+    const gentle=await emphasisSnapshot('0'), strong=await emphasisSnapshot('100');
+    assert.equal(gentle.id,strong.id);assert.equal(gentle.value,strong.value);assert.equal(strong.count,7896);
+    assert.ok(strong.height<gentle.height);assert.ok(strong.color[3]<gentle.color[3]);
+    assert.ok(strong.glowCount<=800);assert.equal(strong.glowPickable,false);assert.equal(strong.glowBlend,'one-minus-src-alpha');
+    assert.match(await page.getByLabel('Population display method').innerText(),/does not change the data/);
+    await page.getByLabel('Inspect H3 ID').fill(strong.id);await page.getByRole('button',{name:'Inspect hexagon',exact:true}).click();
+    assert.ok((await page.getByLabel('Hexagon details',{exact:true}).innerText()).includes(String(strong.value)));
+    await page.getByRole('button',{name:'Close hexagon details'}).click();
+    await page.getByLabel('Population display emphasis',{exact:true}).fill('50');
     const screenshot = `work/kontur-pillars-${name}.png`;
     if (!process.env.SOL_R_REUSE_SCREENSHOTS || !existsSync(screenshot))
       await page.screenshot({ path: screenshot });
@@ -193,12 +212,12 @@ try {
       l.props.onHover({object:f});l.props.onClick({object:f});
       return {count:l.props.data.length, h3:f.properties.h3, before:l.props.beforeId, radius:l.props.getRadius(f), alpha:l.props.getFillColor(f)[3]};
     });
-    assert.equal(circles.count,7896);assert.equal(circles.before,'place_city');assert.ok(circles.radius>0);assert.equal(circles.alpha,95);
+    assert.equal(circles.count,7896);assert.equal(circles.before,'place_city');assert.ok(circles.radius>0);assert.ok(circles.alpha>=2 && circles.alpha<=185);
     assert.match(await page.getByLabel('Hexagon details',{exact:true}).innerText(),new RegExp(circles.h3));
     await page.getByRole('button',{name:'Close hexagon details'}).click();
     assert.match(
       await page.locator(".population-legend").innerText(),
-      /square-root ramp/,
+      /stretched display value/,
     );
     await page
       .getByRole("button", { name: "Toggle population 3D view" })
