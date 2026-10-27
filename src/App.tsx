@@ -38,7 +38,6 @@ export default function App() {
         onEmploymentToggle={() => {
           setEmploymentVisible(!employmentVisible);
           if (!employmentVisible) {
-            setPopulationVisible(false);
             if (window.innerWidth <= 600) setOpen(false);
           }
         }}
@@ -51,7 +50,6 @@ export default function App() {
         populationStatus={populationStatus}
         onPopulationToggle={() => {
           setPopulationVisible(!populationVisible);
-          if (!populationVisible) setEmploymentVisible(false);
           if (!populationVisible && window.innerWidth <= 600) setOpen(false);
         }}
         open={open}

@@ -1,28 +1,15 @@
-import { ColumnLayer } from "@deck.gl/layers";
+import { DemandNeedles } from "./DemandNeedles";
+import { DEMAND_STYLE } from "./demandStyle";
 import type { PickingInfo } from "@deck.gl/core";
 import { jobColor, type JobScale } from "../data/employment";
 import { needleHeight, type BlockData, type JobBlock, type blockStats } from "../data/employmentBlocks";
-export class EmploymentNeedles extends ColumnLayer<JobBlock> {
-  static layerName = "EmploymentNeedles";
-  getShaders() {
-    const shaders = super.getShaders();
-    return {...shaders, inject: {
-      ...shaders.inject,
-      "vs:#decl": "out float needleFraction;",
-      "vs:#main-start": "needleFraction = (positions.z + 1.0) * 0.5;",
-      "vs:DECKGL_FILTER_SIZE": "size.xy *= mix(1.0, 0.12, needleFraction);",
-      "fs:#decl": "in float needleFraction;",
-      "fs:DECKGL_FILTER_COLOR": "if (!bool(picking.isActive)) { color.a *= pow(1.0 - clamp(needleFraction, 0.0, 1.0), 1.4); }",
-    }};
-  }
-}
 export function employmentBlockLayers(data: BlockData, stats: ReturnType<typeof blockStats>, scale: JobScale,
   exag: number, clip: boolean, opacity: number, highlight: string | null,
   hover: (f: JobBlock | null) => void, select: (f: JobBlock) => void) {
-  return [new EmploymentNeedles({
+  return [new DemandNeedles<JobBlock>({
     id: "employment-block-needles", data: data.features,
     getPosition: f => f.geometry.coordinates as [number, number],
-    radiusUnits: "pixels", radius: 1.2, diskResolution: 6,
+    radiusUnits: "pixels", radius: DEMAND_STYLE.needleRadius, diskResolution: DEMAND_STYLE.needleSides,
     extruded: true, material: false, opacity,
     getElevation: f => needleHeight(f.properties.jobs_total, stats.maximum, stats.cap, clip, scale, exag),
     getFillColor: f => f.properties.w_geocode === highlight ? [255, 240, 253, 255] :

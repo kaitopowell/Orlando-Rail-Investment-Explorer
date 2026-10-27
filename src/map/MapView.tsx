@@ -243,6 +243,7 @@ export default function MapView({
           enabled={equityVisible}
         />
       )}
+      <div className={populationVisible && employmentVisible ? "demand-comparison" : undefined}>
       {scene && (
         <PopulationOverlay
           map={scene.map}
@@ -252,6 +253,14 @@ export default function MapView({
           onStatus={onPopulationStatus}
         />
       )}
+      {scene && (
+        <EmploymentOverlay
+          map={scene.map}
+          overlay={scene.employmentOverlay}
+          enabled={employmentVisible}
+        />
+      )}
+      </div>
       <div className={busVisible ? "transit-stack" : undefined}>
       {scene && <BusOverlay map={scene.map} overlay={scene.busOverlay} enabled={busVisible}/>}
       {scene && (
@@ -262,13 +271,6 @@ export default function MapView({
         />
       )}
       </div>
-      {scene && (
-        <EmploymentOverlay
-          map={scene.map}
-          overlay={scene.employmentOverlay}
-          enabled={employmentVisible}
-        />
-      )}
       <div className="view-controls" aria-label="Map views">
         <button
           disabled={dataError}

@@ -73,9 +73,17 @@ legend to make more room on small screens. Gray marks missing values, dimmer
 tracts have fewer than 100 households, and brighter colors indicate higher need
 (lower income for the income measure). Shares are estimates with sampling error.
 
-Kontur's 3D Population view defaults to thin pillars (column width 0.35), linear
-height and 3× exaggeration. Width is a display setting, not to scale. The new
-blue-gray/teal ramp reserves orange/yellow for roughly the top 5% of hexagons.
-Soft lighting and interleaved rendering keep basemap labels above the pillars;
-Existing transit still draws on top. The 2D view, data, tract source and inspector
-are unchanged.
+Kontur's Population view shares Employment's tapered needle shader and display
+scaling. In 3D, symbolic 1.2-pixel base radii (at width 0.35) fade toward transparent
+tips, with square-root height by default and 3× exaggeration. Height is 4,000 m ×
+exaggeration × transformed population / transformed maximum, with a 60 m ×
+exaggeration floor for positive values. Linear and log scales and width remain
+selectable. In 2D, soft translucent circles use area proportional to population
+and zoom-scaled radii. A sequential dark-teal → cyan-green ramp represents the
+square root of population in both views, without a percentile split or white
+endpoint. Normal alpha blending bounds overlaps. These are display encodings,
+not building heights or new metrics. Basemap labels stay above the data.
+Population and Employment can be enabled together; their controls share a
+scrollable stack. The Kontur data, H3 IDs, centers and inspection fields are
+unchanged: modeled estimates, not measured counts. The ACS tract source remains
+available with its existing rendering and inspector.

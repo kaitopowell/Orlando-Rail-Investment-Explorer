@@ -58,20 +58,7 @@ try {
         await page.getByRole("button", { name: "Expand sidebar" }).click();
     };
     await expand();
-    await page
-      .getByRole("checkbox", {
-        name: "Population",
-        exact: true,
-        includeHidden: true,
-      })
-      .check();
-    await page
-      .getByRole("button", { name: "Inspect hexagon", exact: true })
-      .waitFor();
-    await expand();
-    await page
-      .getByRole("checkbox", { name: "Employment", exact: true })
-      .check();
+    await page.getByRole("checkbox", {name: "Employment", exact: true}).check();
     await page.getByLabel("Employment 3D source").waitFor();
     assert.equal(await page.getByLabel("Employment 3D source").inputValue(), "blocks");
     await page.getByRole("button", {name: "Inspect employment block", exact: true}).waitFor();
@@ -278,7 +265,7 @@ try {
     await page
       .getByRole("button", { name: "Inspect hexagon", exact: true })
       .waitFor();
-    assert.equal(await page.locator(".employment-panel").count(), 0);
+    assert.equal(await page.locator(".employment-panel").count(), 1);
     assert.ok(
       await page
         .getByRole("checkbox", {
@@ -290,7 +277,7 @@ try {
     );
     assert.deepEqual(errors, []);
     console.log(
-      `PASS Employment ${name}: 15,574 block needles, clipping/opacity/source/inspection, alternative demand, 489 tract columns, zero tract, sectors, scales, 2D area layer, picking and transit order`,
+      `PASS Employment ${name}: 15,574 block needles, clipping/opacity/source/inspection, independent demand, 489 tract columns, zero tract, sectors, scales, 2D area layer, picking and transit order`,
     );
     await page.close();
   }

@@ -160,7 +160,7 @@ try {
     )
       await page.getByRole("button", { name: "Collapse sidebar" }).click();
     const boxes = await Promise.all(
-      [".equity-panel", ".employment-panel", ".transit-panel"].map((s) =>
+      [".equity-panel", ".demand-comparison", ".transit-panel"].map((s) =>
         page.locator(s).boundingBox(),
       ),
     );

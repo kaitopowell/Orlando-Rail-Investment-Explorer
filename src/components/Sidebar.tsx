@@ -201,8 +201,8 @@ export default function Sidebar({
             <a href="https://lehd.ces.census.gov/data/lodes/LODES8/fl/wac/fl_wac_S000_JT00_2023.csv.gz">
               Census LODES 8.4 (2023), jobs by workplace location.
             </a>{" "}
-            Accessed 2026-10-15. Population and Employment open as alternative
-            3D demand views.
+            Accessed 2026-10-15. Population and Employment can be compared together
+            in 2D and 3D.
           </p>
           <p className="county-attribution">
             Modeled population:{" "}

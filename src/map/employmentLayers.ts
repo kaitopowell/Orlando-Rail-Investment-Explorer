@@ -1,3 +1,4 @@
+import { DEMAND_STYLE } from "./demandStyle";
 import { ColumnLayer, GeoJsonLayer, ScatterplotLayer } from "@deck.gl/layers";
 import {
   jobColor,
@@ -147,7 +148,7 @@ export function employmentLayers(
             getRadius: (f) => jobRadius(f.properties.jobs_total, maxJobs, zoom),
             getFillColor: (f) => {
               const c = jobColor(f.properties.jobs_total, maxJobs);
-              return [c[0], c[1], c[2], 95];
+              return [c[0], c[1], c[2], DEMAND_STYLE.circleAlpha];
             },
             parameters: additive,
             pickable: true,

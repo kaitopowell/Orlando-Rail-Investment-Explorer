@@ -138,11 +138,11 @@ const hexData = parseHexagons(
 assert.equal(hexData.features.length, 7896);
 for (const scale of ["sqrt", "linear", "log"]) {
   assert.equal(hexHeight(0, 6000, scale, 1), 0);
-  assert.ok(Math.abs(hexHeight(6000, 6000, scale, 2) - 4000) < 1e-8);
+  assert.ok(Math.abs(hexHeight(6000, 6000, scale, 2) - 8000) < 1e-8);
   assert.ok(hexHeight(10, 6000, scale, 1) < hexHeight(100, 6000, scale, 1));
 }
-assert.ok(Math.abs(hexHeight(1500, 6000, "sqrt", 1) - 1000) < 1e-8);
-assert.equal(hexHeight(1500, 6000, "linear", 1), 500);
+assert.ok(Math.abs(hexHeight(1500, 6000, "sqrt", 1) - 2000) < 1e-8);
+assert.equal(hexHeight(1500, 6000, "linear", 1), 1000);
 assert.notDeepEqual(hexColor(1, 6000), hexColor(6000, 6000));
 assert.throws(() => parseHexagons({ type: "FeatureCollection", features: [] }));
 console.log(
@@ -176,61 +176,37 @@ console.log(
   "PASS Employment: data contract, height, proportional circle area and sector ranking",
 );
 
-const { pillarDefaults, hexCenter, pillarRadius, warmThreshold, pillarColor } =
-  await import("../src/data/kontur3d.ts");
-assert.deepEqual(pillarDefaults, {
-  coverage: 0.35,
-  exaggeration: 3,
-  scale: "linear",
-});
-const threshold = warmThreshold(hexData),
-  maximum = Math.max(...hexData.features.map((f) => f.properties.population));
-const fraction =
-  hexData.features.filter((f) => f.properties.population >= threshold).length /
-  hexData.features.length;
-assert.ok(fraction >= 0.049 && fraction <= 0.051);
-assert.equal(
-  hexHeight(
-    maximum,
-    maximum,
-    pillarDefaults.scale,
-    pillarDefaults.exaggeration,
-  ),
-  6000,
-);
-assert.equal(
-  hexHeight(85, maximum, pillarDefaults.scale, pillarDefaults.exaggeration),
-  85,
-);
-assert.ok(pillarColor(1, threshold, maximum)[3] < 50);
-assert.ok(pillarColor(threshold - 1, threshold, maximum)[0] < 50);
-assert.ok(pillarColor(threshold, threshold, maximum)[0] > 240);
-assert.deepEqual(pillarColor(maximum, threshold, maximum), [255, 231, 80, 245]);
-const radius = pillarRadius(hexData);
-assert.ok(Number.isFinite(radius) && radius > 0);
-for (const f of hexData.features) {
-  const center = hexCenter(f),
-    ring = f.geometry.coordinates[0];
-  // Independently verify that the maximum-width pillar's vertices stay in the supplied polygon.
-  for (let angle = 0; angle < 6; angle++) {
-    const x =
-      center[0] +
-      (radius * Math.cos((angle * Math.PI) / 3)) /
-        (111195 * Math.cos((center[1] * Math.PI) / 180));
-    const y = center[1] + (radius * Math.sin((angle * Math.PI) / 3)) / 111195;
-    let inside = false;
-    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
-      const a = ring[i],
-        b = ring[j];
-      if (
-        a[1] > y !== b[1] > y &&
-        x < ((b[0] - a[0]) * (y - a[1])) / (b[1] - a[1]) + a[0]
-      )
-        inside = !inside;
-    }
-    assert.ok(inside);
-  }
+const { pillarDefaults, hexCenter } = await import("../src/data/kontur3d.ts");
+const { populationRamp, demandHeight, demandRadius, DEMAND_STYLE } = await import("../src/map/demandStyle.ts");
+assert.deepEqual(pillarDefaults, {coverage: .35, exaggeration: 3, scale: "sqrt"});
+assert.equal(jobHeight, demandHeight);
+assert.equal(jobRadius, demandRadius);
+const maximum = Math.max(...hexData.features.map(f => f.properties.population));
+for (const scale of ["linear", "sqrt", "log"]) {
+  assert.equal(hexHeight(maximum, maximum, scale, 3), 12000);
+  assert.ok(Math.abs(hexHeight(1, maximum, scale, 3) / hexHeight(1, maximum, scale, 1) - 3) < 1e-12);
+  assert.equal(hexHeight(0, maximum, scale, 3), 0);
 }
-console.log(
-  "PASS 3D pillars: linear peaks, 95th-percentile warm tail, low alpha and footprints inside all supplied hexagons",
-);
+assert.equal(hexHeight(.001, maximum, "linear", 3), DEMAND_STYLE.minimumHeight * 3);
+// Population uses the same proportional-circle encoding as Employment.
+assert.equal(demandRadius(400, 400, 10) ** 2 / demandRadius(100, 400, 10) ** 2, 4);
+assert.ok(demandRadius(100, 400, 8) < demandRadius(100, 400, 12));
+// Approximate perceptual lightness in OKLab: sequential, nearly even steps.
+function lightness(rgb) {
+  const [r,g,b] = rgb.map(v => (v /= 255) <= .04045 ? v / 12.92 : ((v + .055) / 1.055) ** 2.4);
+  return .2104542553 * Math.cbrt(.4122214708*r+.5363325363*g+.0514459929*b)
+    + .793617785 * Math.cbrt(.2119034982*r+.6806995451*g+.1073969566*b)
+    - .0040720468 * Math.cbrt(.0883024619*r+.2817188376*g+.6299787005*b);
+}
+const steps=populationRamp.slice(1).map((c,i)=>lightness(c)-lightness(populationRamp[i]));
+assert.ok(steps.every(s=>s>.08 && s<.14));
+for(const color of populationRamp) {
+  assert.ok(color[1]>color[2] && color[2]>color[0]);
+  assert.ok(Math.max(...color)<240);
+}
+for(const f of hexData.features) {
+  const ring=f.geometry.coordinates[0].slice(0,-1), center=hexCenter(f);
+  for(let axis=0;axis<2;axis++) assert.ok(Math.abs(center[axis]-ring.reduce((n,p)=>n+p[axis],0)/ring.length)<1e-10);
+  assert.equal(typeof f.properties.h3,'string');
+}
+console.log("PASS Population style: shared Employment scaling, minimum height, proportional circles, sequential teal ramp and unchanged hexagon centers");
