@@ -88,6 +88,7 @@ try {
         .some((l) => l.id === "population-hexagon-pillars" && l.props.extruded),
     );
     const loaded = Date.now() - start;
+    assert.ok(Math.abs(await page.evaluate(()=>window.map.getPitch())-52)<1e-7);
     assert.equal(
       await page.getByLabel("Population source", { exact: true }).inputValue(),
       "hexagons",
@@ -114,7 +115,7 @@ try {
       await page
         .getByLabel("Vertical exaggeration", { exact: true })
         .inputValue(),
-      "1",
+      "3",
     );
     assert.equal(await page.getByLabel("Column width").inputValue(), "0.35");
     assert.match(
@@ -149,9 +150,10 @@ try {
     assert.ok(order.index < order.streets);
     assert.equal(order.visible, "visible");
     assert.equal(order.coverage, 0.35);
-    assert.ok(Math.abs(order.radius-.8)<1e-10);
+    assert.ok(Math.abs(order.radius-.65)<1e-10);
     assert.equal(order.units, "pixels");
-    assert.equal(order.blend, "one-minus-src-alpha");
+    assert.equal(order.blend, "one");
+    assert.match(order.shader, /min\(color.a, 0.45\)/);
     assert.equal(order.material, false);
     assert.match(order.shader, /needleFraction/);
     const emphasisSnapshot=async value=>{
@@ -167,12 +169,20 @@ try {
     const gentle=await emphasisSnapshot('0'), strong=await emphasisSnapshot('100');
     assert.equal(gentle.id,strong.id);assert.equal(gentle.value,strong.value);assert.equal(strong.count,7896);
     assert.ok(strong.height<gentle.height);assert.ok(strong.color[3]<gentle.color[3]);
-    assert.ok(strong.glowCount<=800);assert.equal(strong.glowPickable,false);assert.equal(strong.glowBlend,'one-minus-src-alpha');
+    assert.equal(strong.glowCount,7896);assert.equal(strong.glowPickable,false);assert.equal(strong.glowBlend,'one');
     assert.match(await page.getByLabel('Population display method').innerText(),/does not change the data/);
     await page.getByLabel('Inspect H3 ID').fill(strong.id);await page.getByRole('button',{name:'Inspect hexagon',exact:true}).click();
     assert.ok((await page.getByLabel('Hexagon details',{exact:true}).innerText()).includes(String(strong.value)));
     await page.getByRole('button',{name:'Close hexagon details'}).click();
     await page.getByLabel('Population display emphasis',{exact:true}).fill('50');
+    const glowPasses=await page.evaluate(()=>{
+      const layers=window.deck._deck.props.layers.flat(Infinity);
+      const ground=layers.find(l=>l.id==='population-hexagon-ground-glow'), bloom=layers.find(l=>l.id==='population-hexagon-needle-glow'), core=layers.find(l=>l.id==='population-hexagon-pillars');
+      return {ground:ground.props.data.length, groundPick:ground.props.pickable, bloomWidth:bloom.props.radius/core.props.radius,
+        groundIndex:layers.indexOf(ground), bloomIndex:layers.indexOf(bloom), coreIndex:layers.indexOf(core)};
+    });
+    assert.ok(glowPasses.ground>0 && glowPasses.ground<250);assert.equal(glowPasses.groundPick,false);
+    assert.ok(Math.abs(glowPasses.bloomWidth-3)<1e-10);assert.ok(glowPasses.groundIndex<glowPasses.bloomIndex && glowPasses.bloomIndex<glowPasses.coreIndex);
     const screenshot = `work/kontur-pillars-${name}.png`;
     if (!process.env.SOL_R_REUSE_SCREENSHOTS || !existsSync(screenshot))
       await page.screenshot({ path: screenshot });
@@ -306,6 +316,11 @@ try {
       },pitch>0);
       assert.ok(await page.evaluate(()=>window.deck._deck.props.layers.flat(Infinity).every(l=>l.props.beforeId==='place_city')));
     }
+    const blends=await page.evaluate(()=>{
+      const ls=window.deck._deck.props.layers.flat(Infinity);
+      return ['population-hexagon-pillars','employment-block-needles'].map(id=>ls.find(l=>l.id===id).props.parameters);
+    });
+    assert.deepEqual(blends[0],blends[1]);
     const stack=await page.locator('.demand-comparison').boundingBox();
     assert.ok(stack.x>=0 && stack.x+stack.width<=width && stack.y>=0 && stack.y+stack.height<=height);
     await page.getByLabel('Employment opacity').scrollIntoViewIfNeeded();

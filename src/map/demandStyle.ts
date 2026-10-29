@@ -15,3 +15,9 @@ export const demandAlphaBlend = {
   blendColorDstFactor: "one-minus-src-alpha", blendAlphaSrcFactor: "one",
   blendAlphaDstFactor: "one-minus-src-alpha", depthWriteEnabled: false, depthCompare: "always",
 } as const;
+
+export const demandAdditiveBlend = {
+  blend: true, blendColorOperation: "add", blendColorSrcFactor: "src-alpha",
+  blendColorDstFactor: "one", blendAlphaSrcFactor: "one", blendAlphaDstFactor: "one-minus-src-alpha",
+  depthWriteEnabled: false, depthCompare: "always",
+} as const;

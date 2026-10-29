@@ -171,8 +171,8 @@ console.log(
 const { pillarDefaults, hexCenter } = await import("../src/data/kontur3d.ts");
 const { demandHeight, demandRadius } = await import("../src/map/demandStyle.ts");
 const { POPULATION_DISPLAY: style, populationValues, displayQuantile, populationDisplaySettings,
-  populationDisplayValue, populationDisplayHeight, populationDisplayRadius, populationDisplayColor } = await import("../src/map/populationDisplay.ts");
-assert.deepEqual(pillarDefaults,{coverage:.35,exaggeration:1,scale:'sqrt'});
+  populationDisplayValue, populationDisplayHeight, populationDisplayRadius, populationDisplayColor, populationNeedleColor } = await import("../src/map/populationDisplay.ts");
+assert.deepEqual(pillarDefaults,{coverage:.35,exaggeration:3,scale:'sqrt'});
 assert.equal(jobHeight,demandHeight);assert.equal(jobRadius,demandRadius);
 const snapshot=JSON.stringify(hexData), values=populationValues(hexData), defaults=populationDisplaySettings(values,50);
 assert.ok(Math.abs(defaults.floor-176)<1e-9);assert.equal(defaults.ceiling,1447);
@@ -198,13 +198,29 @@ assert.ok(populationDisplayRadius(.002,10)<1);
 assert.ok(populationDisplayRadius(.5,8)<populationDisplayRadius(.5,12));
 for(const settings of [populationDisplaySettings([],50),populationDisplaySettings([5,5,5],50)])
   assert.ok(Number.isFinite(populationDisplayValue(5,settings,'sqrt')));
-// Every source-over overlap stays bounded by the cyan-green ceiling, including halos.
+// The unchanged 2D source-over path remains bounded; 3D uses the emission budget below.
 for(const t of [0,.002,.2,.5,1]) {
   const c=populationDisplayColor(t,style.needleAlpha), a=c[3]/255;
   let rgb=[12,20,28];
   for(let n=0;n<10000;n++) rgb=rgb.map((v,i)=>c[i]*a+v*(1-a));
   assert.ok(rgb[0]<50 && rgb[1]<=243 && rgb[2]<200);
 }
+const threeD=populationDisplaySettings(values,50,true);
+assert.ok(Math.abs(threeD.ceiling-2570.025)<1e-8);
+const heights=values.map(v=>populationDisplayHeight(populationDisplayValue(v,threeD,'sqrt'),style.exaggeration));
+assert.equal(Math.max(...heights),12000);
+assert.ok(heights.filter(h=>h>6000).length/values.length<.03);
+assert.ok(heights.filter(h=>h>6000).length>0);
+assert.ok(populationDisplayHeight(.5,3)<.3*populationDisplayHeight(1,3));
+assert.ok(style.needleRadius<.8 && style.needleOpacity<.3 && style.spikeAlphaCap<=.45);
+assert.equal(style.pitch3D,52);
+for(const t of [.002,.2,.5,1]) {
+  const c=populationNeedleColor(t);
+  assert.ok(c[3]<=230);
+  const emitted=c.slice(0,3).map(v=>v/255*Math.min(style.spikeAlphaCap,c[3]/255*Math.pow(style.needleOpacity,1/2.2)));
+  assert.ok(emitted.every(v=>v<=style.spikeAlphaCap));
+}
+console.log('PASS 3D: heavy upper tail, 3x exaggeration, thin needles, per-fragment emission budget and unchanged 2D mappings');
 for(const f of hexData.features) {
   const ring=f.geometry.coordinates[0].slice(0,-1), center=hexCenter(f);
   for(let axis=0;axis<2;axis++) assert.ok(Math.abs(center[axis]-ring.reduce((n,p)=>n+p[axis],0)/ring.length)<1e-10);

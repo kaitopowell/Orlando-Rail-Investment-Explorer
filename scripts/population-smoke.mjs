@@ -75,8 +75,8 @@ try {
         .count(),
       491,
     );
-    await page.waitForFunction(() => window.solRMap.getPitch() === 45);
-    assert.equal(await page.evaluate(() => window.solRMap.getPitch()), 45);
+    await page.waitForFunction(() => Math.abs(window.solRMap.getPitch() - 52) < 1e-7);
+    assert.ok(Math.abs(await page.evaluate(() => window.solRMap.getPitch()) - 52) < 1e-7);
     await page
       .getByRole("button", { name: "Four counties", exact: true })
       .click();

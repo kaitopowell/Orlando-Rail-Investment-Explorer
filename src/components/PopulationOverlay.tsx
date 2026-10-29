@@ -1,3 +1,4 @@
+import { POPULATION_DISPLAY } from "../map/populationDisplay";
 import { useEffect, useMemo, useState } from "react";
 import HexPopulation from "./HexPopulation";
 import type { Map } from "maplibre-gl";
@@ -181,7 +182,7 @@ export default function PopulationOverlay({
         <button
           onClick={() =>
             map.easeTo({
-              pitch: map.getPitch() > 0 ? 0 : populationPitch,
+              pitch: map.getPitch() > 0 ? 0 : source === "hexagons" ? POPULATION_DISPLAY.pitch3D : populationPitch,
               duration: 0,
             })
           }

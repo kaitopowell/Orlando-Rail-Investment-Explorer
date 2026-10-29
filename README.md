@@ -73,21 +73,23 @@ legend to make more room on small screens. Gray marks missing values, dimmer
 tracts have fewer than 100 households, and brighter colors indicate higher need
 (lower income for the income measure). Shares are estimates with sampling error.
 
-Kontur Population uses a display-only emphasis curve to reveal hotspots. The
-emphasis slider ranges from a 40th- to an 80th-percentile floor and power 1.6–4;
-default 50% uses the 60th-percentile floor and power 2.8. The ceiling is the
-95th percentile. Values below the floor map to at most 0.002; values above the
-ceiling map to 1. The selected linear, square-root or normalized-log transform
-is applied before the power curve. Height, color and opacity share that result.
-This changes the display, never the modeled population values.
+Kontur Population uses a display-only emphasis curve. The slider moves the floor
+from the 40th to 80th percentile and power from 1.6 to 4; default 50% uses the
+60th-percentile floor and power 2.8. Source values and inspection are unchanged.
 
-In 3D, tapered needles share Employment's tip-fading shader, with 0.8-pixel
-base radii at width 0.35. Height is 4,000 display metres × exaggeration × display
-value, with an 8 m × exaggeration floor for positive values; default exaggeration
-is 1×. In 2D, small soft circles use the same display value for radius and color.
-Only the top 10% receive a faint halo. A very-dark-teal → neon cyan-green ramp
-and bounded alpha blending prevent Population overlaps from clipping to white.
-Basemap labels stay above the data. Controls and inspectors remain usable with
-Employment enabled. All 7,896 source hexagons remain inspectable, including faint
-low values; the H3 IDs, centers and data are unchanged. These are modeled estimates,
-not measured counts. The ACS tract rendering remains unchanged.
+In 3D the ceiling is the 99.5th percentile, with height proportional to the square
+of the stretched value and 3× default exaggeration. Only the upper tail becomes
+very tall. Thin 0.65-pixel needles share Employment's additive blending and its
+bright-base, transparent-tip taper. A faint 3×-wider pass sits beneath every
+spike, with a subtle ground glow for the top 3%. The teal/cyan ramp reaches
+cyan-white at the high end. Layer opacity is 0.28, and final fragment alpha is
+capped at 0.45 after deck.gl's opacity correction. This caps each spike's light
+contribution; additive overlaps can still saturate locally. The default Population
+camera pitch is 52°, and map labels remain above the data.
+
+The 2D view retains its 95th-percentile ceiling, small soft circles, bounded
+source-over blending and upper-10% halo. Population and Employment can remain
+enabled together. All 7,896 source hexagons remain inspectable with their original
+H3 IDs, centers and modeled estimates, not measured counts. Display heights and
+widths are symbolic, not building heights or land area. The ACS tract renderer
+remains available.
