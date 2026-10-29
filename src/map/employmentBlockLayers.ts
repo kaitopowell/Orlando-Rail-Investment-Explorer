@@ -1,5 +1,5 @@
 import { DemandNeedles } from "./DemandNeedles";
-import { DEMAND_STYLE } from "./demandStyle";
+import { DEMAND_STYLE, demandAdditiveBlend } from "./demandStyle";
 import type { PickingInfo } from "@deck.gl/core";
 import { jobColor, type JobScale } from "../data/employment";
 import { needleHeight, type BlockData, type JobBlock, type blockStats } from "../data/employmentBlocks";
@@ -14,9 +14,7 @@ export function employmentBlockLayers(data: BlockData, stats: ReturnType<typeof 
     getElevation: f => needleHeight(f.properties.jobs_total, stats.maximum, stats.cap, clip, scale, exag),
     getFillColor: f => f.properties.w_geocode === highlight ? [255, 240, 253, 255] :
       jobColor(f.properties.jobs_total, stats.maximum),
-    parameters: { blend: true, blendColorOperation: "add", blendColorSrcFactor: "src-alpha",
-      blendColorDstFactor: "one", blendAlphaSrcFactor: "one", blendAlphaDstFactor: "one-minus-src-alpha",
-      depthWriteEnabled: false, depthCompare: "always" },
+    parameters: demandAdditiveBlend,
     pickable: true,
     onHover: (info: PickingInfo<JobBlock>) => hover(info.object ?? null),
     onClick: (info: PickingInfo<JobBlock>) => { if(info.object) select(info.object); return true; },

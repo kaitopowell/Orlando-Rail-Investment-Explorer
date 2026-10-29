@@ -1,4 +1,4 @@
-import { POPULATION_DISPLAY, populationValues, populationDisplaySettings } from "../map/populationDisplay";
+import { POPULATION_DISPLAY, populationNeedleRampCss, populationValues, populationDisplaySettings } from "../map/populationDisplay";
 import { useEffect, useMemo, useState } from "react";
 import { pillarDefaults } from "../data/kontur3d";
 import { hexPopulationLayers } from "../map/hexPopulationLayers";
@@ -40,7 +40,7 @@ export default function HexPopulation({
       data ? populationValues(data) : [],
     [data],
   );
-  const settings = useMemo(() => populationDisplaySettings(values, emphasis), [values, emphasis]);
+  const settings = useMemo(() => populationDisplaySettings(values, emphasis, is3D), [values, emphasis, is3D]);
   useEffect(() => {
     if (data) {
       onStatus("ready");
@@ -85,7 +85,7 @@ export default function HexPopulation({
         <div
           aria-hidden="true"
           style={{
-            background: hexRampCss,
+            background: is3D ? populationNeedleRampCss : hexRampCss,
             height: 6,
             borderRadius: 3,
             marginBottom: 8,
@@ -95,8 +95,8 @@ export default function HexPopulation({
         <br />
         Modeled estimate, Kontur Population · people per hexagon.
         <br />
-        Color: very dark teal → neon cyan-green. Height, color and opacity use the same stretched display value. Basemap labels draw above the data.
-        {is3D ? " Thin needles fade from a bright base to a transparent tip." : " Small soft circles: radius uses the stretched display value and adapts to zoom."}
+        {is3D ? "Color: dark teal → cyan → cyan-white. Additive light builds in overlapping spikes; per-spike emission is capped." : "Color: very dark teal → neon cyan-green. Height, color and opacity use the same stretched display value."} Basemap labels draw above the data.
+        {is3D ? " Thin needles fade from a bright base to a transparent tip, with faint wider bloom." : " Small soft circles: radius uses the stretched display value and adapts to zoom."}
         <label>
           Display emphasis: {emphasis}%
           <input aria-label="Population display emphasis" type="range" min="0" max="100" step="5"
@@ -104,9 +104,9 @@ export default function HexPopulation({
         </label>
         <p aria-label="Population display method">
           Display setting only; does not change the data. Floor: {Math.round(settings.floorPercentile*100)}th percentile
-          ({display(settings.floor)} people); ceiling: 95th percentile ({display(settings.ceiling)} people).
-          Power: {settings.gamma.toFixed(1)}. Below-floor values nearly vanish; above-ceiling values share the brightest display value.
-          Glow is limited to the top 10%. Inspect any H3 ID for its original value.
+          ({display(settings.floor)} people); ceiling: {is3D ? "99.5th" : "95th"} percentile ({display(settings.ceiling)} people).
+          Power: {settings.gamma.toFixed(1)}. Below-floor values nearly vanish; above-ceiling values share the brightest display value.{" "}
+          {is3D ? "Wider bloom follows each spike; ground glow is limited to the top 3%. Local cores may saturate when many spikes overlap." : "Glow is limited to the top 10%."} Inspect any H3 ID for its original value.
         </p>
         <label>
           Height scale
@@ -148,7 +148,7 @@ export default function HexPopulation({
             or land area.
           </label>
         )}
-        Display height: 4,000 m × exaggeration × stretched display value.{" "}
+        Display height: 4,000 m × exaggeration × stretched display value².{" "}
         {is3D
           ? "An 8 m × exaggeration picking floor retains faint positive values. Display metres are not building heights."
           : "Flat view; height controls apply in 3D."}

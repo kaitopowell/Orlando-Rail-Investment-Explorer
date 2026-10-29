@@ -1,16 +1,29 @@
 import { ScatterplotLayer } from "@deck.gl/layers";
 import type { PickingInfo } from "@deck.gl/core";
 import { DemandNeedles } from "./DemandNeedles";
-import { DEMAND_STYLE, demandAlphaBlend } from "./demandStyle";
+import { DEMAND_STYLE, demandAlphaBlend, demandAdditiveBlend } from "./demandStyle";
 import { hexCenter, pillarDefaults } from "../data/kontur3d";
 import { type Hex, type HexData, type HexScale } from "../data/kontur";
-import { POPULATION_DISPLAY as STYLE, populationDisplayValue, populationDisplayHeight, populationDisplayColor, populationDisplayRadius, type PopulationDisplaySettings } from "./populationDisplay";
+import { POPULATION_DISPLAY as STYLE, populationDisplayValue, populationDisplayHeight, populationDisplayColor, populationDisplayRadius, populationNeedleColor, type PopulationDisplaySettings } from "./populationDisplay";
 class SoftPopulationCircles extends ScatterplotLayer<Hex> {
   static layerName = "SoftPopulationCircles";
   getShaders() {
     const shaders = super.getShaders();
     return {...shaders, inject: {...shaders.inject,
       "fs:DECKGL_FILTER_COLOR": "if (!bool(picking.isActive)) { color.a *= 1.0 - smoothstep(0.55, 1.0, length(geometry.uv)); }",
+    }};
+  }
+}
+// Preserve Employment's taper and bright-base/transparent-tip gradient, then
+// cap each fragment's alpha after deck.gl's opacity gamma correction. This is
+// an emission budget per spike, not a claim of an absolute framebuffer cap.
+class PopulationNeedles extends DemandNeedles<Hex> {
+  static layerName = "PopulationNeedles";
+  getShaders() {
+    const shaders = super.getShaders();
+    return {...shaders, inject: {...shaders.inject,
+      "fs:DECKGL_FILTER_COLOR": shaders.inject["fs:DECKGL_FILTER_COLOR"] +
+        ` if (!bool(picking.isActive)) { color.a = min(color.a, ${STYLE.spikeAlphaCap}); }`,
     }};
   }
 }
@@ -28,11 +41,11 @@ export function hexPopulationLayers(data: HexData, is3D: boolean, zoom: number, 
     onClick: (info: PickingInfo<Hex>) => { if (info.object) select(info.object); return true; },
   };
   const spikes = {
-    ...common, radiusUnits: "pixels" as const,
+    ...common, parameters: demandAdditiveBlend, radiusUnits: "pixels" as const,
     radius: STYLE.needleRadius / pillarDefaults.coverage, coverage: width,
     diskResolution: DEMAND_STYLE.needleSides, extruded: true, material: false as const, opacity: STYLE.needleOpacity,
     getElevation: (f: Hex) => populationDisplayHeight(display(f), exaggeration),
-    getFillColor: (f: Hex) => populationDisplayColor(display(f), STYLE.needleAlpha),
+    getFillColor: (f: Hex) => populationNeedleColor(display(f)),
     updateTriggers: {getElevation: [...triggers, exaggeration], getFillColor: triggers},
   };
   const circles = {
@@ -46,12 +59,21 @@ export function hexPopulationLayers(data: HexData, is3D: boolean, zoom: number, 
     pickable: false, autoHighlight: false,
     getFillColor: (f: Hex): [number,number,number,number] => [45,242,197, STYLE.glowAlpha*Math.pow(display(f),2)],
   };
-  // Upper-tail halos share Employment's taper/fade. Source-over bounds their
-  // accumulation at the cyan-green palette, instead of additive RGB clipping.
+  // Ground halo only for the top percentiles; bloom beneath every original
+  // spike. Both decorations are unpickable and keep the original feature objects.
   return is3D ? [
-    new DemandNeedles<Hex>({...spikes, ...glow, id: "population-hexagon-needle-glow",
-      radius: spikes.radius*STYLE.glowWidth}),
-    new DemandNeedles<Hex>({...spikes, id: "population-hexagon-pillars"}),
+    new SoftPopulationCircles({...common, parameters: demandAdditiveBlend,
+      id: "population-hexagon-ground-glow", radiusUnits: "pixels", getRadius: STYLE.groundRadius,
+      data: data.features.filter(f=>f.properties.population>=settings.groundFloor),
+      pickable: false, autoHighlight: false,
+      getFillColor: f => [36,208,224,STYLE.groundAlpha*Math.pow(display(f),2)],
+      updateTriggers: {getFillColor: triggers},
+    }),
+    new PopulationNeedles({...spikes, id: "population-hexagon-needle-glow",
+      pickable: false, autoHighlight: false, radius: spikes.radius*STYLE.bloomWidth,
+      getFillColor: f => [36,208,224,STYLE.bloomAlpha*Math.pow(display(f),2)],
+    }),
+    new PopulationNeedles({...spikes, id: "population-hexagon-pillars"}),
   ] : [
     new SoftPopulationCircles({...circles, ...glow, id: "population-hexagon-circle-glow",
       getRadius: f => populationDisplayRadius(display(f),zoom)*STYLE.circleGlowWidth}),

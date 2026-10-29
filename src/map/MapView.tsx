@@ -1,3 +1,4 @@
+import { POPULATION_DISPLAY } from "./populationDisplay";
 import { useEffect, useRef, useState } from "react";
 import PopulationOverlay, {
   type PopulationStatus,
@@ -50,7 +51,7 @@ export default function MapView({
     if (!scene) return;
     const frame = requestAnimationFrame(() =>
       scene.map.easeTo({
-        pitch: populationVisible || employmentVisible ? 45 : 0,
+        pitch: populationVisible ? POPULATION_DISPLAY.pitch3D : employmentVisible ? 45 : 0,
         duration: window.matchMedia("(prefers-reduced-motion: reduce)").matches
           ? 0
           : 600,
@@ -117,7 +118,7 @@ export default function MapView({
         map = new maplibregl.Map({
           container: container.current,
           maxZoom: 18,
-          maxPitch: 45,
+          maxPitch: POPULATION_DISPLAY.pitch3D,
           dragRotate: false,
           touchPitch: false,
           renderWorldCopies: false,
