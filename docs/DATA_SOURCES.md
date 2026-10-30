@@ -187,7 +187,8 @@ non-LYMMO headway/departure measure; separate non-LYMMO route names are not supp
 - https://www2.census.gov/geo/tiger/TIGER2025/TABBLOCK20/tl_2025_12_tabblock20.zip
 
 Both home and work must be in Lake, Orange, Osceola or Seminole. String block IDs
-join to `GEOID20`; `INTPTLAT20`/`INTPTLON20` internal points (not centroids) assign
+join to `GEOID20`; the pure-Python `dbfread` reader reads only the ZIP's DBF
+attribute table (`GEOID20`, `COUNTYFP20`, `INTPTLAT20`, `INTPTLON20`), without GDAL; `INTPTLAT20`/`INTPTLON20` internal points (not centroids) assign
 blocks to H3 resolution 8. The script sums `S000`, `SE01`, `SE02`, `SE03` into
 home–work cell pairs, reconciles each column against unmatched-row losses, and
 compares every pair and count with the owner's reference before writing

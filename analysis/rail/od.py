@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Florida LODES OD -> H3 r8 job flows, with reference-safe verification.
 
-Run with Python GDAL bindings and analysis/rail/requirements.txt installed.
+Run with analysis/rail/requirements.txt installed (no GDAL required).
 Default: download/cache sources, reconcile, compare every pair/count against the
 existing reference, then write deterministic gzip only if all checks pass.
 --verify-only never writes the output. Raw download metadata stays gitignored.
@@ -20,7 +20,9 @@ import shutil
 import sys
 import tempfile
 import urllib.request
+import zipfile
 from collections import Counter
+from contextlib import closing
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -100,22 +102,35 @@ def download(url: str, directory: Path) -> dict:
 
 
 def block_records(archive: Path):
-    """Use DBF string fields and internal points; do not calculate centroids."""
-    from osgeo import ogr
-    ogr.UseExceptions()
-    dataset = ogr.Open(f'/vsizip/{archive.resolve()}')
-    if dataset is None:
-        raise ValueError(f'Cannot open Census block archive: {archive}')
-    layer = dataset.GetLayer(0)
+    """Read only the ZIP's DBF attributes, preserving text and internal points.
+
+    COUNTYFP20 is returned when present; the original three-field fixtures remain
+    supported. Filtering still uses GEOID20, so no mapping semantics change.
+    """
+    from dbfread import DBF
     required = ('GEOID20', 'INTPTLAT20', 'INTPTLON20')
-    definition = layer.GetLayerDefn()
-    for name in required:
-        index = definition.GetFieldIndex(name)
-        if index < 0 or definition.GetFieldDefn(index).GetType() != ogr.OFTString:
-            raise ValueError(f'{name} must be a text field in the Census archive')
-    layer.SetIgnoredFields(['OGR_GEOMETRY'])
-    for feature in layer:
-        yield {name: feature.GetFieldAsString(name) for name in required}
+    columns = ('GEOID20', 'COUNTYFP20', 'INTPTLAT20', 'INTPTLON20')
+    with zipfile.ZipFile(archive) as zipped, tempfile.TemporaryDirectory() as folder:
+        members = [member for member in zipped.infolist()
+                   if not member.is_dir() and member.filename.lower().endswith('.dbf')]
+        if len(members) != 1:
+            raise ValueError('Census archive must contain exactly one DBF attribute table')
+        # Copy to a fixed filename: never extract archive-controlled paths or SHP
+        # geometry. DBF streams records from disk instead of loading the table.
+        table_path = Path(folder) / 'blocks.dbf'
+        with zipped.open(members[0]) as source, table_path.open('wb') as target:
+            shutil.copyfileobj(source, target)
+        table = DBF(str(table_path), encoding='ascii', load=False)
+        fields = {field.name: field.type for field in table.fields}
+        for name in required + (('COUNTYFP20',) if 'COUNTYFP20' in fields else ()):
+            if fields.get(name) != 'C':
+                raise ValueError(f'{name} must be a text field in the Census archive')
+        selected = [name for name in columns if name in fields]
+        # Close the DBF handle before temporary-directory cleanup, including
+        # early iterator closure (Windows cannot unlink an open file).
+        with closing(iter(table)) as records:
+            for record in records:
+                yield {name: record[name] for name in selected}
 
 
 def assign_blocks(records) -> dict[str, str]:
