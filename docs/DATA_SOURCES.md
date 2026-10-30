@@ -196,12 +196,57 @@ compares every pair and count with the owner's reference before writing
 uncompressed `data/processed/lodes_od_hex8_2023.csv`; it remains unchanged.
 
 See the [output contract](../data/LODES_OD_HEX8_CONTRACT.md) for field meanings,
-commands, all manual-run expectations and provenance. The raw download date of
-the manual run is unknown. The 2026-10-30 download attempt was blocked by the
-cloud proxy (403); full reproduction is not yet verified. Successful future
-runs record actual UTC download dates and SHA-256 checksums. Inspection of the
-reference confirms 591,177 unique pairs and 1,006,088 jobs, using 5,430 flow
-endpoint cells (distinct from the expected 6,928 cells of all mapped blocks).
+installation, reconciliation and reference-protection behavior. The successful
+Windows source download/run date is 2026-10-30 (UTC); the original notebook's
+download date was not supplied. The successful Windows verification supersedes the earlier sandbox proxy
+failures as the pipeline's verification status.
+
+### Verified end-to-end run
+
+The project owner reports that `analysis/rail/od.py` was run end to end on real
+Census data on **2026-10-30 (UTC)**, on **Windows with Python 3.14.6**, using:
+
+```powershell
+py -3.14 analysis/rail/od.py --verify-only
+```
+
+This command downloads both source files, runs the full pipeline, and compares
+its in-memory result to the reference without writing the generated output.
+The run reproduced the reference exactly: **`summary_differences: {}`**,
+**`missing_pairs: 0`**, **`extra_pairs: 0`**, **`changed_pairs: 0`**. This records
+the owner's supplied verification result, not a new sandbox reproduction.
+
+| File | SHA-256 recorded for the verified run |
+| --- | --- |
+| `fl_od_main_JT00_2023.csv.gz` | `cad279a7fdd24629855d903759bd83aec4d08654c108a8edb2b291d0e59498ed` |
+| `tl_2025_12_tabblock20.zip` | `5daad2fae38f8a652072473ad6c8f353ac5f6219654a03fc72d5f55bc34d31de` |
+| Authoritative reference: `lodes_od_hex8_2023.csv` | `febfaabca41806e3b091c99a00b3101eb6d87ee9033533295fdf3d8b4a12b8ad` |
+
+| Verified statistic | Value |
+| --- | ---: |
+| Florida input rows | 8,416,045 |
+| Florida input jobs (`S000`) | 9,491,708 |
+| Jobs with work end in the four counties | 1,467,549 |
+| Jobs with both ends in the four counties | 1,006,088 |
+| Rows with both ends in the four counties | 825,335 |
+| Four-county Census blocks | 39,751 |
+| H3 cells of all mapped blocks | 6,928 |
+| Directed home–work pairs | 591,177 |
+| Distinct H3 cells appearing in flows | 5,430 |
+| Unmatched blocks | 0 |
+
+| Count column | Before aggregation (both ends in region) | After aggregation |
+| --- | ---: | ---: |
+| `S000` | 1,006,088 | 1,006,088 |
+| `SE01` | 164,743 | 164,743 |
+| `SE02` | 314,222 | 314,222 |
+| `SE03` | 527,123 | 527,123 |
+
+The **uncompressed** `data/processed/lodes_od_hex8_2023.csv` is the authoritative
+reference for reproduction. The script's documented generated output is
+`data/processed/lodes_od_hex8_2023.csv.gz`; that compressed derivative does not
+supersede the reference. Comparison is by parsed content, not compression bytes.
+No reference file was renamed or recompressed for this documentation update.
 
 Counts are jobs, not people or trips. Only workers living **and** working in the
 four counties are retained, about 69% of jobs located there in the supplied
