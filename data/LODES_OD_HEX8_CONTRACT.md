@@ -56,8 +56,13 @@ It selects Florida (`12`) home and work blocks whose county substring
 The Florida main file contains in-state home/work pairs; interstate auxiliary
 flows are not loaded. Both endpoints must pass the region filter.
 
-Read `GEOID20`, `INTPTLAT20` and `INTPTLON20` from the Census archive's text
-fields. Map each four-county block with
+Read `GEOID20`, `COUNTYFP20`, `INTPTLAT20` and `INTPTLON20` as text from
+only the ZIP's DBF attribute table using `dbfread==2.0.7`. This pure-Python
+package has a universal wheel and requires neither GDAL nor a native compiler.
+The reader streams records from a temporary copy of the single DBF and never
+reads SHP geometry. The original three-field fixtures remain supported when
+`COUNTYFP20` is absent; county filtering still uses `GEOID20[2:5]`, unchanged.
+Map each four-county block with
 `h3.latlng_to_cell(float(INTPTLAT20), float(INTPTLON20), 8)` using H3 Python
 4.4.2. Use the provided internal point directly (latitude then longitude), not
 polygon centroids, polygon overlaps or an area-weighted allocation. Internal
@@ -103,23 +108,42 @@ available**; the supplied aggregates cannot establish those facts independently.
 
 ## Reproduction
 
-Use Python 3.11+ with GDAL Python bindings matching the installed GDAL. Install
-H3 from `analysis/rail/requirements.txt` into a virtual environment that can see
-those system bindings, for example:
+Use Python 3.11+; the OD script has no GDAL/`osgeo` dependency. Both packages
+are pinned in `analysis/rail/requirements.txt`. Pip downloads were verified for
+64-bit Windows CPython 3.14: `h3-4.4.2-cp314-cp314-win_amd64.whl` and
+`dbfread-2.0.7-py2.py3-none-any.whl`. This establishes wheel availability, not
+execution on a Windows host; validation here ran on Linux Python 3.13.
 
-```sh
-/usr/bin/python3 -m venv --system-site-packages /tmp/rail-od-venv
-/tmp/rail-od-venv/bin/python -m pip install -r analysis/rail/requirements.txt
-/tmp/rail-od-venv/bin/python analysis/rail/od.py --verify-only \
-  --report /tmp/lodes-od-verification.json
-/tmp/rail-od-venv/bin/python analysis/rail/od.py \
-  --report /tmp/lodes-od-verification.json
-/tmp/rail-od-venv/bin/python -m unittest discover -s analysis -p 'test_rail_od.py'
+From the repository root on Windows (PowerShell or Command Prompt):
+
+```powershell
+py -3.14 -m pip install -r analysis/rail/requirements.txt
+py -3.14 analysis/rail/od.py --verify-only --report data/raw/lodes-od-verification.json
+py -3.14 analysis/rail/od.py --report data/raw/lodes-od-verification.json
+py -3.14 -m unittest discover -s analysis -p "test_rail_od_dbf.py"
 ```
 
+On Linux/macOS, use a normal virtual environment (no system GDAL required):
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install -r analysis/rail/requirements.txt
+.venv/bin/python analysis/rail/od.py --verify-only --report data/raw/lodes-od-verification.json
+.venv/bin/python analysis/rail/od.py --report data/raw/lodes-od-verification.json
+.venv/bin/python -m unittest discover -s analysis -p 'test_rail_od_dbf.py'
+```
+
+The new attribute-reader tests build tiny DBF-only ZIPs with the standard
+library, check all four text columns (including leading zeroes), and reject
+missing required columns or ambiguous archives. The original `test_rail_od.py`
+fixtures and reference-verification logic are unchanged. One original test
+still uses GDAL **to create its synthetic shapefile fixture**, so running that
+legacy test or the complete analysis suite needs the existing GDAL test
+environment. This is not a dependency of the OD script or the new reader tests.
+
 The first run downloads the two sources to `data/raw/`; later runs reuse them.
-The first command only verifies; the second writes the compressed output if
-all checks pass. `--reference` accepts an alternate CSV/CSV.gz reference.
+The `--verify-only` invocation only verifies; omitting that flag writes the
+compressed output if all checks pass. `--reference` accepts an alternate CSV/CSV.gz reference.
 `--raw-dir` can point at an existing download cache. Downloads use normal proxy
 and TLS trust configuration, write atomically, and preserve source checksums.
 The report records summary differences and up to five changed/missing reference

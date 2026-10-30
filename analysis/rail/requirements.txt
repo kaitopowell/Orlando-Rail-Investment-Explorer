@@ -1,2 +1,2 @@
-# GDAL Python bindings must also match the system GDAL installation.
 h3==4.4.2
+dbfread==2.0.7

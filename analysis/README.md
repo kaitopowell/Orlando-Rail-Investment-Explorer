@@ -32,6 +32,6 @@ filters both ends to the four counties, and aggregates directed H3 resolution-8
 job flows. It verifies every pair/count against the supplied notebook reference
 and the requested summary totals before creating compressed output. See
 [`data/LODES_OD_HEX8_CONTRACT.md`](../data/LODES_OD_HEX8_CONTRACT.md) for installation,
-commands, provenance, verification status, and limitations. H3 is pinned in
-`rail/requirements.txt`; GDAL bindings must match the system installation.
+commands, provenance, verification status, and limitations. H3 and the pure-Python `dbfread` reader are pinned in
+`rail/requirements.txt`; this pipeline needs no GDAL installation.
 `test_rail_od.py` uses tiny synthetic fixtures only and requires no network.
