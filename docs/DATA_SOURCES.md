@@ -177,3 +177,37 @@ above them, and demand/bus stay below basemap label layers when available. Bus
 toggling does not alter pitch. The inspector labels the supplied original
 best-route names and all-route departure count separately from the selected
 non-LYMMO headway/departure measure; separate non-LYMMO route names are not supplied.
+
+## LODES home–work flows for rail analysis (2023)
+
+`analysis/rail/od.py` downloads Florida LODES8 main OD JT00 for 2023 and the
+2025 TIGER/Line Florida 2020 tabulation blocks into gitignored `data/raw/`:
+
+- https://lehd.ces.census.gov/data/lodes/LODES8/fl/od/fl_od_main_JT00_2023.csv.gz
+- https://www2.census.gov/geo/tiger/TIGER2025/TABBLOCK20/tl_2025_12_tabblock20.zip
+
+Both home and work must be in Lake, Orange, Osceola or Seminole. String block IDs
+join to `GEOID20`; `INTPTLAT20`/`INTPTLON20` internal points (not centroids) assign
+blocks to H3 resolution 8. The script sums `S000`, `SE01`, `SE02`, `SE03` into
+home–work cell pairs, reconciles each column against unmatched-row losses, and
+compares every pair and count with the owner's reference before writing
+`data/processed/lodes_od_hex8_2023.csv.gz`. The actual committed reference is the
+uncompressed `data/processed/lodes_od_hex8_2023.csv`; it remains unchanged.
+
+See the [output contract](../data/LODES_OD_HEX8_CONTRACT.md) for field meanings,
+commands, all manual-run expectations and provenance. The raw download date of
+the manual run is unknown. The 2026-10-30 download attempt was blocked by the
+cloud proxy (403); full reproduction is not yet verified. Successful future
+runs record actual UTC download dates and SHA-256 checksums. Inspection of the
+reference confirms 591,177 unique pairs and 1,006,088 jobs, using 5,430 flow
+endpoint cells (distinct from the expected 6,928 cells of all mapped blocks).
+
+Counts are jobs, not people or trips. Only workers living **and** working in the
+four counties are retained, about 69% of jobs located there in the supplied
+Florida main OD file. Interstate auxiliary flows are excluded. Confidentiality
+noise affects small flows; multi-site employers may be assigned to one location
+(the top reference work hexagon has 61,428 jobs near Walt Disney World).
+Tract-level data does not vary within a tract; any later tract-to-hexagon join
+must preserve that limitation. No tract attributes or demand metrics are added
+by this pipeline. Tiny synthetic fixture tests cover filtering, H3 placement,
+integer reconciliation, unmatched endpoints, content comparison and write safety.

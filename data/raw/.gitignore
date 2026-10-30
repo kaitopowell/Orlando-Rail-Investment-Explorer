@@ -1,0 +1,3 @@
+# Preserve already tracked source archives; never add new raw downloads.
+*
+!.gitignore
