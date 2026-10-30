@@ -24,3 +24,14 @@ On the supplied data, the four breaks are: no-vehicle share
 1.4315072596328762, 2.784297211304511, 4.555533107658448, 8.41136486219713%;
 poverty share 5.625319903861305, 8.218314851606467, 12.08204835825537,
 18.970607565181936%; income $56,532.4, $69,644.8, $85,127.8, $107,983.4.
+
+### Rail home–work input
+
+`rail/od.py` downloads/caches Florida LODES8 OD and TIGER block internal points,
+filters both ends to the four counties, and aggregates directed H3 resolution-8
+job flows. It verifies every pair/count against the supplied notebook reference
+and the requested summary totals before creating compressed output. See
+[`data/LODES_OD_HEX8_CONTRACT.md`](../data/LODES_OD_HEX8_CONTRACT.md) for installation,
+commands, provenance, verification status, and limitations. H3 is pinned in
+`rail/requirements.txt`; GDAL bindings must match the system installation.
+`test_rail_od.py` uses tiny synthetic fixtures only and requires no network.
