@@ -290,3 +290,30 @@ is not a walking-distance bound and is not labeled a half-mile catchment. See
 [TRANSIT_COVERAGE_CONTRACT.md](../data/TRANSIT_COVERAGE_CONTRACT.md) for all fields,
 complete scenario results, schema inspection, assumptions, Windows commands,
 limitations and source dates. The existing stop layers and frontend are unchanged.
+
+### Coverage K/headway sensitivity grid
+
+`analysis/rail/coverage_sensitivity.py` adds eight combinations for K=0/1:
+any transit and rail only at each K, plus frequent LYNX at ≤15/≤30 minutes.
+The new 30-minute threshold and the two K values are **sensitivity assumptions**;
+catchment citation remains **TBD**. The field remains `headway_best_route_min`
+in **minutes**, including LYMMO. There are 207 qualifying stops at 15 minutes
+and 2,145 at 30, with 43 null values, 0 missing keys and 0 zero values. Nulls are
+excluded from frequent service; missing keys or zero/invalid values fail the
+unchanged original validation. Rail remains excluded from frequent service
+because its station layers contain no frequency field.
+
+New small outputs are `data/processed/transit_coverage_sensitivity.csv` and
+`.json`. They do not replace the PR #34 summary or covered-cell CSV. Every row
+reconciles all four job/earnings totals, and the original K=1 results are checked
+exactly against the preserved baseline, including all group counts and shares.
+Both-covered jobs at K=0 are 179,677 (any), 5,813 (15-minute LYNX), 96,434
+(30-minute LYNX), and 418 (rail). At K=1 they are 398,770, 20,235, 265,698,
+and 6,610 respectively. See the [complete grid and contract](../data/TRANSIT_COVERAGE_CONTRACT.md#kheadway-sensitivity-grid-pr-34-baseline-preserved).
+
+Using the existing Church Street station as a downtown diagnostic anchor, H3
+computes mean local edge 509.91824 m, cell area 673,352.94932 m², and adjacent
+center distances 843.34566–912.55233 m. K=0 covers one whole cell, not zero walking
+distance; K=1 adds neighbors and is not a half-mile walking catchment. These
+geometric results do not establish usable transit connections or routed walks.
+The OD reference, stop inputs, original results and frontend remain unchanged.

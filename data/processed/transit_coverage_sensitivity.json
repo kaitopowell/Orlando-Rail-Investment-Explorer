@@ -1,0 +1,715 @@
+{
+  "schema_version": 1,
+  "h3_version": "4.4.2",
+  "sources": {
+    "lynx": {
+      "file": "lynx_stops_peak_headway.geojson",
+      "sha256": "6d5328c36b2f3f94fc2de9100d06fbf08eee40d1116cda7f9b87c54f3dd23745"
+    },
+    "sunrail": {
+      "file": "sunrail_stations.geojson",
+      "sha256": "b9211627173b63c8321372446f66f55bdda823dd65944722e38be75171f122ad"
+    },
+    "brightline": {
+      "file": "brightline_stations.geojson",
+      "sha256": "e250deccc69ddc3429b78e3191977af8d714edd71d42fab116892614ba2ec401"
+    },
+    "flows": {
+      "file": "lodes_od_hex8_2023.csv",
+      "sha256": "febfaabca41806e3b091c99a00b3101eb6d87ee9033533295fdf3d8b4a12b8ad"
+    }
+  },
+  "baseline_reference": {
+    "file": "transit_coverage_summary.json",
+    "sha256": "a09931bfb6f0feede777eb2d7f50e3feeca4f0ded973ef0ae859dc15ea6a7f8a"
+  },
+  "parameters": {
+    "k_values_assumption": [
+      0,
+      1
+    ],
+    "headway_thresholds_minutes_assumption": [
+      15.0,
+      30.0
+    ],
+    "catchment_citation": "TBD",
+    "rail_frequency_policy": "Rail excluded from frequent_transit: no frequency fields in station layers."
+  },
+  "headway_audit": {
+    "field": "headway_best_route_min",
+    "units": "minutes",
+    "lymmo_included": true,
+    "stop_features": 3664,
+    "missing_keys": 0,
+    "null_values": 43,
+    "zero_values": 0,
+    "threshold_counts": [
+      {
+        "headway_minutes": 15.0,
+        "selected_stops": 207
+      },
+      {
+        "headway_minutes": 30.0,
+        "selected_stops": 2145
+      }
+    ],
+    "policy": "Nulls excluded from frequent service, retained in any-stop scenarios. Missing keys, zero, negative and nonnumeric values fail original validation; no imputation."
+  },
+  "downtown_geometry": {
+    "resolution": 8,
+    "anchor": {
+      "source": "sunrail_stations.geojson",
+      "stop_id": "14",
+      "stop_name": "Church Street",
+      "coordinates_lon_lat": [
+        -81.38077,
+        28.538901
+      ],
+      "h3": "8844a90097fffff",
+      "cell_center_lat_lon": [
+        28.538882136516303,
+        -81.3783078629614
+      ]
+    },
+    "global_average_edge_m": 531.41401,
+    "global_average_area_m2": 737327.5975944176,
+    "local_edge_mean_m": 509.91823699919786,
+    "local_edge_min_m": 492.9576028088929,
+    "local_edge_max_m": 532.4420653296305,
+    "local_cell_area_m2": 673352.949317336,
+    "adjacent_center_distance_min_m": 843.345662244115,
+    "adjacent_center_distance_max_m": 912.5523305367399,
+    "rings": [
+      {
+        "k_rings": 0,
+        "covered_cells": 1,
+        "covered_area_m2": 673352.949317336,
+        "nonorigin_center_distance_min_m": 0,
+        "nonorigin_center_distance_max_m": 0
+      },
+      {
+        "k_rings": 1,
+        "covered_cells": 7,
+        "covered_area_m2": 4713470.571815336,
+        "nonorigin_center_distance_min_m": 843.345662244115,
+        "nonorigin_center_distance_max_m": 912.5523305367399
+      }
+    ],
+    "interpretation": "H3 spherical geometry at the supplied Church Street point. K=0 includes one entire cell, not zero walking distance. K=1 includes its neighbors. Center distances are not stop-to-endpoint distances or routed walks; catchment citation TBD."
+  },
+  "flow_inventory": {
+    "flow_rows": 591177,
+    "flow_hexagons": 5430,
+    "counts": {
+      "S000": 1006088,
+      "SE01": 164743,
+      "SE02": 314222,
+      "SE03": 527123
+    }
+  },
+  "baseline_reproduced": true,
+  "reconciled": true,
+  "rows": [
+    {
+      "key": "any_transit_k0",
+      "scenario": "any_transit",
+      "k_rings": 0,
+      "headway_minutes": null,
+      "selected_stop_features": 3680,
+      "unique_stop_cells": 820,
+      "covered_hexagons": 820,
+      "groups": {
+        "both_covered": {
+          "flow_rows": 78209,
+          "counts": {
+            "S000": 179677,
+            "SE01": 31308,
+            "SE02": 63896,
+            "SE03": 84473
+          },
+          "flow_share": 0.13229371237378992,
+          "shares": {
+            "S000": 0.17858974562861302,
+            "SE01": 0.19004145851417056,
+            "SE02": 0.2033466784629975,
+            "SE03": 0.16025292009644806
+          }
+        },
+        "home_only": {
+          "flow_rows": 69211,
+          "counts": {
+            "S000": 93307,
+            "SE01": 16200,
+            "SE02": 33539,
+            "SE03": 43568
+          },
+          "flow_share": 0.11707322849163618,
+          "shares": {
+            "S000": 0.09274238436399201,
+            "SE01": 0.09833498236647384,
+            "SE02": 0.10673663842760851,
+            "SE03": 0.08265243595896973
+          }
+        },
+        "work_only": {
+          "flow_rows": 199145,
+          "counts": {
+            "S000": 393201,
+            "SE01": 58586,
+            "SE02": 113451,
+            "SE03": 221164
+          },
+          "flow_share": 0.33686188738736456,
+          "shares": {
+            "S000": 0.3908216776266092,
+            "SE01": 0.3556205726495208,
+            "SE02": 0.3610536499672206,
+            "SE03": 0.41956810839215897
+          }
+        },
+        "neither": {
+          "flow_rows": 244612,
+          "counts": {
+            "S000": 339903,
+            "SE01": 58649,
+            "SE02": 103336,
+            "SE03": 177918
+          },
+          "flow_share": 0.4137711717472094,
+          "shares": {
+            "S000": 0.3378461923807858,
+            "SE01": 0.35600298646983486,
+            "SE02": 0.32886303314217336,
+            "SE03": 0.33752653555242323
+          }
+        }
+      }
+    },
+    {
+      "key": "frequent_transit_k0_h15",
+      "scenario": "frequent_transit",
+      "k_rings": 0,
+      "headway_minutes": 15.0,
+      "selected_stop_features": 207,
+      "unique_stop_cells": 51,
+      "covered_hexagons": 51,
+      "groups": {
+        "both_covered": {
+          "flow_rows": 880,
+          "counts": {
+            "S000": 5813,
+            "SE01": 1078,
+            "SE02": 2000,
+            "SE03": 2735
+          },
+          "flow_share": 0.001488555880895231,
+          "shares": {
+            "S000": 0.005777824603811993,
+            "SE01": 0.006543525369818445,
+            "SE02": 0.006364926707868959,
+            "SE03": 0.005188542332624454
+          }
+        },
+        "home_only": {
+          "flow_rows": 9188,
+          "counts": {
+            "S000": 17550,
+            "SE01": 3380,
+            "SE02": 6680,
+            "SE03": 7490
+          },
+          "flow_share": 0.015541876629165207,
+          "shares": {
+            "S000": 0.01744380213261663,
+            "SE01": 0.02051680496288158,
+            "SE02": 0.021258855204282324,
+            "SE03": 0.014209207338704628
+          }
+        },
+        "work_only": {
+          "flow_rows": 42045,
+          "counts": {
+            "S000": 166036,
+            "SE01": 22132,
+            "SE02": 48616,
+            "SE03": 95288
+          },
+          "flow_share": 0.07112083183209089,
+          "shares": {
+            "S000": 0.16503128950946636,
+            "SE01": 0.134342582082395,
+            "SE02": 0.15471863841487865,
+            "SE03": 0.18076995312289543
+          }
+        },
+        "neither": {
+          "flow_rows": 539064,
+          "counts": {
+            "S000": 816689,
+            "SE01": 138153,
+            "SE02": 256926,
+            "SE03": 421610
+          },
+          "flow_share": 0.9118487356578486,
+          "shares": {
+            "S000": 0.811747083754105,
+            "SE01": 0.8385970875849049,
+            "SE02": 0.81765757967297,
+            "SE03": 0.7998322972057755
+          }
+        }
+      }
+    },
+    {
+      "key": "frequent_transit_k0_h30",
+      "scenario": "frequent_transit",
+      "k_rings": 0,
+      "headway_minutes": 30.0,
+      "selected_stop_features": 2145,
+      "unique_stop_cells": 520,
+      "covered_hexagons": 520,
+      "groups": {
+        "both_covered": {
+          "flow_rows": 37725,
+          "counts": {
+            "S000": 96434,
+            "SE01": 17570,
+            "SE02": 35311,
+            "SE03": 43553
+          },
+          "flow_share": 0.06381337568951431,
+          "shares": {
+            "S000": 0.09585046238500011,
+            "SE01": 0.10665096544314477,
+            "SE02": 0.1123759634907804,
+            "SE03": 0.08262397960248367
+          }
+        },
+        "home_only": {
+          "flow_rows": 54798,
+          "counts": {
+            "S000": 77904,
+            "SE01": 13185,
+            "SE02": 27451,
+            "SE03": 37268
+          },
+          "flow_share": 0.09269305131965554,
+          "shares": {
+            "S000": 0.07743259038970746,
+            "SE01": 0.08003374953715787,
+            "SE02": 0.08736180152885539,
+            "SE03": 0.07070076623482564
+          }
+        },
+        "work_only": {
+          "flow_rows": 172113,
+          "counts": {
+            "S000": 371863,
+            "SE01": 58141,
+            "SE02": 113799,
+            "SE03": 199923
+          },
+          "flow_share": 0.29113615719150104,
+          "shares": {
+            "S000": 0.3696127972900979,
+            "SE01": 0.3529193956647627,
+            "SE02": 0.3621611472143898,
+            "SE03": 0.37927201051746934
+          }
+        },
+        "neither": {
+          "flow_rows": 326541,
+          "counts": {
+            "S000": 459887,
+            "SE01": 75847,
+            "SE02": 137661,
+            "SE03": 246379
+          },
+          "flow_share": 0.5523574157993292,
+          "shares": {
+            "S000": 0.45710414993519455,
+            "SE01": 0.46039588935493464,
+            "SE02": 0.4381010877659744,
+            "SE03": 0.46740324364522134
+          }
+        }
+      }
+    },
+    {
+      "key": "rail_only_k0",
+      "scenario": "rail_only",
+      "k_rings": 0,
+      "headway_minutes": null,
+      "selected_stop_features": 16,
+      "unique_stop_cells": 16,
+      "covered_hexagons": 16,
+      "groups": {
+        "both_covered": {
+          "flow_rows": 66,
+          "counts": {
+            "S000": 418,
+            "SE01": 36,
+            "SE02": 76,
+            "SE03": 306
+          },
+          "flow_share": 0.00011164169106714232,
+          "shares": {
+            "S000": 0.00041547061489651004,
+            "SE01": 0.00021852218303660854,
+            "SE02": 0.00024186721489902045,
+            "SE03": 0.0005805096723155696
+          }
+        },
+        "home_only": {
+          "flow_rows": 1747,
+          "counts": {
+            "S000": 2640,
+            "SE01": 413,
+            "SE02": 681,
+            "SE03": 1546
+          },
+          "flow_share": 0.0029551217317317826,
+          "shares": {
+            "S000": 0.0026240249361884843,
+            "SE01": 0.0025069350442810923,
+            "SE02": 0.0021672575440293807,
+            "SE03": 0.0029329018084963093
+          }
+        },
+        "work_only": {
+          "flow_rows": 16625,
+          "counts": {
+            "S000": 71773,
+            "SE01": 6236,
+            "SE02": 15048,
+            "SE03": 50489
+          },
+          "flow_share": 0.028121865363503654,
+          "shares": {
+            "S000": 0.07133869005494549,
+            "SE01": 0.03785289815045252,
+            "SE02": 0.047889708550006044,
+            "SE03": 0.09578219884163658
+          }
+        },
+        "neither": {
+          "flow_rows": 572739,
+          "counts": {
+            "S000": 931257,
+            "SE01": 158058,
+            "SE02": 298417,
+            "SE03": 474782
+          },
+          "flow_share": 0.9688113712136974,
+          "shares": {
+            "S000": 0.9256218143939695,
+            "SE01": 0.9594216446222298,
+            "SE02": 0.9497011666910655,
+            "SE03": 0.9007043896775515
+          }
+        }
+      }
+    },
+    {
+      "key": "any_transit_k1",
+      "scenario": "any_transit",
+      "k_rings": 1,
+      "headway_minutes": null,
+      "selected_stop_features": 3680,
+      "unique_stop_cells": 820,
+      "covered_hexagons": 1691,
+      "groups": {
+        "both_covered": {
+          "flow_rows": 197005,
+          "counts": {
+            "S000": 398770,
+            "SE01": 67228,
+            "SE02": 138327,
+            "SE03": 193215
+          },
+          "flow_share": 0.33324199013155115,
+          "shares": {
+            "S000": 0.39635697871359166,
+            "SE01": 0.40807803669958664,
+            "SE02": 0.44022060835969473,
+            "SE03": 0.3665463278969045
+          }
+        },
+        "home_only": {
+          "flow_rows": 69783,
+          "counts": {
+            "S000": 89195,
+            "SE01": 16504,
+            "SE02": 31102,
+            "SE03": 41589
+          },
+          "flow_share": 0.11804078981421808,
+          "shares": {
+            "S000": 0.08865526673611056,
+            "SE01": 0.1001802808010052,
+            "SE02": 0.09898097523407018,
+            "SE03": 0.07889809399324256
+          }
+        },
+        "work_only": {
+          "flow_rows": 194558,
+          "counts": {
+            "S000": 332460,
+            "SE01": 46945,
+            "SE02": 87959,
+            "SE03": 197556
+          },
+          "flow_share": 0.32910278985819813,
+          "shares": {
+            "S000": 0.3304482311686453,
+            "SE01": 0.28495899674037745,
+            "SE02": 0.2799262941487229,
+            "SE03": 0.3747815974639695
+          }
+        },
+        "neither": {
+          "flow_rows": 129831,
+          "counts": {
+            "S000": 185663,
+            "SE01": 34066,
+            "SE02": 56834,
+            "SE03": 94763
+          },
+          "flow_share": 0.21961443019603266,
+          "shares": {
+            "S000": 0.1845395233816525,
+            "SE01": 0.20678268575903072,
+            "SE02": 0.1808721222575122,
+            "SE03": 0.1797739806458834
+          }
+        }
+      }
+    },
+    {
+      "key": "frequent_transit_k1_h15",
+      "scenario": "frequent_transit",
+      "k_rings": 1,
+      "headway_minutes": 15.0,
+      "selected_stop_features": 207,
+      "unique_stop_cells": 51,
+      "covered_hexagons": 154,
+      "groups": {
+        "both_covered": {
+          "flow_rows": 4814,
+          "counts": {
+            "S000": 20235,
+            "SE01": 3546,
+            "SE02": 7094,
+            "SE03": 9595
+          },
+          "flow_share": 0.008143077284806411,
+          "shares": {
+            "S000": 0.020112554766581053,
+            "SE01": 0.02152443502910594,
+            "SE02": 0.022576395032811197,
+            "SE03": 0.018202582698914675
+          }
+        },
+        "home_only": {
+          "flow_rows": 21594,
+          "counts": {
+            "S000": 36575,
+            "SE01": 7058,
+            "SE02": 13692,
+            "SE03": 15825
+          },
+          "flow_share": 0.03652713146824048,
+          "shares": {
+            "S000": 0.03635367880344463,
+            "SE01": 0.042842487996455084,
+            "SE02": 0.043574288242070894,
+            "SE03": 0.030021456092790486
+          }
+        },
+        "work_only": {
+          "flow_rows": 76121,
+          "counts": {
+            "S000": 222378,
+            "SE01": 29109,
+            "SE02": 64004,
+            "SE03": 129265
+          },
+          "flow_share": 0.12876177523821122,
+          "shares": {
+            "S000": 0.22103235502262228,
+            "SE01": 0.1766933951670177,
+            "SE02": 0.20369038450522242,
+            "SE03": 0.24522739474468008
+          }
+        },
+        "neither": {
+          "flow_rows": 488648,
+          "counts": {
+            "S000": 726900,
+            "SE01": 125030,
+            "SE02": 229432,
+            "SE03": 372438
+          },
+          "flow_share": 0.8265680160087419,
+          "shares": {
+            "S000": 0.722501411407352,
+            "SE01": 0.7589396818074212,
+            "SE02": 0.7301589322198955,
+            "SE03": 0.7065485664636147
+          }
+        }
+      }
+    },
+    {
+      "key": "frequent_transit_k1_h30",
+      "scenario": "frequent_transit",
+      "k_rings": 1,
+      "headway_minutes": 30.0,
+      "selected_stop_features": 2145,
+      "unique_stop_cells": 520,
+      "covered_hexagons": 1192,
+      "groups": {
+        "both_covered": {
+          "flow_rows": 123026,
+          "counts": {
+            "S000": 265698,
+            "SE01": 46991,
+            "SE02": 95772,
+            "SE03": 122935
+          },
+          "flow_share": 0.2081034952307008,
+          "shares": {
+            "S000": 0.2640902187482606,
+            "SE01": 0.2852382195298131,
+            "SE02": 0.304790880333013,
+            "SE03": 0.2332188123075639
+          }
+        },
+        "home_only": {
+          "flow_rows": 76420,
+          "counts": {
+            "S000": 104262,
+            "SE01": 17530,
+            "SE02": 34778,
+            "SE03": 51954
+          },
+          "flow_share": 0.12926754592956086,
+          "shares": {
+            "S000": 0.10363109390033476,
+            "SE01": 0.10640816301754855,
+            "SE02": 0.11067971052313333,
+            "SE03": 0.09856143632510818
+          }
+        },
+        "work_only": {
+          "flow_rows": 195986,
+          "counts": {
+            "S000": 357678,
+            "SE01": 53592,
+            "SE02": 102079,
+            "SE03": 202007
+          },
+          "flow_share": 0.3315183100831054,
+          "shares": {
+            "S000": 0.3555136330022821,
+            "SE01": 0.32530668981383126,
+            "SE02": 0.3248626767062777,
+            "SE03": 0.3832255469785989
+          }
+        },
+        "neither": {
+          "flow_rows": 195745,
+          "counts": {
+            "S000": 278450,
+            "SE01": 46630,
+            "SE02": 81593,
+            "SE03": 150227
+          },
+          "flow_share": 0.33111064875663293,
+          "shares": {
+            "S000": 0.2767650543491225,
+            "SE01": 0.2830469276388071,
+            "SE02": 0.259666732437576,
+            "SE03": 0.284994204388729
+          }
+        }
+      }
+    },
+    {
+      "key": "rail_only_k1",
+      "scenario": "rail_only",
+      "k_rings": 1,
+      "headway_minutes": null,
+      "selected_stop_features": 16,
+      "unique_stop_cells": 16,
+      "covered_hexagons": 106,
+      "groups": {
+        "both_covered": {
+          "flow_rows": 1686,
+          "counts": {
+            "S000": 6610,
+            "SE01": 847,
+            "SE02": 1482,
+            "SE03": 4281
+          },
+          "flow_share": 0.002851937744533363,
+          "shares": {
+            "S000": 0.006570001828865865,
+            "SE01": 0.0051413413620002065,
+            "SE02": 0.004716410690530899,
+            "SE03": 0.008121444141120763
+          }
+        },
+        "home_only": {
+          "flow_rows": 13693,
+          "counts": {
+            "S000": 21545,
+            "SE01": 3667,
+            "SE02": 6282,
+            "SE03": 11596
+          },
+          "flow_share": 0.023162267814884546,
+          "shares": {
+            "S000": 0.021414627746280643,
+            "SE01": 0.02225891236653454,
+            "SE02": 0.0199922347894164,
+            "SE03": 0.021998660654154723
+          }
+        },
+        "work_only": {
+          "flow_rows": 51379,
+          "counts": {
+            "S000": 143968,
+            "SE01": 15418,
+            "SE02": 34592,
+            "SE03": 93958
+          },
+          "flow_share": 0.08690967341422282,
+          "shares": {
+            "S000": 0.14309682652014535,
+            "SE01": 0.09358819494606752,
+            "SE02": 0.11008777233930152,
+            "SE03": 0.17824682284779833
+          }
+        },
+        "neither": {
+          "flow_rows": 524419,
+          "counts": {
+            "S000": 833965,
+            "SE01": 144811,
+            "SE02": 271866,
+            "SE03": 417288
+          },
+          "flow_share": 0.8870761210263592,
+          "shares": {
+            "S000": 0.8289185439047081,
+            "SE01": 0.8790115513253978,
+            "SE02": 0.8652035821807512,
+            "SE03": 0.7916330723569261
+          }
+        }
+      }
+    }
+  ],
+  "interpretation": "Stop proximity only. Both ends covered does not establish a usable or connected transit trip, travel time, ridership, or unique people."
+}
