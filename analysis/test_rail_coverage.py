@@ -9,6 +9,7 @@ from unittest.mock import patch
 
 import h3
 from rail import coverage as c
+from rail import coverage_sensitivity as sensitivity
 
 
 def collection(points):
@@ -133,6 +134,96 @@ class CoverageTests(unittest.TestCase):
                 records = list(csv.DictReader(source))
             self.assertEqual({r['scenario'] for r in records}, set(c.SCENARIOS))
             self.assertTrue(all(r['h3'] == self.a for r in records))
+
+
+    def test_sensitivity_k0_k1_hand_checkable_flows(self):
+        neighbor = sorted(h3.grid_ring(self.a, 1))[0]
+        far = sorted(h3.grid_ring(self.a, 2))[0]
+        lat, lon = h3.cell_to_latlng(self.a)
+        layers = {'lynx': collection([(lat, lon, {c.HEADWAY_FIELD: 15})]),
+                  'sunrail': collection([]), 'brightline': collection([])}
+        covered, definitions = sensitivity.grid_coverage(layers)
+        self.assertEqual(len(definitions), 8)
+        self.assertTrue(all(row['headway_minutes'] is None for row in definitions
+                            if row['scenario'] != 'frequent_transit'))
+        rows = [{**row, 'h_hex': home, 'w_hex': work}
+                for row, (home, work) in zip(self.rows,
+                    [(self.a, neighbor), (neighbor, self.a), (far, self.a), (far, far)])]
+        results, _ = c.aggregate_flows(rows, covered, self.totals)
+        self.assertEqual([results['any_transit_k0'][g]['counts']['S000'] for g in c.GROUPS], [0, 6, 7, 2])
+        self.assertEqual([results['any_transit_k1'][g]['counts']['S000'] for g in c.GROUPS], [10, 0, 3, 2])
+        self.assertEqual(results['frequent_transit_k1_h15'], results['any_transit_k1'])
+
+    def test_sensitivity_30_minute_inclusive_threshold(self):
+        points = [(*h3.cell_to_latlng(cell), {c.HEADWAY_FIELD: minutes})
+                  for cell, minutes in [(self.a, 15), (self.b, 30), (self.d, 30.1), (self.e, None)]]
+        layers = {'lynx': collection(points), 'sunrail': collection([]), 'brightline': collection([])}
+        covered, _ = sensitivity.grid_coverage(layers)
+        self.assertEqual(covered['frequent_transit_k0_h15'], {self.a})
+        self.assertEqual(covered['frequent_transit_k0_h30'], {self.a, self.b})
+        audit = sensitivity.headway_audit(layers['lynx'])
+        self.assertEqual([x['selected_stops'] for x in audit['threshold_counts']], [1, 2])
+        self.assertEqual(audit['null_values'], 1)
+        self.assertEqual(audit['missing_keys'], 0)
+        self.assertEqual(audit['zero_values'], 0)
+        with self.assertRaisesRegex(ValueError, 'invalid headway'):
+            sensitivity.headway_audit(collection([(28.54, -81.38, {c.HEADWAY_FIELD: 0})]))
+
+    def test_sensitivity_baseline_checks_all_columns_not_just_jobs(self):
+        from copy import deepcopy
+        mapping = {'any_transit': 'any_transit_k1', 'frequent_transit': 'frequent_transit_k1_h15',
+                   'rail_only': 'rail_only_k1', 'any_transit_no_brightline': 'baseline_no_brightline'}
+        results, inventory = c.aggregate_flows(self.rows, {key: {self.a, self.b} for key in mapping.values()}, self.totals)
+        baseline = {'sources': {}, 'flow_inventory': inventory,
+                    'scenarios': {name: deepcopy(results[key]) for name, key in mapping.items()}}
+        with patch.object(sensitivity, 'PR34_BOTH_JOBS', {name: 6 for name in sensitivity.PR34_BOTH_JOBS}):
+            sensitivity.verify_baseline(results, baseline, {}, inventory)
+            results['any_transit_k1']['both_covered']['counts']['SE01'] += 1
+            with self.assertRaisesRegex(ValueError, 'full counts/shares/rows'):
+                sensitivity.verify_baseline(results, baseline, {}, inventory)
+            results['any_transit_k1']['both_covered']['counts']['S000'] += 1
+            with self.assertRaisesRegex(ValueError, 'both-covered jobs'):
+                sensitivity.verify_baseline(results, baseline, {}, inventory)
+
+    def test_sensitivity_outputs_preserve_baseline_and_include_all_group_earnings(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for mode, filename in c.STOP_FILES.items():
+                props = {c.HEADWAY_FIELD: 15} if mode == 'lynx' else {
+                    'stop_name': sensitivity.DOWNTOWN_STATION_NAME, 'stop_id': 'fixture'}
+                (root/filename).write_text(json.dumps(collection([(28.54, -81.38, props)])))
+            with (root/c.FLOW_FILE).open('w', newline='') as target:
+                writer = csv.DictWriter(target, fieldnames=('h_hex', 'w_hex', *c.COUNTS))
+                writer.writeheader()
+                writer.writerows(self.rows)
+            with patch.object(c, 'EXPECTED_TOTALS', self.totals):
+                baseline, covered = c.analyze(root)
+                c.write_outputs(baseline, covered, root)
+                before = {p.name: p.read_bytes() for p in root.iterdir()}
+                expected = {name: baseline['scenarios'][name]['both_covered']['counts']['S000']
+                            for name in sensitivity.PR34_BOTH_JOBS}
+                with patch.object(sensitivity, 'PR34_BOTH_JOBS', expected):
+                    summary = sensitivity.analyze(root)
+            sensitivity.write_outputs(summary, root)
+            first = {name: (root/name).read_bytes() for name in
+                     ('transit_coverage_sensitivity.csv', 'transit_coverage_sensitivity.json')}
+            sensitivity.write_outputs(summary, root)
+            self.assertEqual(first, {name: (root/name).read_bytes() for name in first})
+            self.assertEqual(before, {name: (root/name).read_bytes() for name in before})
+            self.assertEqual(len(summary['rows']), 8)
+            for row in summary['rows']:
+                c.reconcile(row['groups'], self.totals, 4)
+            with (root/'transit_coverage_sensitivity.csv').open() as source:
+                rows = list(csv.DictReader(source))
+            self.assertEqual(len(rows), 8)
+            self.assertEqual(sum(r['headway_minutes'] == '' for r in rows), 4)
+            scale = summary['downtown_geometry']
+            self.assertGreater(scale['local_cell_area_m2'], 0)
+            self.assertGreater(scale['local_edge_mean_m'], 0)
+            self.assertEqual([r['covered_cells'] for r in scale['rings']], [1, 7])
+            self.assertEqual(scale['rings'][0]['nonorigin_center_distance_max_m'], 0)
+            self.assertGreater(scale['adjacent_center_distance_min_m'], 0)
+            self.assertEqual(scale['adjacent_center_distance_max_m'], scale['rings'][1]['nonorigin_center_distance_max_m'])
 
 
 if __name__ == '__main__':

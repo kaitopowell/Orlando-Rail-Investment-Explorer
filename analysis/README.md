@@ -45,3 +45,9 @@ See [the coverage contract](../data/TRANSIT_COVERAGE_CONTRACT.md) for Windows
 commands, actual results, schema inspection and assumptions.
 `test_rail_coverage.py` uses tiny offline synthetic fixtures. Both-end stop
 proximity is not a verified transit connection; GTFS routing remains future work.
+
+`rail/coverage_sensitivity.py` runs the separate K=0/1 and 15/30-minute grid,
+reuses the original coverage functions, and checks complete PR #34 baseline
+agreement before writing new sensitivity CSV/JSON files. The original outputs
+remain read-only. Run the same `test_rail_coverage.py` suite for the extended
+hand-checkable ring and headway fixtures; see the contract for Windows commands.

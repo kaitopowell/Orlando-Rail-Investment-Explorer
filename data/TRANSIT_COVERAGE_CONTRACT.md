@@ -232,3 +232,149 @@ reconciliation failures, deterministic output, and read-only inputs.
   2023 OD data and October 2026 stop layers have different vintages.
 - Baseline transit travel times from GTFS remain the next milestone. This screen
   does not verify what share of commutes is actually possible by transit today.
+
+## K/headway sensitivity grid (PR #34 baseline preserved)
+
+`analysis/rail/coverage_sensitivity.py` adds a separate, offline eight-row grid.
+It imports the original coverage functions; it does not change `coverage.py`,
+`transit_coverage_summary.json`, `transit_coverage_hex8.csv`, the OD CSV or any
+stop layer. The original including/excluding-Brightline results remain intact.
+
+### Grid assumptions and headway audit
+
+Named constants are `K_VALUES = (0, 1)`, `SECOND_HEADWAY_MINUTES = 30.0`, and
+`HEADWAY_THRESHOLDS_MINUTES = (15.0, 30.0)` (the 15-minute value is reused from
+the original module). These are the requested **sensitivity assumptions**, not
+validated catchment or frequency standards. The catchment-distance citation
+remains **TBD**.
+
+The headway field remains **`headway_best_route_min`, in minutes, including
+LYMMO**. Numeric thresholds are inclusive and apply only to frequent LYNX:
+
+| Audit of the supplied 3,664 LYNX stops | Count | Treatment |
+| --- | ---: | --- |
+| Positive headway ≤15 minutes | 207 | Selected for 15- and 30-minute frequent scenarios |
+| Positive headway ≤30 minutes | 2,145 | Selected for the 30-minute frequent scenario; includes the 207 above |
+| Null headway | 43 | Excluded from frequent service; retained in any-stop coverage |
+| Missing headway key | 0 | Original validation fails if a key is missing |
+| Zero headway | 0 | Original validation fails; zero is not instant/frequent service |
+
+Negative, nonnumeric and non-finite values also fail. No values are imputed or
+converted to a different unit. Neither rail station layer supports a frequency
+filter; SunRail and Brightline remain **excluded from frequent LYNX**, while
+both remain in any transit and rail only. Threshold is therefore not applicable
+to any-transit/rail rows, rather than a second reason to duplicate those rows.
+
+K=0 requires a stop within the **same H3 cell** as the flow endpoint; K=1 also
+includes the first ring. The grid has two any-transit rows, four frequent-LYNX
+rows, and two rail-only rows. No new no-Brightline grid is added; that existing
+K=1 sensitivity is still compared against its preserved PR #34 result.
+
+### Downtown Orlando geometry computed with H3
+
+The diagnostic anchor is the **supplied Church Street SunRail station**, stop
+ID `14`, at GeoJSON `[longitude, latitude] = [-81.38077, 28.538901]`. These are
+input coordinates, not an invented downtown point. Its resolution-8 cell is
+`8844a90097fffff`. Anchor choice affects only this geometry diagnostic, not any
+scenario's coverage. All distances and areas below are computed by H3 4.4.2 at
+runtime; none are constants in the analysis code.
+
+| H3 measurement | Computed value |
+| --- | ---: |
+| Resolution-8 global average edge (`average_hexagon_edge_length`) | 531.41401 m |
+| Resolution-8 global average cell area (`average_hexagon_area`) | 737,327.59759 m² |
+| Church Street cell mean of its directed-edge lengths (`edge_length`) | 509.91824 m |
+| Church Street cell edge minimum / maximum | 492.95760 / 532.44207 m |
+| Church Street cell area (`cell_area`) | 673,352.94932 m² |
+| Minimum center-to-center distance to an adjacent cell (`great_circle_distance`) | 843.34566 m |
+| Maximum center-to-center distance to an adjacent cell | 912.55233 m |
+
+| K | Cells in the anchor's disk | Summed spherical cell area | Distance from anchor center to other included centers |
+| --- | ---: | ---: | --- |
+| 0 | 1 | 673,352.94932 m² | 0 m: only the origin center is included |
+| 1 | 7 | 4,713,470.57182 m² | 843.34566–912.55233 m to the six adjacent centers |
+
+K=0 does **not** mean zero walking distance: the entire cell is included and a
+stop/endpoint may be anywhere within it. K=1 does **not** define a half-mile
+walk or a maximum stop-to-endpoint distance. The local measurements differ from
+the earlier all-stop-cell measurements because this diagnostic concerns one
+specified downtown cell. Neither these areas nor center distances account for
+walkable streets, barriers or entrances. Catchment citation: **TBD**.
+
+### Sensitivity results
+
+The run on 2026-11-01 produced the following counts. All S000 shares use
+1,006,088 jobs as the denominator. SE01–SE03 below are jobs in the both-covered
+group; they are not household counts or identified workers.
+
+| Scenario | K | Headway (min) | Both jobs (share) | Home only jobs (share) | Work only jobs (share) | Neither jobs (share) | Both SE01 | Both SE02 | Both SE03 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Any transit | 0 | — | 179,677 (17.8590%) | 93,307 (9.2742%) | 393,201 (39.0822%) | 339,903 (33.7846%) | 31,308 | 63,896 | 84,473 |
+| Frequent LYNX | 0 | 15 | 5,813 (0.5778%) | 17,550 (1.7444%) | 166,036 (16.5031%) | 816,689 (81.1747%) | 1,078 | 2,000 | 2,735 |
+| Frequent LYNX | 0 | 30 | 96,434 (9.5850%) | 77,904 (7.7433%) | 371,863 (36.9613%) | 459,887 (45.7104%) | 17,570 | 35,311 | 43,553 |
+| Rail only | 0 | — | 418 (0.0415%) | 2,640 (0.2624%) | 71,773 (7.1339%) | 931,257 (92.5622%) | 36 | 76 | 306 |
+| Any transit | 1 | — | 398,770 (39.6357%) | 89,195 (8.8655%) | 332,460 (33.0448%) | 185,663 (18.4540%) | 67,228 | 138,327 | 193,215 |
+| Frequent LYNX | 1 | 15 | 20,235 (2.0113%) | 36,575 (3.6354%) | 222,378 (22.1032%) | 726,900 (72.2501%) | 3,546 | 7,094 | 9,595 |
+| Frequent LYNX | 1 | 30 | 265,698 (26.4090%) | 104,262 (10.3631%) | 357,678 (35.5514%) | 278,450 (27.6765%) | 46,991 | 95,772 | 122,935 |
+| Rail only | 1 | — | 6,610 (0.6570%) | 21,545 (2.1415%) | 143,968 (14.3097%) | 833,965 (82.8919%) | 847 | 1,482 | 4,281 |
+
+### New output schemas and verification
+
+- `data/processed/transit_coverage_sensitivity.csv`: eight data rows. Unique key:
+  `(scenario, k_rings, headway_minutes)`. `scenario` uses `any_transit`,
+  `frequent_transit` (frequent LYNX), or `rail_only`; `k_rings` is integer 0/1.
+  `headway_minutes` is 15/30 for frequent LYNX and blank (not zero) otherwise.
+  For each of `both_covered`, `home_only`, `work_only`, `neither`, the `_jobs`
+  column is integer S000 and `_share` is its fraction of total jobs in [0,1].
+  `both_covered_SE01`, `both_covered_SE02`, `both_covered_SE03` are integer counts
+  of each original earnings category within the both-covered group. The source
+  earnings definitions are unchanged. Row order is K, scenario, then headway.
+- `data/processed/transit_coverage_sensitivity.json`: the same eight combinations
+  in `rows`, with **all four groups' counts and shares for all four earnings/job
+  columns** and flow-row counts. This exposes full earnings reconciliation even
+  though the small CSV includes earnings only for the both-covered group.
+  Additional fields record input SHA-256 hashes, original baseline-file hash,
+  H3 version, named assumptions, headway audit, selected-stop/covered-cell counts,
+  downtown geometry (full precision), `reconciled` and `baseline_reproduced`.
+  Not-applicable headways are JSON null. Column-specific earnings shares retain
+  the original contract's denominators; rounded displayed percentages may not
+  sum to exactly 100%.
+
+Every grid row's four groups must reconcile to **S000 1,006,088; SE01 164,743;
+SE02 314,222; SE03 527,123**, and its group row counts to 591,177. All are
+checked before either new file is written. The grid reuses the original strict
+integer/H3/duplicate-pair validation without dropping flow rows.
+
+The three K=1 baseline checks are explicit: any transit **398,770**,
+frequent LYNX at 15 minutes **20,235**, and rail only **6,610** both-covered jobs.
+In addition, all original four scenarios' group counts, earnings, shares and
+flow-row counts are compared exactly to the existing PR #34 JSON, along with
+source hashes and flow inventory. This also protects the existing no-Brightline
+scenario. Any disagreement fails loudly before new outputs are written. The
+original baseline JSON/CSV are read-only and are never regenerated by this entry
+point. This is agreement with the supplied baseline, not independent validation
+of the source timetables or actual travel conditions.
+
+### Run the grid without overwriting PR #34 outputs
+
+```powershell
+py -3.14 -m pip install -r analysis/rail/requirements.txt
+py -3.14 analysis/rail/coverage_sensitivity.py
+py -3.14 -m unittest discover -s analysis -p "test_rail_coverage.py"
+```
+
+Optional `--input-dir` must contain the four original inputs and the preserved
+`transit_coverage_summary.json`; `--output-dir` selects where the **new** CSV/JSON
+are written. Use a temporary output directory to compare repeat runs. No new
+pip dependency, GDAL, GeoPandas or Fiona is required. Validation ran on Linux
+Python 3.13; Windows execution of the sensitivity script was not performed here.
+The added fixture tests use tiny synthetic inputs, no network and no real files:
+hand-checkable K=0/K=1 flow classifications, inclusive 30-minute filtering,
+null/zero policy, complete baseline mismatch detection, output repeatability and
+preservation of baseline/input bytes.
+
+All prior limitations still apply. These are stop-proximity sensitivities, not
+proof that any commute is possible, connected, affordable or timely by transit.
+The 30-minute screen broadens eligibility; it does not validate all-day service.
+Live service, GTFS routing, walking paths and the catchment-distance citation
+remain unverified/TBD. No score or greedy model is created or changed.
