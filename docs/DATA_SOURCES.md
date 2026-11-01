@@ -257,3 +257,36 @@ Tract-level data does not vary within a tract; any later tract-to-hexagon join
 must preserve that limitation. No tract attributes or demand metrics are added
 by this pipeline. Tiny synthetic fixture tests cover filtering, H3 placement,
 integer reconciliation, unmatched endpoints, content comparison and write safety.
+
+## Transit coverage screen for rail analysis
+
+`analysis/rail/coverage.py` reads the unchanged authoritative OD CSV and the three
+processed stop/station layers documented above. It converts Points to H3 r8 and
+unions each stop cell's `grid_disk` with **K=1 (assumption; catchment citation TBD)**.
+Four scenarios separately classify every directed flow as both ends covered,
+home only, work only, or neither: any stop, frequent service, rail only, and any
+stop excluding Brightline. All four job-count columns reconcile exactly.
+
+LYNX frequency uses `headway_best_route_min` in **minutes**, the best single-route
+peak headway **including LYMMO**, rather than combined service across routes.
+The **≤15-minute threshold is an assumption**. There are 207 qualifying stops;
+43 null-headway stops are excluded from frequent service but included in the
+any-stop screen. Neither SunRail nor Brightline has a frequency field, so both
+are explicitly excluded from the frequent scenario; no frequency is invented.
+
+Outputs: `data/processed/transit_coverage_summary.json` (group counts and shares,
+input SHA-256 hashes, parameters and inspected schemas) and
+`data/processed/transit_coverage_hex8.csv` (covered cells per scenario).
+Both-end proximity covers 398,770 jobs (39.6357%) for any stop, 20,235 (2.0113%)
+for frequent LYNX, 6,610 (0.6570%) for rail only, and 398,742 (39.6329%) for any
+stop without Brightline. These are **stop-proximity screens, not findings of
+usable transit service or possible trips**. Rail frequency, timetable/route
+connectivity, walking-network access and current operations are not verified.
+
+H3 computes an r8 global-average edge of 531.41401 m and regular-hex K=1
+center-reach estimate of 920.43607 m. Actual neighboring-center distances around
+the supplied stop cells range from 841.34581 to 914.69422 m. Whole-cell coverage
+is not a walking-distance bound and is not labeled a half-mile catchment. See
+[TRANSIT_COVERAGE_CONTRACT.md](../data/TRANSIT_COVERAGE_CONTRACT.md) for all fields,
+complete scenario results, schema inspection, assumptions, Windows commands,
+limitations and source dates. The existing stop layers and frontend are unchanged.
