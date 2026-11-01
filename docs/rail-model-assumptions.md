@@ -1,6 +1,6 @@
 # SOL/R rail model: assumptions and implementation plan
 
-Status: **OD pipeline verified** end to end on 2026-10-30 (UTC), per the owner's Windows Python 3.14.6 run. **Stop-proximity coverage screen completed** (2026-11-01; [contract](../data/TRANSIT_COVERAGE_CONTRACT.md)); this does not establish usable transit trips. **Next milestone: baseline transit travel times from existing GTFS** (SunRail, Brightline and LYNX). Optimization assumptions remain DRAFT for review; optimization implementation still requires approval of this document.
+Status: **OD pipeline verified** end to end on 2026-10-30 (UTC), per the owner's Windows Python 3.14.6 run. **Stop-proximity coverage screen completed** (2026-11-01; [contract](../data/TRANSIT_COVERAGE_CONTRACT.md)); this does not establish usable transit trips. **Coverage sensitivity grid completed** ([PR #35](https://github.com/kaitopowell/Orlando-Rail-Investment-Explorer/pull/35)). **Next milestone: baseline transit travel times and driving reference times.** Baseline transit travel times, driving travel times, the competitiveness ratio and the routing tool remain open decisions (section 9). Optimization assumptions remain DRAFT for review; optimization implementation still requires approval of this document.
 Decisions in section 9 were made by the project owner on 2026-10-29; remaining TBDs need cited sources.
 Location in repo: `docs/rail-model-assumptions.md`
 
@@ -18,23 +18,37 @@ Scope: **rail only** (light rail and heavy rail). Bus rapid transit is out of sc
 
 ## 2. Objective (primary score)
 
-Commute-weighted time savings:
+For each home–work pair, compare three travel times: **transit today** (if a usable trip exists), **driving** (reference), and **transit with candidate rail**. A stop nearby alone does not establish a transit baseline. An unknown or failed routing result is not evidence of no service.
 
-```
-benefit(network) = sum over home-work pairs (i, j) of:
-                   workers(i, j) * max(0, baseline_minutes(i, j) - network_minutes(i, j))
-```
+Report two benefits **separately; never sum them**:
 
-- `workers(i, j)`: legacy notation for the LODES **job count** linking home area `i` to work area `j`, not a count of unique people; one person can hold multiple jobs.
-- `baseline_minutes`: best existing transit time today (SunRail, Brightline, LYNX).
-- `network_minutes`: best transit time with the candidate rail links added.
-- Pairs where rail is not faster contribute zero. No negative benefit.
+1. **Minutes saved versus today's transit**, only for pairs with a transit baseline: sum `jobs(i, j) * max(0, transit_today_minutes(i, j) - candidate_transit_minutes(i, j))`. Pairs without a usable candidate trip contribute zero. The total is job-weighted minutes saved; pairs where candidate transit is not faster contribute zero.
+2. **Workers newly connected**, only for pairs with no transit baseline today and a usable candidate rail trip competitive with driving: sum `jobs(i, j)` where `candidate_transit_minutes(i, j) / driving_minutes(i, j) <= competitiveness_threshold`. This label refers to LODES **jobs**, not unique people. A valid positive driving time is required to evaluate the ratio; unresolved pairs are reported separately rather than assumed competitive.
 
-Selection rule: greedy by **benefit gained per dollar**. Add the corridor with the best ratio, update, repeat until the budget is spent. The order of selection is the proposed phasing.
+The **transit-to-driving ratio threshold is TBD** and must be justified with a citation from planning literature; no numerical value is selected here. This comparison rule is fixed before results are viewed. The cited threshold must also be fixed before viewing model results and will not be changed to improve results. Newly connected jobs do not receive invented minutes saved from an absent transit baseline, and driving is a reference, not a substitute baseline for the time-savings benefit.
+
+`workers(i, j)` elsewhere in this plan is legacy notation for the LODES **job count**, not unique workers; one person can hold multiple jobs. The primary greedy selection remains transit-baseline minutes saved per dollar; newly connected jobs are reported separately, not added to that score. Add the corridor with the best primary ratio, update, repeat until the budget is spent. The order is the proposed phasing, not a forecast of mode switching or ridership.
+
+### Baseline context: stop proximity
+
+The [PR #35 sensitivity CSV](../data/processed/transit_coverage_sensitivity.csv) reports the following both-ends-covered results. Counts and share fractions below are copied directly from that output; percentages are those fractions multiplied by 100 and rounded to four decimal places. The denominator is 1,006,088 jobs.
+
+| Scenario | K | Both ends: jobs | Share (source fraction) | Share (%) |
+| --- | ---: | ---: | ---: | ---: |
+| Any transit | 0 | 179677 | 0.17858974562861302 | 17.8590% |
+| Frequent LYNX ≤15 minutes | 0 | 5813 | 0.005777824603811993 | 0.5778% |
+| Frequent LYNX ≤30 minutes | 0 | 96434 | 0.09585046238500011 | 9.5850% |
+| Rail only | 0 | 418 | 0.00041547061489651004 | 0.0415% |
+| Any transit | 1 | 398770 | 0.39635697871359166 | 39.6357% |
+| Frequent LYNX ≤15 minutes | 1 | 20235 | 0.020112554766581053 | 2.0113% |
+| Frequent LYNX ≤30 minutes | 1 | 265698 | 0.2640902187482606 | 26.4090% |
+| Rail only | 1 | 6610 | 0.006570001828865865 | 0.6570% |
+
+Thus coverage is roughly 18–40% for any transit, 0.6–2.0% for 15-minute LYNX, 9.6–26.4% for 30-minute LYNX, and 0.04–0.66% for rail only (K=0 to K=1). These measure **stop proximity, not usable trips**: they do not establish connectivity, timetables, transfers or travel times. K=0 requires a stop in the same hexagon; K=1 also includes neighboring hexagons. Neither is a routed walking-distance guarantee. Rail is excluded from the frequent-LYNX scenarios because the station layers lack frequency fields. See the [coverage contract](../data/TRANSIT_COVERAGE_CONTRACT.md) for the assumptions and limitations.
 
 ### Secondary scores (reported, not optimized in v1)
 
-1. **Equity:** the same time savings, reported separately for workers living in high-need tracts. "High need" uses the equity layer's existing ACS 2020-2024 indicators and its existing quintile classes (no new thresholds):
+1. **Equity:** the two benefits above, reported separately for jobs linked to homes in high-need tracts, without summing them. Benefit for people without cars is represented through these equity measures, not an assumed driving-time saving. "High need" uses the equity layer's existing ACS 2020-2024 indicators and its existing quintile classes (no new thresholds):
    - Primary: **households with no vehicle** (direct measure of transit dependence). High need = top quintile.
    - Secondary: **people below poverty**. High need = top quintile.
    - Context only: **median household income** (bottom quintile = lower income). Not used as a need flag, since it is a weaker proxy for transit dependence.
@@ -53,11 +67,20 @@ Selection rule: greedy by **benefit gained per dollar**. Add the corridor with t
 | Equity indicators | ACS 2020-2024 (households with no vehicle, people below poverty, median household income) | Secondary equity score | Loaded |
 | Hexagon geography | H3 resolution 8 (verified from hexagon IDs, e.g. 8844a90e4dfffff) | Common geography for all layers and the model | Verified |
 | Existing transit | SunRail and Brightline GTFS, LYNX GTFS | Baseline travel times | Loaded as layers; routing use **TBD** |
+| Driving reference times | **TBD**: OpenStreetMap-based OSRM, Valhalla or r5py on a Florida extract | Reference for the candidate-transit/driving ratio | Tool, extract vintage, routing profile and travel times **TBD**; free-flow without congestion |
 | Visitor demand | Hotel and attraction locations, airport passengers, visitor counts | Tourism scenario only | **TBD**: sources not yet chosen |
 | Rail construction costs | Published project cost datasets (for example NYU Marron Transit Costs Project, FTA filings) | Cost per mile by mode | **TBD**: cite exact table, year, and project list |
 | Candidate corridors | Existing rail rights-of-way, highway medians, major arterials, minus water and protected land | The set the algorithm chooses from | **TBD**: build and document |
 
 LODES origin-destination data is at census-block level. **Decision: aggregate to H3 resolution 8 hexagons**, consistent with the map. The verified OD pipeline assigns each block using its supplied Census internal point (`INTPTLAT20`, `INTPTLON20`), not a centroid; see the [OD contract](../data/LODES_OD_HEX8_CONTRACT.md). Tract-level ACS indicators are assigned to each hexagon through the census tract ID already carried by the app. Limitation: tract-level indicators do not vary between hexagons in the same tract.
+
+### Driving reference and ACS validation
+
+Choose among **OSRM, Valhalla or r5py**, using OpenStreetMap on a **Florida extract**; the routing tool and data-source decision remain **TBD**. Verify the selected tool's driving support and profile before use. These proposed routes give **free-flow times without congestion**, understating driving time and making rail's competitiveness harder to meet, a limitation that works against rail.
+
+Compare home-tract, commute-weighted routed driving times with ACS **2020–2024 five-year subject table S0801, Commuting Characteristics**, **`S0801_C01_046E`**, total **mean travel time to work (minutes)**; retain its margin of error, `S0801_C01_046M`. Citation: US Census Bureau, [2024 ACS five-year S0801 table and variable definitions](https://api.census.gov/data/2024/acs/acs5/subject/groups/S0801.html). This is a plausibility check, not calibration to force agreement: ACS covers observed commutes across modes for workers age 16 and over who did not work from home, while the model uses 2023 jobs, free-flow driving and only within-region flows. Report differences in geography, universe, vintage, mode and uncertainty; a tract mean cannot validate each OD route.
+
+Source-access note: the Census API returned HTTP 403 in this sandbox. The exact variable was corroborated using the [tract-level mean-commute lookup](https://github.com/DPC-data/Delta-Socioeconomic-Indicators-Report/blob/ef3e158fc7f36d6a51295c532734060d41cb185a/Analyses%20Scripts/commute_time.Rmd#L32-L40) and the [ACS variable mapping](https://github.com/EndurantDevs/healthcare-mrf-api/blob/df58383a5314e894ef7902e57fb4349ae559dad8/process/geo_census_contract.py). Direct inspection of the current Census table and the actual drive-time comparison remain pending; no validation results are claimed.
 
 ### Industry and earnings: what the OD file can identify
 
@@ -102,6 +125,8 @@ Every parameter below shows in the UI as an assumption, with its source.
 | Station catchment (walk distance for routing) | **TBD**; the preliminary H3-ring screen does not establish a walk-distance standard | **TBD** |
 | Preliminary stop-proximity screen | H3 r8, K=1 ring; about 920.44 m regular-hex center-reach estimate, not a half-mile walking catchment | **Project assumption; catchment citation TBD**. [Coverage contract](../data/TRANSIT_COVERAGE_CONTRACT.md) |
 | Frequent-stop screen | LYNX best-route peak headway ≤15 minutes, including LYMMO; rail excluded because station layers lack frequency | **Project assumption**; supplied headway field is in minutes |
+| Competitiveness ratio threshold | **TBD**, candidate-transit minutes / driving minutes; fixed before viewing results | **TBD**: cite planning literature; never tune to improve results |
+| Driving routing tool and reference | **TBD**: OSRM, Valhalla or r5py; OSM Florida extract, free-flow | Tool/profile/extract decision pending; ACS S0801 plausibility check above |
 | Rail average speed incl. stops, by mode | **TBD** | Agency documentation or TCRP |
 | Wait time model (headway / 2) and headway by mode | **TBD** | |
 | Transfer penalty | **TBD** | |
@@ -117,7 +142,9 @@ Cost reference cities: Houston as a lower-cost light rail reference in a car-ori
 ### Modeling simplifications (state these on the limitations slide)
 
 - Travel time between areas is computed centroid to centroid.
-- Drivers are assumed to switch to rail only where rail beats the existing transit option. Driving time is not modeled in v1, so benefit estimates describe time saved for transit users and potential users, not forecast ridership.
+- Driving is a reference for newly connected jobs, not a forecast of drivers switching modes. Transit-baseline time savings and newly connected jobs are never summed.
+- No parking cost, fuel cost or reliability differences are modeled. Free-flow driving times understate congestion, a limitation that works against rail.
+- Benefit for people without cars (no-vehicle households) is reported through the equity measures, not through assumed time savings against driving.
 - No induced development or land-use change is modeled.
 - Costs are order-of-magnitude benchmarks, not engineering estimates.
 - Greedy selection is not guaranteed to be globally optimal.
@@ -149,7 +176,7 @@ data/
 ### Milestones
 
 1. **Data contracts.** Document the schema of each input and output file in `data/`. Pull LODES OD and record provenance.
-2. **Baseline.** Compute `baseline_minutes` for home-work pairs from existing transit. Report coverage: what share of workers have a transit option at all.
+2. **Baseline and driving reference.** Decide the routing tool and transit service/time assumptions, compute existing-transit and free-flow driving times for home–work pairs, and compare driving results with tract ACS S0801 means. Fix the literature-cited competitiveness ratio before viewing model results. Report usable-transit coverage separately from the completed stop-proximity screen and report unresolved routing results.
 3. **Toy model.** Implement `score.py` and `greedy.py` on a 5-node graph with an answer verifiable by hand. Write the tests first.
 4. **Real run, single scenario.** Candidate corridors, one cost assumption, one objective.
 5. **Sensitivity.** Rerun with low and high costs, different catchment distances, and the accessibility cross-check. Record which corridors stay in the top ranks.
@@ -186,7 +213,7 @@ This model is rail only. The primary comparison is against **rail-based proposal
 For each run:
 
 1. Ordered list of built corridors with cost and cumulative cost.
-2. For every corridor: commute-weighted minutes saved, workers affected, home areas that gain, job centers that gain.
+2. For every corridor: job-weighted minutes saved versus existing transit and newly connected jobs competitive with driving, in separate columns and never summed; home areas and job centers that gain. Report unresolved pairs separately.
 3. Totals for the primary, equity, and cross-check scores, side by side.
 4. Sensitivity table: which corridors persist across assumptions.
 5. The parameters used, with sources.
@@ -219,3 +246,8 @@ For each run:
 4. Which cost datasets and peer cities are used, and the low/high bounds.
 5. How hospitality shares of jobs (LODES WAC workplace industry columns) are presented in the tourism story.
 6. **Resolved (2026-10-30):** no-vehicle and poverty measures are shares (percent of households / people in the poverty universe). High need is strictly above the equity layer's existing 80th-percentile break: **8.41136486219713%** for no-vehicle share and **18.970607565181936%** for poverty share. These exact strings are copied from the [Equity section of `analysis/README.md`](../analysis/README.md#equity); equality belongs to the lower class.
+
+7. **Baseline transit travel times — open:** routing from existing GTFS, service date/time, usable-trip definition and treatment of unavailable results.
+8. **Driving travel times — open:** free-flow references on a Florida OSM extract, profile/vintage and the ACS S0801 tract comparison.
+9. **Competitiveness ratio — open:** threshold TBD with a planning-literature citation; fix it before viewing results, never adjust it to improve results. The separate-benefits rule in section 2 is fixed.
+10. **Routing tool — open:** decide among OSRM, Valhalla or r5py for driving and establish the existing-transit routing setup; no tool is selected by this document.
