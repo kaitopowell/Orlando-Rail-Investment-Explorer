@@ -1,6 +1,6 @@
 # SOL/R rail model: assumptions and implementation plan
 
-Status: **OD pipeline verified** end to end on 2026-10-30 (UTC), per the owner's Windows Python 3.14.6 run. **Next milestone: baseline transit travel times from existing GTFS** (SunRail, Brightline and LYNX). Optimization assumptions remain DRAFT for review; optimization implementation still requires approval of this document.
+Status: **OD pipeline verified** end to end on 2026-10-30 (UTC), per the owner's Windows Python 3.14.6 run. **Stop-proximity coverage screen completed** (2026-11-01; [contract](../data/TRANSIT_COVERAGE_CONTRACT.md)); this does not establish usable transit trips. **Next milestone: baseline transit travel times from existing GTFS** (SunRail, Brightline and LYNX). Optimization assumptions remain DRAFT for review; optimization implementation still requires approval of this document.
 Decisions in section 9 were made by the project owner on 2026-10-29; remaining TBDs need cited sources.
 Location in repo: `docs/rail-model-assumptions.md`
 
@@ -99,7 +99,9 @@ Every parameter below shows in the UI as an assumption, with its source.
 
 | Parameter | Value | Source |
 |---|---|---|
-| Station catchment (walk distance) | **TBD** (half mile is the common planning convention; confirm and cite) | |
+| Station catchment (walk distance for routing) | **TBD**; the preliminary H3-ring screen does not establish a walk-distance standard | **TBD** |
+| Preliminary stop-proximity screen | H3 r8, K=1 ring; about 920.44 m regular-hex center-reach estimate, not a half-mile walking catchment | **Project assumption; catchment citation TBD**. [Coverage contract](../data/TRANSIT_COVERAGE_CONTRACT.md) |
+| Frequent-stop screen | LYNX best-route peak headway ≤15 minutes, including LYMMO; rail excluded because station layers lack frequency | **Project assumption**; supplied headway field is in minutes |
 | Rail average speed incl. stops, by mode | **TBD** | Agency documentation or TCRP |
 | Wait time model (headway / 2) and headway by mode | **TBD** | |
 | Transfer penalty | **TBD** | |

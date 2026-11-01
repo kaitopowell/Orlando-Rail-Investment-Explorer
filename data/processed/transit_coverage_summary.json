@@ -1,0 +1,419 @@
+{
+  "schema_version": 1,
+  "h3_version": "4.4.2",
+  "sources": {
+    "lynx": {
+      "file": "lynx_stops_peak_headway.geojson",
+      "sha256": "6d5328c36b2f3f94fc2de9100d06fbf08eee40d1116cda7f9b87c54f3dd23745"
+    },
+    "sunrail": {
+      "file": "sunrail_stations.geojson",
+      "sha256": "b9211627173b63c8321372446f66f55bdda823dd65944722e38be75171f122ad"
+    },
+    "brightline": {
+      "file": "brightline_stations.geojson",
+      "sha256": "e250deccc69ddc3429b78e3191977af8d714edd71d42fab116892614ba2ec401"
+    },
+    "flows": {
+      "file": "lodes_od_hex8_2023.csv",
+      "sha256": "febfaabca41806e3b091c99a00b3101eb6d87ee9033533295fdf3d8b4a12b8ad"
+    }
+  },
+  "parameters": {
+    "resolution": 8,
+    "k_rings_assumption": 1,
+    "frequent_headway_minutes_assumption": 15.0,
+    "lynx_headway_field": "headway_best_route_min",
+    "lymmo_included": true,
+    "frequent_rail_treatment": "Excluded: neither rail station layer has frequency fields.",
+    "catchment_citation": "TBD"
+  },
+  "spatial_scale": {
+    "units": "metres",
+    "global_average_edge_m": 531.41401,
+    "actual_stop_cell_directed_edges_m": {
+      "min": 491.7614897616444,
+      "mean": 510.0926482566361,
+      "max": 533.6809403720933
+    },
+    "approximate_k1_center_reach_m": 920.4360651739153,
+    "approximate_selected_k_center_reach_m": 920.4360651739153,
+    "actual_selected_k_center_distances_m": {
+      "min": 841.3458098422983,
+      "mean": 883.4914005224235,
+      "max": 914.6942165185052
+    },
+    "method": "H3 edge_length and great_circle_distance; regular-hex approximation K*sqrt(3)*average edge. Not walking-network distance or a bound on stop-to-point distance."
+  },
+  "stop_inventory": {
+    "lynx": {
+      "features": 3664,
+      "geometry_types": [
+        "Point"
+      ],
+      "property_names": [
+        "county",
+        "freq15",
+        "freq15_nl",
+        "freq20_nl",
+        "freq30",
+        "freq30_nl",
+        "headway_best_nonlymmo_min",
+        "headway_best_route_min",
+        "headway_combined_min",
+        "n_dep",
+        "n_dep_best_nonlymmo",
+        "route_long_name",
+        "route_short_name",
+        "stop_id",
+        "stop_name"
+      ],
+      "unique_stop_cells": 816,
+      "frequency_field_used": "headway_best_route_min",
+      "headway_units": "minutes",
+      "null_headways": 43,
+      "headway_min": 6.2,
+      "headway_max": 240.0,
+      "frequent_selected_stops": 207
+    },
+    "sunrail": {
+      "features": 15,
+      "geometry_types": [
+        "Point"
+      ],
+      "property_names": [
+        "county",
+        "stop_id",
+        "stop_lat",
+        "stop_lon",
+        "stop_name",
+        "stop_url",
+        "wheelchair_boarding",
+        "zone_id"
+      ],
+      "unique_stop_cells": 15,
+      "frequency_field_used": null,
+      "frequency_note": "No frequency field in the inspected rail layer; excluded from frequent_transit."
+    },
+    "brightline": {
+      "features": 1,
+      "geometry_types": [
+        "Point"
+      ],
+      "property_names": [
+        "county",
+        "stop_code",
+        "stop_desc",
+        "stop_id",
+        "stop_lat",
+        "stop_lon",
+        "stop_name",
+        "stop_timezone",
+        "wheelchair_boarding"
+      ],
+      "unique_stop_cells": 1,
+      "frequency_field_used": null,
+      "frequency_note": "No frequency field in the inspected rail layer; excluded from frequent_transit."
+    }
+  },
+  "flow_inventory": {
+    "flow_rows": 591177,
+    "flow_hexagons": 5430,
+    "counts": {
+      "S000": 1006088,
+      "SE01": 164743,
+      "SE02": 314222,
+      "SE03": 527123
+    }
+  },
+  "scenario_selection": {
+    "any_transit": {
+      "selected_stop_features": 3680,
+      "unique_stop_cells": 820,
+      "covered_hexagons": 1691
+    },
+    "frequent_transit": {
+      "selected_stop_features": 207,
+      "unique_stop_cells": 51,
+      "covered_hexagons": 154
+    },
+    "rail_only": {
+      "selected_stop_features": 16,
+      "unique_stop_cells": 16,
+      "covered_hexagons": 106
+    },
+    "any_transit_no_brightline": {
+      "selected_stop_features": 3679,
+      "unique_stop_cells": 819,
+      "covered_hexagons": 1684
+    }
+  },
+  "scenarios": {
+    "any_transit": {
+      "both_covered": {
+        "flow_rows": 197005,
+        "counts": {
+          "S000": 398770,
+          "SE01": 67228,
+          "SE02": 138327,
+          "SE03": 193215
+        },
+        "flow_share": 0.33324199013155115,
+        "shares": {
+          "S000": 0.39635697871359166,
+          "SE01": 0.40807803669958664,
+          "SE02": 0.44022060835969473,
+          "SE03": 0.3665463278969045
+        }
+      },
+      "home_only": {
+        "flow_rows": 69783,
+        "counts": {
+          "S000": 89195,
+          "SE01": 16504,
+          "SE02": 31102,
+          "SE03": 41589
+        },
+        "flow_share": 0.11804078981421808,
+        "shares": {
+          "S000": 0.08865526673611056,
+          "SE01": 0.1001802808010052,
+          "SE02": 0.09898097523407018,
+          "SE03": 0.07889809399324256
+        }
+      },
+      "work_only": {
+        "flow_rows": 194558,
+        "counts": {
+          "S000": 332460,
+          "SE01": 46945,
+          "SE02": 87959,
+          "SE03": 197556
+        },
+        "flow_share": 0.32910278985819813,
+        "shares": {
+          "S000": 0.3304482311686453,
+          "SE01": 0.28495899674037745,
+          "SE02": 0.2799262941487229,
+          "SE03": 0.3747815974639695
+        }
+      },
+      "neither": {
+        "flow_rows": 129831,
+        "counts": {
+          "S000": 185663,
+          "SE01": 34066,
+          "SE02": 56834,
+          "SE03": 94763
+        },
+        "flow_share": 0.21961443019603266,
+        "shares": {
+          "S000": 0.1845395233816525,
+          "SE01": 0.20678268575903072,
+          "SE02": 0.1808721222575122,
+          "SE03": 0.1797739806458834
+        }
+      }
+    },
+    "frequent_transit": {
+      "both_covered": {
+        "flow_rows": 4814,
+        "counts": {
+          "S000": 20235,
+          "SE01": 3546,
+          "SE02": 7094,
+          "SE03": 9595
+        },
+        "flow_share": 0.008143077284806411,
+        "shares": {
+          "S000": 0.020112554766581053,
+          "SE01": 0.02152443502910594,
+          "SE02": 0.022576395032811197,
+          "SE03": 0.018202582698914675
+        }
+      },
+      "home_only": {
+        "flow_rows": 21594,
+        "counts": {
+          "S000": 36575,
+          "SE01": 7058,
+          "SE02": 13692,
+          "SE03": 15825
+        },
+        "flow_share": 0.03652713146824048,
+        "shares": {
+          "S000": 0.03635367880344463,
+          "SE01": 0.042842487996455084,
+          "SE02": 0.043574288242070894,
+          "SE03": 0.030021456092790486
+        }
+      },
+      "work_only": {
+        "flow_rows": 76121,
+        "counts": {
+          "S000": 222378,
+          "SE01": 29109,
+          "SE02": 64004,
+          "SE03": 129265
+        },
+        "flow_share": 0.12876177523821122,
+        "shares": {
+          "S000": 0.22103235502262228,
+          "SE01": 0.1766933951670177,
+          "SE02": 0.20369038450522242,
+          "SE03": 0.24522739474468008
+        }
+      },
+      "neither": {
+        "flow_rows": 488648,
+        "counts": {
+          "S000": 726900,
+          "SE01": 125030,
+          "SE02": 229432,
+          "SE03": 372438
+        },
+        "flow_share": 0.8265680160087419,
+        "shares": {
+          "S000": 0.722501411407352,
+          "SE01": 0.7589396818074212,
+          "SE02": 0.7301589322198955,
+          "SE03": 0.7065485664636147
+        }
+      }
+    },
+    "rail_only": {
+      "both_covered": {
+        "flow_rows": 1686,
+        "counts": {
+          "S000": 6610,
+          "SE01": 847,
+          "SE02": 1482,
+          "SE03": 4281
+        },
+        "flow_share": 0.002851937744533363,
+        "shares": {
+          "S000": 0.006570001828865865,
+          "SE01": 0.0051413413620002065,
+          "SE02": 0.004716410690530899,
+          "SE03": 0.008121444141120763
+        }
+      },
+      "home_only": {
+        "flow_rows": 13693,
+        "counts": {
+          "S000": 21545,
+          "SE01": 3667,
+          "SE02": 6282,
+          "SE03": 11596
+        },
+        "flow_share": 0.023162267814884546,
+        "shares": {
+          "S000": 0.021414627746280643,
+          "SE01": 0.02225891236653454,
+          "SE02": 0.0199922347894164,
+          "SE03": 0.021998660654154723
+        }
+      },
+      "work_only": {
+        "flow_rows": 51379,
+        "counts": {
+          "S000": 143968,
+          "SE01": 15418,
+          "SE02": 34592,
+          "SE03": 93958
+        },
+        "flow_share": 0.08690967341422282,
+        "shares": {
+          "S000": 0.14309682652014535,
+          "SE01": 0.09358819494606752,
+          "SE02": 0.11008777233930152,
+          "SE03": 0.17824682284779833
+        }
+      },
+      "neither": {
+        "flow_rows": 524419,
+        "counts": {
+          "S000": 833965,
+          "SE01": 144811,
+          "SE02": 271866,
+          "SE03": 417288
+        },
+        "flow_share": 0.8870761210263592,
+        "shares": {
+          "S000": 0.8289185439047081,
+          "SE01": 0.8790115513253978,
+          "SE02": 0.8652035821807512,
+          "SE03": 0.7916330723569261
+        }
+      }
+    },
+    "any_transit_no_brightline": {
+      "both_covered": {
+        "flow_rows": 196977,
+        "counts": {
+          "S000": 398742,
+          "SE01": 67228,
+          "SE02": 138326,
+          "SE03": 193188
+        },
+        "flow_share": 0.3331946269898863,
+        "shares": {
+          "S000": 0.3963291481460866,
+          "SE01": 0.40807803669958664,
+          "SE02": 0.44021742589634083,
+          "SE03": 0.3664951064552296
+        }
+      },
+      "home_only": {
+        "flow_rows": 69811,
+        "counts": {
+          "S000": 89223,
+          "SE01": 16504,
+          "SE02": 31103,
+          "SE03": 41616
+        },
+        "flow_share": 0.11808815295588293,
+        "shares": {
+          "S000": 0.0886830973036156,
+          "SE01": 0.1001802808010052,
+          "SE02": 0.09898415769742411,
+          "SE03": 0.07894931543491747
+        }
+      },
+      "work_only": {
+        "flow_rows": 194536,
+        "counts": {
+          "S000": 332438,
+          "SE01": 46945,
+          "SE02": 87956,
+          "SE03": 197537
+        },
+        "flow_share": 0.32906557596117575,
+        "shares": {
+          "S000": 0.33042636429417704,
+          "SE01": 0.28495899674037745,
+          "SE02": 0.2799167467586611,
+          "SE03": 0.37474555274575383
+        }
+      },
+      "neither": {
+        "flow_rows": 129853,
+        "counts": {
+          "S000": 185685,
+          "SE01": 34066,
+          "SE02": 56837,
+          "SE03": 94782
+        },
+        "flow_share": 0.21965164409305504,
+        "shares": {
+          "S000": 0.18456139025612073,
+          "SE01": 0.20678268575903072,
+          "SE02": 0.18088166964757402,
+          "SE03": 0.17981002536409907
+        }
+      }
+    }
+  },
+  "reconciled": true,
+  "interpretation": "Stop proximity only. Both ends covered does not establish a usable or connected transit trip, travel time, ridership, or unique people."
+}

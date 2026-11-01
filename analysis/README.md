@@ -35,3 +35,13 @@ and the requested summary totals before creating compressed output. See
 commands, provenance, verification status, and limitations. H3 and the pure-Python `dbfread` reader are pinned in
 `rail/requirements.txt`; this pipeline needs no GDAL installation.
 `test_rail_od.py` uses tiny synthetic fixtures only and requires no network.
+
+### Transit stop-proximity coverage
+
+`rail/coverage.py` reads the authoritative OD CSV and the three supplied stop
+layers without downloads or geometry libraries. It produces four separate
+H3-ring coverage scenarios and reconciles all job/earnings columns.
+See [the coverage contract](../data/TRANSIT_COVERAGE_CONTRACT.md) for Windows
+commands, actual results, schema inspection and assumptions.
+`test_rail_coverage.py` uses tiny offline synthetic fixtures. Both-end stop
+proximity is not a verified transit connection; GTFS routing remains future work.
