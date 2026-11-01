@@ -1,0 +1,17 @@
+import assert from "node:assert/strict";
+import { prepareTrainPaths, TRAIN_MOTION } from "../src/map/trainMotion.ts";
+const item = (geometry) => ({type:"Feature",properties:{id:"toy",service:"sunrail",name:"toy"},geometry});
+const input = [item({type:"LineString",coordinates:[[0,0],[0.01,0],[0.03,0]]})];
+const before=JSON.stringify(input);
+const [path]=prepareTrainPaths(input);
+assert.equal(path.trips.length, TRAIN_MOTION.trainsPerPath*2);
+const times=path.trips[1].timestamps;
+assert.ok(Math.abs((times[2]-times[1])/(times[1]-times[0])-2)<1e-10);
+assert.equal(JSON.stringify(input), before);
+assert.equal(path.trips[0].path, path.trips[1].path);
+assert.equal(path.trips[0].timestamps[0],-path.duration);
+assert.ok(Math.abs(path.trips[3].timestamps[0]-path.duration*TRAIN_MOTION.spacingFraction)<1e-10);
+assert.equal(prepareTrainPaths([item({type:"Point",coordinates:[0,0]})]).length,0);
+assert.equal(prepareTrainPaths([item({type:"LineString",coordinates:[[0,0],[0,0]]})]).length,0);
+assert.equal(prepareTrainPaths([item({type:"MultiLineString",coordinates:[[[0,0],[1,0]],[[3,0],[4,0]]]})]).length,2);
+console.log("PASS train paths: distance-proportional timestamps, fixed spacing, wrap copies, unchanged input, separate multipart paths and degenerate suppression");

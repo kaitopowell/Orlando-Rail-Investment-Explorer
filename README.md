@@ -91,3 +91,22 @@ Basemap labels stay above the data. Controls and inspectors remain usable with
 Employment enabled. All 7,896 source hexagons remain inspectable, including faint
 low values; the H3 IDs, centers and data are unchanged. These are modeled estimates,
 not measured counts. The ACS tract rendering remains unchanged.
+
+### Illustrative train motion
+
+Turn on **Rail · SunRail / Brightline** under Existing transit to reveal the
+optional **Train motion** toggle and **Pause / Play** button. Motion starts off,
+including when `prefers-reduced-motion` is set. Use Space to toggle the checkbox
+and Space or Enter on the pause/play button. Enabling reduced motion while it
+runs switches motion off; explicit opt-in remains available. Hiding rail or
+turning motion off removes the animated layer; the underlying lines, stations
+and inspectors retain their existing behavior.
+
+**Illustrative train motion. Not real schedules.** Three short, translucent cyan
+trails per line path run in a simple one-way loop, restarting at the beginning.
+Their fixed decorative speed and spacing do not represent frequency, ridership,
+schedules or analysis. Settings are named in `src/map/trainMotion.ts`.
+Timestamps are precomputed from distances along the existing GeoJSON paths;
+no new data files are created. Motion sits above the rail lines and below
+station markers, labels and county outlines. Pause preserves position, hidden
+tabs do not advance the clock, and unmount cancels animation and clears layers.

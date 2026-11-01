@@ -1,16 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Map } from "maplibre-gl";
 import type { MapboxOverlay } from "@deck.gl/mapbox";
 import { loadTransit, services, type TransitItem } from "../data/transit";
 import { transitLayers } from "../map/transitLayers";
+import { prepareTrainPaths } from "../map/trainMotion";
+import { useTrainMotion } from "../map/useTrainMotion";
 export default function TransitOverlay({
   map,
   overlay,
   enabled,
+  motionEnabled,
+  motionPaused,
 }: {
   map: Map;
   overlay: Pick<MapboxOverlay, "setProps">;
   enabled: boolean;
+  motionEnabled: boolean;
+  motionPaused: boolean;
 }) {
   const [items, setItems] = useState<TransitItem[]>([]);
   const [error, setError] = useState(false);
@@ -64,22 +70,12 @@ export default function TransitOverlay({
       media.removeEventListener("change", start);
     };
   }, [enabled]);
-  useEffect(() => {
-    overlay.setProps({
-      layers:
-        enabled && !error
-          ? transitLayers(
-              items,
-              hovered?.properties.id ?? selected?.properties.id ?? null,
-              pulse,
-              zoom,
-              setHovered,
-              setSelected,
-            )
-          : [],
-    });
-    return () => overlay.setProps({ layers: [] });
-  }, [overlay, enabled, error, items, hovered, selected, pulse, zoom]);
+  const trainPaths = useMemo(() => prepareTrainPaths(items), [items]);
+  const baseLayers = useMemo(() => enabled && !error ? transitLayers(
+    items, hovered?.properties.id ?? selected?.properties.id ?? null,
+    pulse, zoom, setHovered, setSelected,
+  ) : [], [enabled, error, items, hovered, selected, pulse, zoom]);
+  useTrainMotion(overlay, baseLayers, trainPaths, enabled && !error && motionEnabled, motionPaused);
   if (!enabled) return null;
   return (
     <section className="transit-panel" aria-label="Existing transit layer">
