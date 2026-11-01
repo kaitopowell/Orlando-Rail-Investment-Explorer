@@ -25,12 +25,16 @@ export default function MapView({
   countiesVisible,
   populationVisible,
   onPopulationStatus,
+  trainMotion,
+  trainPaused,
   transitVisible,
   employmentVisible,
 }: {
   busVisible: boolean;
   equityVisible: boolean;
   employmentVisible: boolean;
+  trainMotion: boolean;
+  trainPaused: boolean;
   transitVisible: boolean;
   sidebarOpen: boolean;
   countiesVisible: boolean;
@@ -268,6 +272,8 @@ export default function MapView({
           map={scene.map}
           overlay={scene.transitOverlay}
           enabled={transitVisible}
+          motionEnabled={trainMotion}
+          motionPaused={trainPaused}
         />
       )}
       </div>

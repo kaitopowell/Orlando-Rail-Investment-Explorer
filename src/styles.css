@@ -814,3 +814,22 @@ main .demand-comparison > .population-panel {
     top: calc(104px + (100dvh - 276px) / 3); bottom: auto; max-height: calc((100dvh - 276px) / 3);
   }
 }
+
+.train-motion-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border, #28383f);
+  font-size: 12px;
+}
+.train-motion-controls label { display: flex; align-items: center; gap: 8px; flex: 1; }
+.train-motion-controls input { accent-color: #59d2da; width: 18px; height: 18px; }
+.train-motion-controls button {
+  min-width: 60px; min-height: 36px; color: #c9e4e7;
+  background: #15242b; border: 1px solid #45616b; border-radius: 4px;
+}
+.train-motion-controls button:disabled { opacity: 0.5; }
+.train-motion-controls :focus-visible { outline: 2px solid #59d2da; outline-offset: 3px; }
+.train-motion-controls p { margin: 0; width: 100%; color: #a9bdc5; line-height: 1.5; }

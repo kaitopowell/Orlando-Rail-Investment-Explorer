@@ -9,6 +9,10 @@ export default function Sidebar({
   onEquityToggle,
   employmentVisible,
   onEmploymentToggle,
+  trainMotion,
+  trainPaused,
+  onTrainMotionToggle,
+  onTrainPauseToggle,
   transitVisible,
   onTransitToggle,
   open,
@@ -25,6 +29,10 @@ export default function Sidebar({
   onEquityToggle: () => void;
   employmentVisible: boolean;
   onEmploymentToggle: () => void;
+  trainMotion: boolean;
+  trainPaused: boolean;
+  onTrainMotionToggle: () => void;
+  onTrainPauseToggle: () => void;
   transitVisible: boolean;
   onTransitToggle: () => void;
   open: boolean;
@@ -179,6 +187,20 @@ export default function Sidebar({
                   aria-label="Existing transit"
                 />
               </label>
+              {transitVisible && (
+                <div className="train-motion-controls">
+                  <label>
+                    <input type="checkbox" checked={trainMotion} onChange={onTrainMotionToggle}
+                      aria-label="Illustrative train motion" aria-describedby="train-motion-note" />
+                    Train motion
+                  </label>
+                  <button type="button" disabled={!trainMotion} onClick={onTrainPauseToggle}
+                    aria-label={trainPaused ? "Play train motion" : "Pause train motion"}>
+                    {trainPaused ? "Play" : "Pause"}
+                  </button>
+                  <p id="train-motion-note">Illustrative train motion. Not real schedules.</p>
+                </div>
+              )}
               <label className="layer county-toggle">
                 <span className="layer-symbol" aria-hidden="true">●</span>
                 <span className="layer-text"><strong>Bus baseline (LYNX)</strong><small>Scheduled peak frequency · Wednesday</small></span>
