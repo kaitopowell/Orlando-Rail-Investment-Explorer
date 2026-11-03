@@ -1,6 +1,6 @@
 # SOL/R rail model: assumptions and implementation plan
 
-Status: **OD pipeline verified** end to end on 2026-10-30 (UTC), per the owner's Windows Python 3.14.6 run. **Stop-proximity coverage screen completed** (2026-11-01; [contract](../data/TRANSIT_COVERAGE_CONTRACT.md)); this does not establish usable transit trips. **Next milestone: baseline transit travel times from existing GTFS** (SunRail, Brightline and LYNX). Optimization assumptions remain DRAFT for review; optimization implementation still requires approval of this document.
+Status: **OD pipeline verified** end to end on 2026-10-30 (UTC), per the owner's Windows Python 3.14.6 run. **Stop-proximity coverage screen completed** (2026-11-01; [contract](../data/TRANSIT_COVERAGE_CONTRACT.md)); this does not establish usable transit trips. **Baseline travel-time script added; full run pending** (existing transit and driving via r5py). The script was not run here. Optimization assumptions remain DRAFT for review; optimization implementation still requires approval of this document.
 Decisions in section 9 were made by the project owner on 2026-10-29; remaining TBDs need cited sources.
 Location in repo: `docs/rail-model-assumptions.md`
 
@@ -52,12 +52,41 @@ Selection rule: greedy by **benefit gained per dollar**. Add the corridor with t
 | Population | ACS 2020-2024 and Kontur hexagons (modeled) | Context, accessibility cross-check | Loaded |
 | Equity indicators | ACS 2020-2024 (households with no vehicle, people below poverty, median household income) | Secondary equity score | Loaded |
 | Hexagon geography | H3 resolution 8 (verified from hexagon IDs, e.g. 8844a90e4dfffff) | Common geography for all layers and the model | Verified |
-| Existing transit | SunRail and Brightline GTFS, LYNX GTFS | Baseline travel times | Loaded as layers; routing use **TBD** |
+| Existing transit | SunRail and Brightline GTFS, LYNX GTFS | Baseline travel times | Loaded as layers; r5py baseline script added, full run pending |
 | Visitor demand | Hotel and attraction locations, airport passengers, visitor counts | Tourism scenario only | **TBD**: sources not yet chosen |
 | Rail construction costs | Published project cost datasets (for example NYU Marron Transit Costs Project, FTA filings) | Cost per mile by mode | **TBD**: cite exact table, year, and project list |
 | Candidate corridors | Existing rail rights-of-way, highway medians, major arterials, minus water and protected land | The set the algorithm chooses from | **TBD**: build and document |
 
 LODES origin-destination data is at census-block level. **Decision: aggregate to H3 resolution 8 hexagons**, consistent with the map. The verified OD pipeline assigns each block using its supplied Census internal point (`INTPTLAT20`, `INTPTLON20`), not a centroid; see the [OD contract](../data/LODES_OD_HEX8_CONTRACT.md). Tract-level ACS indicators are assigned to each hexagon through the census tract ID already carried by the app. Limitation: tract-level indicators do not vary between hexagons in the same tract.
+
+### Baseline travel times
+
+[`analysis/rail/baseline_times.py`](../analysis/rail/baseline_times.py) uses
+**r5py for both existing transit and driving**, with H3 resolution-8 hexagon
+centers as origins/destinations and street-network snapping. The supplied script
+is preserved unchanged and was **not run here**; the **full run is pending**.
+Its optional dependencies are separate in `requirements-routing.txt` (pins TBD),
+requiring Java 21+. The owner reports a Google Colab Linux/Python 3.13 test
+environment with `openjdk-21-jdk-headless`.
+
+Settings: **Wednesday 2026-11-04 08:00, America/New_York**; **120-minute** transit
+limit, **60-minute `CAR_MAX_TIME`** driving cap, and r5py's default **10-minute
+departure window** and **median travel time**. The script passes a naive local
+datetime and leaves the window/statistic at library defaults; confirm timezone
+and defaults when the routing environment is pinned. Driving times are
+free-flow, without congestion. A transit time slightly above 120 minutes can
+include walking legs. Blank times can mean a search cap or snapping failure,
+not proof that no route exists. Same-hexagon near-zero times need a modeling
+rule (**TBD**).
+
+The plan is to run **50-origin batches with saved progress**, resuming completed
+chunks only with unchanged inputs/settings. The delivered script defaults to
+a **20-origin sample**; the operator must set `SAMPLE_ORIGINS = None` for the
+future full run. Driving is the slow part: owner-reported timing tests were
+**about 5.5 seconds per origin for driving**, versus **under 1 second for transit**.
+These are runtime observations, not travel-time or coverage results, and were
+not reproduced here. See the [contract](../data/BASELINE_TRAVEL_TIMES_CONTRACT.md)
+for source dates, clip bounds, missing-value semantics and reconciliation.
 
 ### Industry and earnings: what the OD file can identify
 
@@ -117,7 +146,7 @@ Cost reference cities: Houston as a lower-cost light rail reference in a car-ori
 ### Modeling simplifications (state these on the limitations slide)
 
 - Travel time between areas is computed centroid to centroid.
-- Drivers are assumed to switch to rail only where rail beats the existing transit option. Driving time is not modeled in v1, so benefit estimates describe time saved for transit users and potential users, not forecast ridership.
+- Transit benefits are not forecast ridership. Driving reference times are now planned through the r5py baseline script; the full run remains pending. Free-flow driving excludes congestion and can make rail look worse in comparisons.
 - No induced development or land-use change is modeled.
 - Costs are order-of-magnitude benchmarks, not engineering estimates.
 - Greedy selection is not guaranteed to be globally optimal.
