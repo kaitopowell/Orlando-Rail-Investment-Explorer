@@ -1,0 +1,10 @@
+# Optional routing environment only; version pins are TBD.
+# r5py requires Java 21 or newer.
+# User-reported script test run: Google Colab (Linux, Python 3.13),
+# with the Java package openjdk-21-jdk-headless. Full run pending.
+# Keep these separate from requirements.txt and the CI/Windows OD setup.
+h3
+r5py
+geopandas
+shapely
+pandas

@@ -317,3 +317,29 @@ center distances 843.34566–912.55233 m. K=0 covers one whole cell, not zero wa
 distance; K=1 adds neighbors and is not a half-mile walking catchment. These
 geometric results do not establish usable transit connections or routed walks.
 The OD reference, stop inputs, original results and frontend remain unchanged.
+
+## Baseline routing inputs
+
+Planned consumer: `analysis/rail/baseline_times.py`; planned output:
+`data/processed/baseline_travel_times.csv.gz`. **Script added; full run pending.
+The script was not run here.** See the [baseline travel-times contract](../data/BASELINE_TRAVEL_TIMES_CONTRACT.md)
+for columns, settings, batching and limitations. The owner supplied the routing
+snapshot details; this change does not download or verify the raw files.
+
+| Source / routing filename | File date / validity | Existing source URL and historical archive hash |
+| --- | --- | --- |
+| LYNX — `data/raw/gtfs/lynx.zip` | Dated 2026-10-16; valid 2026-10-02 to 2026-12-12 | http://gtfsrt.golynx.com/gtfsrt/google_transit.zip; existing archive `data/raw/lynx_gtfs_2026-10-16.zip`, SHA1 `951d151b999633151eba05207b7ca245e6f9f21c` |
+| SunRail — `data/raw/gtfs/sunrail.zip` | Dated 2026-10-13; valid 2025-12-01 to 2026-12-31 | https://corporate.sunrail.com/gtfs/google_transit.zip; existing archive `data/raw/sunrail_gtfs_2026-10-13.zip`, SHA1 `64321ecbdaa919208e097dddeebda4d0718ecf7c` |
+| Brightline — `data/raw/gtfs/brightline.zip` | Dated 2026-10-13; valid 2026-10-12 to 2027-08-09 | http://feed.gobrightline.com/bl_gtfs.zip, previously obtained through Transitland; existing archive `data/raw/brightline_gtfs_2026-10-13.zip`, SHA1 `5f0efcb0501d829cadc386953c8c1c3d49367d91` |
+| OpenStreetMap Florida extract from Geofabrik — clipped file `data/raw/osm/orlando-region.osm.pbf` | Data timestamp 2026-11-01; download date TBD | URL, original extract filename and source/clipped-file hashes **TBD** |
+
+The GTFS URLs and SHA1 strings above are copied from the existing repository
+entries, not newly verified. Hashes of the script's `data/raw/gtfs/` aliases are
+**TBD** until their byte identity with those archives is checked. Existing
+license notes and Transitland attribution above continue to apply. Brightline's
+feed includes an “Event Train” agency that has not been separated out.
+
+The Florida extract was clipped with **osmium** to
+**-82.1577,27.4431,-80.6732,29.4605** (west, south, east, north), the hexagon extent
+plus **0.2 degrees**. Routing beyond that box is not possible. Raw inputs remain
+ignored by `data/raw/.gitignore`; no raw, chunk or sample output is committed.
