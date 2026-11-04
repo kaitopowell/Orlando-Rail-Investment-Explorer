@@ -1,129 +1,174 @@
-# Baseline travel times: planned output contract
+# Baseline travel times: computed output contract
 
-**Status: script added; full run not completed.** No full-run routing results
-are available. The script was not run or imported in this sandbox. The owner
-reports testing it in Google Colab (Linux, Python 3.13) with
-`openjdk-21-jdk-headless`. Test observations below are supplied context, not
-full-run findings or independently reproduced results.
+**Status: baseline computed in Google Colab (Linux, Python 3.13), as reported by
+the owner.** The committed CSV was independently audited here on 2026-11-04;
+**the routing script was not run or imported here**. Reading the output verifies
+its contents, not reproduction of the routing computation or its provenance.
 
-## File and row meaning
+## File and schema
 
-Planned output: `data/processed/baseline_travel_times.csv.gz`, a gzip-compressed
-CSV with one row for each home–work pair in the authoritative, uncompressed
-`data/processed/lodes_od_hex8_2023.csv`. The complete output must contain exactly
-**591,177 pairs** and **1,006,088 jobs**. These are required input reconciliation
-totals, not results of a completed routing run.
+File: `data/processed/baseline_travel_times.csv.gz` (gzip CSV).
+Verified SHA-256:
+`2544ef1fdefae60565d1ca1c0b8ca093292b8b7cb31237f7132594e3a1237c33`.
+The file is read-only for this change: no filtering, editing or regeneration.
 
 | Column | Meaning | Type / units |
 | --- | --- | --- |
 | `h_hex` | Home H3 resolution-8 cell | String |
 | `w_hex` | Work H3 resolution-8 cell | String |
-| `S000` | Jobs for this pair, preserved from the LODES flows file | Integer jobs, not people |
-| `transit_min` | Existing-transit travel time between hexagon centers | Float minutes; blank allowed |
-| `car_min` | Driving reference time between hexagon centers | Float minutes; blank allowed |
+| `S000` | Jobs for the pair, from the LODES flows file | Integer jobs, not unique people |
+| `transit_min` | Existing-transit travel time | Float minutes; blank when unavailable |
+| `car_min` | Driving reference travel time | Float minutes; blank when unavailable |
 
-A blank `transit_min` means no transit trip returned within the 120-minute
-limit, or an endpoint could not be placed (snapped) on the street network.
-A blank `car_min` means no drive returned within `CAR_MAX_TIME` (60 minutes),
-or the same snapping failure. **A blank alone does not establish that no route
-exists** and must not automatically be classified as no transit baseline.
-Transit times slightly above 120 minutes can appear because of walking legs.
+Verified against `data/processed/lodes_od_hex8_2023.csv`: **591,177 rows**,
+**1,006,088 jobs**, **zero duplicate pairs**, **zero missing or extra pairs** and
+**zero changed per-pair job counts**. There are **5,202 distinct home cells** and
+**4,464 distinct work cells**; all H3 identifiers are valid at resolution 8.
+No nonblank time is negative or nonfinite. The supplied full-run script asserts
+row and job totals against the input before writing; the independent file audit
+also checked exact pair membership and duplicates.
 
-Same-hexagon home–work pairs get near-zero times. Their treatment in the model
-is **TBD**; these must not silently stand in for actual door-to-door journeys.
+## Measured contents (before model filtering)
 
-## Script and environment
+| Measure | Pairs | Jobs |
+| --- | ---: | ---: |
+| Transit time present | 154,991 | 347,462 |
+| Car time present | 574,400 | 986,479 |
+| Same home/work hexagon | 1,478 | 4,487 |
+| No car time | 16,777 | 19,609 |
+| Transit time strictly greater than 120 minutes | 435 | 653 |
+| Car time strictly greater than 60 minutes | 360 | 379 |
+| Transit/car ratio ≤1.5, with both times and car time >0 | 56 | 96 |
 
-Entry point: [`analysis/rail/baseline_times.py`](../analysis/rail/baseline_times.py).
-The supplied script is preserved unchanged. Install routing dependencies from
-`analysis/rail/requirements-routing.txt` in a separate routing environment;
-all versions are unpinned and **pins are TBD**. Java 21 or newer is required for
-r5py. Routing dependencies are not added to `analysis/rail/requirements.txt`,
-imported by new tests, or executed by CI. The existing Windows OD setup remains
-separate from this Colab/Java routing environment.
+Transit-time coverage is **34.53594516583043%** of jobs (**34.5%** rounded to one
+decimal). Car-time coverage is **98.05096572069242%** (**98.1%** rounded).
+**Discrepancy:** the supplied summary says **98.0%**; its job count is correct,
+but conventional one-decimal rounding gives 98.1%. This has not been silently
+substituted or used to change the data.
 
-The delivered script defaults to `SAMPLE_ORIGINS = 20`, `SAMPLE_SEED = 1`,
-`CHUNK = 50` origins and `RESTRICT_DESTINATIONS = True`. It routes only to work
-hexagons needed by each batch. For a future full run, the operator must set
-`SAMPLE_ORIGINS = None`; no such change or run was made here. Sample mode does
-not write the planned final output. Full mode asserts that the output row and
-job totals equal the loaded flows totals before writing the final CSV. It does
-not hard-code the expected totals above or separately assert unique pair IDs;
-the full-run review must check exact pair membership against the reference.
+The observed maxima are **179 minutes transit** and **85 minutes car**.
+The configured **120-minute transit and 60-minute driving limits are search
+limits, not strict output cutoffs**. Analysis must apply its own cutoffs while
+preserving this source file.
 
-The script tries `lodes_od_hex8_2023.csv.gz` before `.csv` if both exist. The
-uncompressed `.csv` remains authoritative: before a future run, ensure any
-compressed alternative contains exactly the same reference flows. This task
-does not create, rename, recompress or modify either input.
+Among **153,357 pairs** with both times and **positive car time**, the unweighted
+per-pair transit/car ratio has inclusive, linearly interpolated quartiles
+**4.916666666666667 / 6.111111111111111 / 8.11111111111111**, minimum **1.0** and
+maximum **40.0**. These round to the supplied **4.9 / 6.1 / 8.1**. The **1.5**
+ratio above is a descriptive check value, **not a model competitiveness threshold**.
+There are another **1,486 pairs (4,497 jobs)** with both times but zero car time;
+the ratio is undefined for them, so they are excluded from ratio statistics,
+not silently assigned a finite ratio. These statistics precede search-limit,
+suspected-placement and same-hexagon model rules.
 
-Batches and `run_config.json` are saved in
-`data/processed/baseline_chunks_test/` for samples and
-`data/processed/baseline_chunks/` for a full run. Existing batch files are skipped
-on resume, and recorded setting differences cause an exit. The saved config is
-not a complete provenance manifest: it does not hash source files or record all
-library defaults. Resume only with unchanged inputs, environment and settings;
-archive incompatible progress separately before starting a new run. Chunk and
-sample outputs are ignored by Git and are not committed.
+## Blank times and the cell-count discrepancy
 
-## Routing settings (assumptions)
+A blank time means the router did not return a time. Search limits or failure
+to place an endpoint on the street network are possible explanations;
+**a blank alone does not mean no route exists**. Causes are not encoded in this
+CSV and were not confirmed by rerunning the router.
 
-- Departure: **Wednesday 2026-11-04 at 08:00, America/New_York**, within the
-  supplied service-date ranges. The script passes a naive local `datetime`;
-  confirm the feed/network timezone in the routing environment, rather than
-  treating it as UTC.
-- Transit limit: **120 minutes** (`MAX_TIME`).
-- Driving cap: **60 minutes** (`CAR_MAX_TIME`, passed as `max_time_driving`);
-  the common routing call also passes the 120-minute `max_time`.
-- r5py default **10-minute departure window** and **median travel time**. The
-  script leaves these at library defaults; confirm them when pins are chosen.
-- Origins and destinations: H3 resolution-8 **hexagon centers**, snapped to the
-  street network, approximating door-to-door travel.
-- r5py is used for both existing transit and driving. Driving is free-flow,
-  with no congestion.
+Build these lists from the **unfiltered CSV**, before applying model time limits.
+A returned car time above 60 minutes still counts as present for this diagnostic.
 
-## Input provenance
+The corrected description is **98 role entries across 86 distinct hexagons**
+(**66 as home ends, 32 as work ends, 12 in both lists**):
 
-The supplied routing file names and provenance dates are recorded below.
-URLs and existing historical feed hashes are documented in
-[`docs/DATA_SOURCES.md`](../docs/DATA_SOURCES.md#baseline-routing-inputs).
-Hashes for the routing aliases and OSM files remain **TBD** until those exact
-files are checked; historical archive hashes are not verification of an alias.
+- **66 home-role cells** have no nonblank car time in any row where they are home.
+- **32 work-role cells** have no nonblank car time in any row where they are work.
+- The sets overlap by **12 IDs**: **98 role entries across 86 distinct hexagons**.
+- **61 distinct cells** have no car time anywhere, in either role. Thus “no car
+  time in any pair” is also different from membership in the role-specific sets.
 
-| Input expected by script | Snapshot / service validity |
+Excluding a row when its home belongs to the 66-cell home set **or** its work
+belongs to the 32-cell work set affects **2,815 pairs (3,863 jobs)**, matching the
+supplied job total. Excluding either endpoint whenever it belongs to the union
+of 86 cells instead affects **3,571 pairs (4,904 jobs)**. These are different
+rules with different scopes. The owner selected the **role-specific exclusion
+rule**: exclude home ends in
+the 66-cell list and work ends in the 32-cell list, affecting **3,863 jobs**.
+The broader union rule is not adopted; it is shown only to explain the audit
+discrepancy.
+
+These cells are **suspected placement failures, not confirmed unplaced cells**.
+Other blank car times are suspected to reflect journeys beyond the search limit,
+but that explanation is also unconfirmed. A cell with only long journeys can
+also satisfy a no-car-time test. Same-hexagon pairs have near-zero times and
+need a model rule (**TBD**); they do not represent exact door-to-door access.
+
+## Routing settings and provenance
+
+The following settings are documented by the supplied script and owner, not
+recoverable from the output CSV alone:
+
+- Departure: **Wednesday 2026-11-04 08:00**, intended as **America/New_York** local
+  time. The script uses a naive datetime; feed/network timezone is not recorded
+  in this output.
+- r5py defaults: **10-minute departure window**, **median travel time**. Versions
+  are unpinned; confirm defaults when choosing pins.
+- H3 resolution-8 centers as origins/destinations, with network snapping.
+- Transit `max_time`: **120 minutes**; car `max_time`: **60 minutes**. The supplied
+  revised script passes `CAR_MAX_TIME` as `max_time` for driving.
+- **50 origins per batch**, implying **105 batches** for the verified 5,202 homes.
+  This arithmetic does not independently verify the owner's actual batch logs.
+- OpenStreetMap Florida extract from Geofabrik, clipped with **osmium** to
+  **-82.1577,27.4431,-80.6732,29.4605** (west, south, east, north).
+  **Map data timestamp: TBD** for this completed run; the earlier planned-run
+  date is not treated as verified provenance of this output.
+
+| Input expected by script | Supplied snapshot |
 | --- | --- |
-| `data/raw/gtfs/lynx.zip` | File dated 2026-10-16; valid 2026-10-02 to 2026-12-12 |
-| `data/raw/gtfs/sunrail.zip` | File dated 2026-10-13; valid 2025-12-01 to 2026-12-31 |
-| `data/raw/gtfs/brightline.zip` | File dated 2026-10-13; valid 2026-10-12 to 2027-08-09 |
-| `data/raw/osm/orlando-region.osm.pbf` | OpenStreetMap Florida extract from Geofabrik; data timestamp 2026-11-01; clipped with osmium |
-| `data/processed/lodes_od_hex8_2023.csv` | Authoritative 2023 LODES OD reference; see [OD contract](LODES_OD_HEX8_CONTRACT.md) |
+| `data/raw/gtfs/lynx.zip` | File dated 2026-10-16; previously documented validity 2026-10-02 to 2026-12-12 |
+| `data/raw/gtfs/sunrail.zip` | File dated 2026-10-13; previously documented validity 2025-12-01 to 2026-12-31 |
+| `data/raw/gtfs/brightline.zip` | File dated 2026-10-13; previously documented validity 2026-10-12 to 2027-08-09 |
+| `data/raw/osm/orlando-region.osm.pbf` | Clipped Florida extract; data timestamp, original filename, download date, URL and hashes TBD |
 
-The osmium clip box is **-82.1577,27.4431,-80.6732,29.4605**
-(west, south, east, north), the hexagon extent plus **0.2 degrees**.
-The original Florida-extract filename, source URL, download date and hashes
-are **TBD**; the data timestamp is not a claimed download date.
-No source files were downloaded or inspected for this change. The script's
-calendar check uses `calendar.txt` range endpoints; it is not a full service
-exception or timezone audit.
+Existing feed URLs and historical archive hashes are retained in
+[DATA_SOURCES.md](../docs/DATA_SOURCES.md#baseline-routing-inputs). Hashes for the
+actual routing aliases remain TBD; those files were not inspected here.
 
-## Limitations and pending decisions
+## Script, dependencies and saved progress
 
-- Driving times are free-flow without congestion, understating driving time
-  and making rail look worse in comparisons.
-- Schedules are a fall-2026 snapshot; the LYNX feed ends **2026-12-12**.
-- Only one departure setting is represented, with the default departure window;
-  this is not an all-day, weekend or seasonal analysis.
-- Brightline's feed includes an **“Event Train”** agency that has not been
-  separated out. Brightline is intercity service.
-- Some centers could not be snapped to the street network: the owner reports
-  **about 0.9% of jobs in a 100-origin test**. This is a test limitation only;
-  the full-run share has **not** been measured and must not be extrapolated.
-- Center-to-center travel approximates door-to-door travel, not exact household
-  or workplace access. The same-hexagon rule is **TBD**.
+[`analysis/rail/baseline_times.py`](../analysis/rail/baseline_times.py) is the
+supplied completed-run script, unchanged except for the permitted header.
+It defaults to **`SAMPLE_ORIGINS = None`** (full run). Its Colab-specific
+**`DRIVE = /content/drive/MyDrive/sol_r`** must exist; references to “Cell 2” and
+“Cell 3” refer to the owner's notebook, not repository setup commands.
+It saves chunks/config on Drive under `baseline_chunks/` (or
+`baseline_chunks_test/` in sample mode), skips existing chunks, and copies the
+completed output to Drive as well as the repository-relative output path.
+Do not mistake the Drive path for a portable local path.
+
+`run_config.json` rejects recorded setting changes but is not a complete input
+hash or environment manifest. Resume only with unchanged inputs/settings. The
+script prefers the compressed OD input if both `.csv.gz` and `.csv` exist;
+verify its content matches the authoritative uncompressed flows before any
+future rerun. This task does not run or alter either dataset.
+
+Optional dependencies are in `analysis/rail/requirements-routing.txt`: h3,
+r5py, geopandas, shapely and pandas, **unpinned; pins TBD**. Java **21+** is
+required. The owner reports Google Colab Linux/Python **3.13** with
+**`openjdk-21-jdk-headless`**. The CI/Windows OD requirements and CI workflow
+are unchanged; no new tests import r5py.
+
+Owner-reported performance: driving roughly **4–5 seconds per origin**, transit
+**under 10 seconds per batch**, and **about 6 hours** for the full run on free
+Google Colab. The driving cap reduced runtime only slightly. These timings
+cannot be verified from the CSV and were not measured here.
+
+## Limitations and model handling
+
+- Free-flow driving omits congestion, making rail look worse in comparisons.
+- One departure setting and a fall-2026 schedule snapshot; LYNX ends 2026-12-12.
+- Hexagon centers approximate door-to-door access; same-hexagon rule TBD.
+- Brightline's “Event Train” agency was not separated out; Brightline is intercity.
 - Routing outside the clipped box is impossible, including useful detours.
-- Walking legs can produce a transit time slightly above 120 minutes.
-- Blank times conflate search limits and snapping failures; they alone cannot
-  support a claim of no route. LODES weights count jobs, not unique people.
-
-The full run, reconciliation, output validation, dependency pins and
-same-hexagon modeling rule remain pending. No full-run result statistics are
-reported here.
+- Analysis will treat transit >120 minutes as no option and car >60 minutes as
+  no usable drive time, without editing the stored values.
+- Exclude from time comparisons and report rows whose home is
+  in the 66-cell no-car-home set or whose work is in the 32-cell no-car-work set.
+  This affects 3,863 jobs and uses 98 role entries across 86 distinct hexagons
+  (66 home, 32 work, 12 in both lists). Missingness is not proof of placement
+  failure.
+- The 1.5 check value is not an adopted competitiveness threshold, and these
+  descriptive ratios are not a forecast of ridership or distinct commuters.

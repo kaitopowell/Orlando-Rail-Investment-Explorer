@@ -44,7 +44,12 @@ H3-ring coverage scenarios and reconciles all job/earnings columns.
 See [the coverage contract](../data/TRANSIT_COVERAGE_CONTRACT.md) for Windows
 commands, actual results, schema inspection and assumptions.
 `test_rail_coverage.py` uses tiny offline synthetic fixtures. Both-end stop
-proximity is not a verified transit connection; GTFS routing remains future work.
+proximity is not a verified transit connection. The separately computed r5py
+transit/driving baseline is documented in the
+[baseline travel-times contract](../data/BASELINE_TRAVEL_TIMES_CONTRACT.md);
+its stored CSV was audited here without rerunning routing. The supplied Colab
+script is `rail/baseline_times.py`, with optional, unpinned dependencies in
+`rail/requirements-routing.txt` and a Colab-specific Google Drive path.
 
 `rail/coverage_sensitivity.py` runs the separate K=0/1 and 15/30-minute grid,
 reuses the original coverage functions, and checks complete PR #34 baseline
