@@ -318,28 +318,38 @@ distance; K=1 adds neighbors and is not a half-mile walking catchment. These
 geometric results do not establish usable transit connections or routed walks.
 The OD reference, stop inputs, original results and frontend remain unchanged.
 
-## Baseline routing inputs
+## Baseline routing inputs and computed output
 
-Planned consumer: `analysis/rail/baseline_times.py`; planned output:
-`data/processed/baseline_travel_times.csv.gz`. **Script added; full run pending.
-The script was not run here.** See the [baseline travel-times contract](../data/BASELINE_TRAVEL_TIMES_CONTRACT.md)
-for columns, settings, batching and limitations. The owner supplied the routing
-snapshot details; this change does not download or verify the raw files.
+Consumer: `analysis/rail/baseline_times.py`. The owner completed a Colab run;
+`data/processed/baseline_travel_times.csv.gz` was audited read-only here on
+2026-11-04. **The routing script was not run or imported here.** Verified SHA-256:
+`2544ef1fdefae60565d1ca1c0b8ca093292b8b7cb31237f7132594e3a1237c33`.
+The [contract](../data/BASELINE_TRAVEL_TIMES_CONTRACT.md) records columns, exact
+pair/job reconciliation, measured times, search-limit exceedances and limitations.
 
-| Source / routing filename | File date / validity | Existing source URL and historical archive hash |
+| Source / routing filename | File date / previously documented validity | Existing source URL and historical archive hash |
 | --- | --- | --- |
 | LYNX — `data/raw/gtfs/lynx.zip` | Dated 2026-10-16; valid 2026-10-02 to 2026-12-12 | http://gtfsrt.golynx.com/gtfsrt/google_transit.zip; existing archive `data/raw/lynx_gtfs_2026-10-16.zip`, SHA1 `951d151b999633151eba05207b7ca245e6f9f21c` |
 | SunRail — `data/raw/gtfs/sunrail.zip` | Dated 2026-10-13; valid 2025-12-01 to 2026-12-31 | https://corporate.sunrail.com/gtfs/google_transit.zip; existing archive `data/raw/sunrail_gtfs_2026-10-13.zip`, SHA1 `64321ecbdaa919208e097dddeebda4d0718ecf7c` |
 | Brightline — `data/raw/gtfs/brightline.zip` | Dated 2026-10-13; valid 2026-10-12 to 2027-08-09 | http://feed.gobrightline.com/bl_gtfs.zip, previously obtained through Transitland; existing archive `data/raw/brightline_gtfs_2026-10-13.zip`, SHA1 `5f0efcb0501d829cadc386953c8c1c3d49367d91` |
-| OpenStreetMap Florida extract from Geofabrik — clipped file `data/raw/osm/orlando-region.osm.pbf` | Data timestamp 2026-11-01; download date TBD | URL, original extract filename and source/clipped-file hashes **TBD** |
+| OpenStreetMap Florida extract from Geofabrik — clipped file `data/raw/osm/orlando-region.osm.pbf` | Data timestamp **TBD** for the completed run; download date TBD | URL, original extract filename and source/clipped-file hashes **TBD** |
 
-The GTFS URLs and SHA1 strings above are copied from the existing repository
-entries, not newly verified. Hashes of the script's `data/raw/gtfs/` aliases are
-**TBD** until their byte identity with those archives is checked. Existing
-license notes and Transitland attribution above continue to apply. Brightline's
-feed includes an “Event Train” agency that has not been separated out.
+The earlier planned-run map date is not verified provenance for this completed
+output. The GTFS URLs and historical SHA1 values above already appear in the
+repository; hashes of the actual `data/raw/gtfs/` routing aliases remain **TBD**.
+No raw files were downloaded or independently checked. Existing license notes
+and Transitland attribution above continue to apply. Brightline's “Event Train”
+agency was not separated out.
 
-The Florida extract was clipped with **osmium** to
-**-82.1577,27.4431,-80.6732,29.4605** (west, south, east, north), the hexagon extent
-plus **0.2 degrees**. Routing beyond that box is not possible. Raw inputs remain
-ignored by `data/raw/.gitignore`; no raw, chunk or sample output is committed.
+The supplied clip was made with **osmium** at
+**-82.1577,27.4431,-80.6732,29.4605** (west, south, east, north); routing outside
+it is impossible. Colab progress is saved at the script's `DRIVE` path; raw
+inputs and repository chunk/sample paths remain ignored. No chunks or sample
+outputs are committed.
+
+Audit discrepancies are explicit in the contract: car-time coverage rounds to
+**98.1%, not 98.0%**; the corrected count is **98 role entries across 86 distinct hexagons
+(66 as home ends, 32 as work ends, 12 in both lists)**. The owner selected the
+role-specific exclusion, accounting for **3,863 jobs**;
+either-endpoint exclusion across the union would account for **4,904 jobs**.
+Placement failure remains a suspicion, not a confirmed cause of missing times.

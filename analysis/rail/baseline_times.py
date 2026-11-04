@@ -1,18 +1,21 @@
+# This script was run in Google Colab (Linux, Python 3.13).
+# DRIVE is a Colab-specific Google Drive path.
 # analysis/rail/baseline_times.py
 # Door-to-door travel times (existing transit and driving) between hexagons that have
-# commuters. Progress is saved per batch, so an interrupted run can resume.
+# commuters. Progress is saved per batch on Drive, so an interrupted run can resume.
 
 import csv
 import datetime
 import io
 import json
 import os
+import shutil
 import time
 import zipfile
 from pathlib import Path
 
 # ---- inputs ----
-# clipped to a box around the hexagons: -82.1577,27.4431,-80.6732,29.4605
+# map clipped to a box around the hexagons: -82.1577,27.4431,-80.6732,29.4605
 OSM_PBF = Path("data/raw/osm/orlando-region.osm.pbf")
 GTFS_FILES = [
     Path("data/raw/gtfs/lynx.zip"),        # file dated 2026-10-16
@@ -25,19 +28,20 @@ FLOWS = next(
     Path("data/processed/lodes_od_hex8_2023.csv.gz"),
 )
 OUT = Path("data/processed/baseline_travel_times.csv.gz")
+DRIVE = Path("/content/drive/MyDrive/sol_r")
 
 # ---- assumptions (document these) ----
 DEPARTURE = datetime.datetime(2026, 11, 4, 8, 0)   # a Wednesday morning peak, inside all three feeds
 MAX_TIME = datetime.timedelta(minutes=120)         # transit trips longer than this count as "no option"
-CAR_MAX_TIME = datetime.timedelta(minutes=60)      # driving search cap; longer drives are left blank
+CAR_MAX_TIME = datetime.timedelta(minutes=60)      # driving cap; longer drives are left blank
 
 # ---- run settings ----
 CHUNK = 50                    # origins per batch (one saved file per batch)
-SAMPLE_ORIGINS = 20           # random test sample; set to None for the full run
-SAMPLE_SEED = 1               # same seed as the earlier test, so timings are comparable
+SAMPLE_ORIGINS = None         # None = FULL RUN; a number (for example 20) = quick test
+SAMPLE_SEED = 1
 RESTRICT_DESTINATIONS = True  # only route to the work hexagons each batch needs
 
-CHUNK_DIR = Path("data/processed/baseline_chunks_test" if SAMPLE_ORIGINS else "data/processed/baseline_chunks")
+CHUNK_DIR = DRIVE / ("baseline_chunks_test" if SAMPLE_ORIGINS else "baseline_chunks")
 
 
 def gtfs_date_range(path):
@@ -49,15 +53,17 @@ def gtfs_date_range(path):
     return min(r["start_date"] for r in rows), max(r["end_date"] for r in rows)
 
 
-# 0. make sure Java can be found (the usual Colab install location)
+# 0. Java location in Colab, and a check that Drive is connected
 colab_java = "/usr/lib/jvm/java-21-openjdk-amd64"
 if "JAVA_HOME" not in os.environ and os.path.isdir(colab_java):
     os.environ["JAVA_HOME"] = colab_java
+if not DRIVE.exists():
+    raise SystemExit("Google Drive is not connected. Run Cell 2 first.")
 
 # 1. make sure every input exists
 missing = [str(p) for p in [OSM_PBF, FLOWS, *GTFS_FILES] if not p.exists()]
 if missing:
-    raise SystemExit("Missing input files:\n  " + "\n  ".join(missing))
+    raise SystemExit("Missing input files (rerun Cells 2 and 3):\n  " + "\n  ".join(missing))
 
 import geopandas as gpd
 import h3
@@ -111,11 +117,11 @@ print("network built in", round(time.time() - t0), "seconds")
 pairs = flows[["h_hex", "w_hex", "S000"]].rename(columns={"h_hex": "from_id", "w_hex": "to_id"})
 
 
-def run(modes, label, origin_chunk, dests, **extra):
+def run(modes, label, origin_chunk, dests, max_time=MAX_TIME, **extra):
     """Travel times (minutes) from these origins to these destinations; unreachable pairs are absent."""
     ttm = r5py.TravelTimeMatrix(
         network, origins=origin_chunk, destinations=dests, transport_modes=modes,
-        departure=DEPARTURE, max_time=MAX_TIME, snap_to_network=True, **extra,
+        departure=DEPARTURE, max_time=max_time, snap_to_network=True, **extra,
     )
     ttm = ttm.rename(columns={"travel_time": label})   # travel_time is already minutes (float)
     return ttm[["from_id", "to_id", label]]
@@ -138,7 +144,7 @@ for n in range(n_chunks):
     transit = run([r5py.TransportMode.TRANSIT], "transit_min", chunk, dests)
     t_transit = time.time() - t
     t = time.time()
-    car = run([r5py.TransportMode.CAR], "car_min", chunk, dests, max_time_driving=CAR_MAX_TIME)
+    car = run([r5py.TransportMode.CAR], "car_min", chunk, dests, max_time=CAR_MAX_TIME)
     t_car = time.time() - t
 
     block = block.merge(transit, on=["from_id", "to_id"], how="left").merge(car, on=["from_id", "to_id"], how="left")
@@ -169,11 +175,12 @@ if SAMPLE_ORIGINS is None:
     assert jobs == total_jobs, "job count does not match the flows file"
     print("reconciles with the flows file")
     result.to_csv(OUT, index=False)
-    print("saved", OUT)
+    shutil.copy(OUT, DRIVE / OUT.name)     # safe copy on Drive
+    print("saved", OUT, "and a copy in", DRIVE)
     try:
         from google.colab import files
         files.download(str(OUT))
-    except ImportError:
-        pass
+    except Exception:
+        print("auto-download skipped; get the file from Drive instead")
 else:
     print("test sample only; nothing written to", OUT)
