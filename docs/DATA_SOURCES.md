@@ -378,3 +378,28 @@ See the [candidate contract](../data/CANDIDATE_CONNECTIONS_CONTRACT.md) for exac
 selection/missingness rules and the flagged WAC hotspot discrepancy (the supplied
 `8844a9160dfffff` has 4,252 WAC jobs; the largest WAC cell,
 `8844a9166bfffff`, has 84,289). Values are not corrected or redistributed.
+
+
+## Center-level commute demand baseline
+
+`analysis/rail/center_od.py` aggregates the read-only
+`data/processed/baseline_travel_times.csv.gz` into the existing PR #42 candidate
+centers using their listed H3 membership and nearest-centroid assignment within
+3, 5 and 8 great-circle km (default 5 km; assumptions). No downloads or routing
+are performed. The baseline SHA-256 is checked against
+`2544ef1fdefae60565d1ca1c0b8ca093292b8b7cb31237f7132594e3a1237c33`.
+Existing baseline and candidate files remain byte-identical.
+
+New outputs: `data/processed/center_od_baseline.csv.gz` (directed center-pair
+job totals and per-mode weighted times), `center_od_unassigned.csv` (unassigned
+roles at each radius), and `center_od_sensitivity.json` (coverage, exclusions,
+concentration and top pairs). See the [center OD contract](../data/CENTER_OD_BASELINE_CONTRACT.md)
+for schemas, source hashes, exact results, assumptions and limitations.
+
+Time averages apply the existing inclusive 120-minute transit / 60-minute car
+rules and role-specific exclusion of 66 home-role and 32 work-role cells
+(98 entries across 86 distinct cells, 12 in both lists; 3,863 jobs). Excluded
+jobs stay in reconciled job totals and are separately reported. All radii
+reconcile to 591,177 original pairs and 1,006,088 jobs. These are aggregated
+stored times, not rerouted center-centroid trips, unique workers, ridership
+or competitiveness scores. No competitiveness threshold is selected.

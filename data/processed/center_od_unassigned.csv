@@ -1,0 +1,10 @@
+assign_max_km,category,pair_count,jobs,excluded_pair_count,excluded_jobs
+3,both_unassigned,32689,39550,395,470
+3,home_unassigned,141590,227008,817,1061
+3,work_unassigned,43765,51070,620,751
+5,both_unassigned,13060,15992,74,74
+5,home_unassigned,79679,120466,537,647
+5,work_unassigned,22757,26026,75,77
+8,both_unassigned,3479,4128,36,36
+8,home_unassigned,34995,47690,272,316
+8,work_unassigned,9309,10470,31,31
