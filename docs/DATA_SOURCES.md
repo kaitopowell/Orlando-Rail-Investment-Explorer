@@ -353,3 +353,28 @@ Audit discrepancies are explicit in the contract: car-time coverage rounds to
 role-specific exclusion, accounting for **3,863 jobs**;
 either-endpoint exclusion across the union would account for **4,904 jobs**.
 Placement failure remains a suspicion, not a confirmed cause of missing times.
+
+## Candidate activity centers and connections
+
+`analysis/rail/centers.py` reads only the supplied Kontur H3 population GeoJSON
+and `lodes_wac_blocks_2023.csv`. The WAC internal-point coordinates support H3
+resolution-8 aggregation, so **no OD fallback is used**. No existing transit or
+plan geometry, stop data or published proposals enter the pipeline.
+
+Assumptions: independently select `ceil(0.05 * source_cell_count)` cells for jobs
+and population, break ties by H3 ID, cluster their union using H3 k=1 adjacency,
+use job-weighted spherical centroids (population fallback), and nominate three
+nearest centers within 40 great-circle km, deduplicating undirected pairs.
+Outputs are the new `candidate_centers.geojson`, `candidate_connections.geojson`
+and `candidate_connections_summary.json` under `data/processed/`.
+
+The actual run produces **146 centers and 270 connections**, with **63.16335%**
+of represented workplace jobs and **31.40994%** of modeled population inside
+centers; components have **136, 5 and 5 centers**, with no degree-zero centers.
+These illustrative straight lines are **not routes or proposals** and ignore
+water/terrain. No costs, speeds or ridership are implied. The summary records
+source hashes, schema findings, thresholds, percentiles and component membership.
+See the [candidate contract](../data/CANDIDATE_CONNECTIONS_CONTRACT.md) for exact
+selection/missingness rules and the flagged WAC hotspot discrepancy (the supplied
+`8844a9160dfffff` has 4,252 WAC jobs; the largest WAC cell,
+`8844a9166bfffff`, has 84,289). Values are not corrected or redistributed.
