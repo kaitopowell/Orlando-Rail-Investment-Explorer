@@ -833,3 +833,19 @@ main .demand-comparison > .population-panel {
 .train-motion-controls button:disabled { opacity: 0.5; }
 .train-motion-controls :focus-visible { outline: 2px solid #59d2da; outline-offset: 3px; }
 .train-motion-controls p { margin: 0; width: 100%; color: #a9bdc5; line-height: 1.5; }
+
+/* Candidate controls remain in the scrollable sidebar; no motion or hover transitions. */
+.candidate-controls { margin: 20px 0; padding: 0 22px; }
+.candidate-symbol { color: #e2ab55; }
+.candidate-details { font-size: 12px; line-height: 1.6; color: #becbd0; overflow-wrap: anywhere; }
+.candidate-details label { display: block; margin-top: 12px; }
+.candidate-details select { display: block; width: 100%; min-height: 36px; background: #152128; color: #e3e9eb; border: 1px solid #53636b; border-radius: 4px; }
+.candidate-details button { background: #1a2930; border: 1px solid #53636b; color: #e3e9eb; padding: 7px; cursor: pointer; font: inherit; overflow-wrap: anywhere; }
+.candidate-details :is(button,select,summary,a):focus-visible { outline: 2px solid #f5c979; outline-offset: 3px; }
+.candidate-details summary { cursor: pointer; padding: 8px 0; }
+.candidate-details a { color: #c5dbdf; }
+.candidate-inspector { border-top: 1px solid #53636b; margin-top: 16px; padding-top: 12px; }
+.candidate-inspector dl { margin: 10px 0; }
+.candidate-inspector dd { margin: 0 0 8px; color: #f0d8b0; }
+.candidate-inspector ul { padding-left: 16px; }
+.candidate-inspector li { margin-bottom: 6px; }

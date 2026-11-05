@@ -1,3 +1,6 @@
+import CandidateOverlay from "./CandidateOverlay";
+import type {CandidateState} from "../components/useCandidates";
+import type {CandidateSelection} from "../data/candidates";
 import { useEffect, useRef, useState } from "react";
 import PopulationOverlay, {
   type PopulationStatus,
@@ -19,6 +22,8 @@ import {
 } from "./studyArea";
 
 export default function MapView({
+  candidates,
+  onCandidateSelect,
   busVisible,
   equityVisible,
   sidebarOpen,
@@ -30,6 +35,8 @@ export default function MapView({
   transitVisible,
   employmentVisible,
 }: {
+  candidates: CandidateState;
+  onCandidateSelect: (s: CandidateSelection) => void;
   busVisible: boolean;
   equityVisible: boolean;
   employmentVisible: boolean;
@@ -47,6 +54,7 @@ export default function MapView({
     overlay: Pick<MapboxOverlay, "setProps">;
     equityOverlay: Pick<MapboxOverlay, "setProps">;
     employmentOverlay: Pick<MapboxOverlay, "setProps">;
+    candidateOverlay: Pick<MapboxOverlay, "setProps">;
     busOverlay: Pick<MapboxOverlay, "setProps">;
     transitOverlay: Pick<MapboxOverlay, "setProps">;
   } | null>(null);
@@ -177,6 +185,7 @@ export default function MapView({
             equityOverlay,
             populationOverlay,
             employmentOverlay,
+            candidateOverlay,
             busOverlay,
             transitOverlay,
           ] = overlayChannels(overlay, labelLayerId);
@@ -186,6 +195,7 @@ export default function MapView({
             overlay: populationOverlay,
             equityOverlay,
             employmentOverlay,
+            candidateOverlay,
             busOverlay,
             transitOverlay,
           });
@@ -266,6 +276,7 @@ export default function MapView({
       )}
       </div>
       <div className={busVisible ? "transit-stack" : undefined}>
+      {scene && <CandidateOverlay state={candidates} overlay={scene.candidateOverlay} onSelect={onCandidateSelect}/>}
       {scene && <BusOverlay map={scene.map} overlay={scene.busOverlay} enabled={busVisible}/>}
       {scene && (
         <TransitOverlay

@@ -18,7 +18,8 @@
     "test:employment": "node --experimental-strip-types scripts/test-employment-blocks.mjs && node scripts/employment-smoke.mjs",
     "test:equity": "node --experimental-strip-types scripts/test-equity.mjs && node scripts/equity-smoke.mjs",
     "test:lynx": "node --experimental-strip-types scripts/test-lynx.mjs && node scripts/lynx-smoke.mjs",
-    "test:train-motion": "node --experimental-strip-types scripts/test-train-motion.mjs && node scripts/train-motion-smoke.mjs"
+    "test:train-motion": "node --experimental-strip-types scripts/test-train-motion.mjs && node scripts/train-motion-smoke.mjs",
+    "test:candidates": "node --experimental-strip-types scripts/test-candidates.mjs && node scripts/candidates-smoke.mjs"
   },
   "dependencies": {
     "@deck.gl/core": "^9.2.0",

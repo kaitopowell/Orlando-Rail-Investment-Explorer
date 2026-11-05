@@ -1,8 +1,11 @@
+import CandidateControls from "./CandidateControls";
+import type {CandidateState} from "./useCandidates";
 import type { PopulationStatus } from "./PopulationOverlay";
 import { populationSource } from "../data/population";
 import CountyAttribution from "./CountyAttribution";
 import { plannedLayers } from "../data/layers";
 export default function Sidebar({
+  candidates,
   busVisible,
   onBusToggle,
   equityVisible,
@@ -23,6 +26,7 @@ export default function Sidebar({
   populationStatus,
   onPopulationToggle,
 }: {
+  candidates: CandidateState;
   busVisible: boolean;
   onBusToggle: () => void;
   equityVisible: boolean;
@@ -260,6 +264,7 @@ export default function Sidebar({
             Accessed 2026-10-13 · tract boundaries 2024.
           </p>
         </section>
+        <CandidateControls state={candidates}/>
         <section className="study">
           <p className="eyebrow">STUDY AREA</p>
           <h2>

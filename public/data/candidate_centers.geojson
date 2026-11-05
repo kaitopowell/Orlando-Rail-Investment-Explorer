@@ -1,0 +1,4103 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90085fffff",
+        "hexagon_count": 65,
+        "total_jobs": 204031,
+        "total_population": 89597.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a90085fffff",
+          "8844a90089fffff",
+          "8844a9008bfffff",
+          "8844a9008dfffff",
+          "8844a90091fffff",
+          "8844a90093fffff",
+          "8844a90097fffff",
+          "8844a9009bfffff",
+          "8844a9009dfffff",
+          "8844a900a9fffff",
+          "8844a900b3fffff",
+          "8844a900bbfffff",
+          "8844a900c3fffff",
+          "8844a900d5fffff",
+          "8844a900d7fffff",
+          "8844a90501fffff",
+          "8844a90507fffff",
+          "8844a90521fffff",
+          "8844a90529fffff",
+          "8844a9052bfffff",
+          "8844a90545fffff",
+          "8844a9054dfffff",
+          "8844a90561fffff",
+          "8844a90563fffff",
+          "8844a90565fffff",
+          "8844a90569fffff",
+          "8844a9056bfffff",
+          "8844a9056dfffff",
+          "8844a90c01fffff",
+          "8844a90c03fffff",
+          "8844a90c09fffff",
+          "8844a90c0bfffff",
+          "8844a90c11fffff",
+          "8844a90c19fffff",
+          "8844a90c1bfffff",
+          "8844a90c1dfffff",
+          "8844a90c29fffff",
+          "8844a90c43fffff",
+          "8844a90c47fffff",
+          "8844a90c49fffff",
+          "8844a90c4bfffff",
+          "8844a90c4dfffff",
+          "8844a90c55fffff",
+          "8844a90c59fffff",
+          "8844a90c5dfffff",
+          "8844a90c61fffff",
+          "8844a90c63fffff",
+          "8844a90c65fffff",
+          "8844a90c69fffff",
+          "8844a90c6bfffff",
+          "8844a90e01fffff",
+          "8844a90e03fffff",
+          "8844a90e05fffff",
+          "8844a90e07fffff",
+          "8844a90e09fffff",
+          "8844a90e21fffff",
+          "8844a90e23fffff",
+          "8844a90e29fffff",
+          "8844a90e31fffff",
+          "8844a90e3dfffff",
+          "8844a90e43fffff",
+          "8844a90e51fffff",
+          "8844a90e55fffff",
+          "8844a90e59fffff",
+          "8844a90e5dfffff"
+        ],
+        "jobs_selected_hexagons": 32,
+        "population_selected_hexagons": 42,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.36651145904673,
+          28.55188729519964
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90213fffff",
+        "hexagon_count": 127,
+        "total_jobs": 136322,
+        "total_population": 208304.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a90213fffff",
+          "8844a90281fffff",
+          "8844a90283fffff",
+          "8844a9028bfffff",
+          "8844a9028dfffff",
+          "8844a90291fffff",
+          "8844a90295fffff",
+          "8844a90297fffff",
+          "8844a90299fffff",
+          "8844a9029dfffff",
+          "8844a902a1fffff",
+          "8844a902a9fffff",
+          "8844a902adfffff",
+          "8844a902b3fffff",
+          "8844a902b9fffff",
+          "8844a902bbfffff",
+          "8844a902c1fffff",
+          "8844a902c3fffff",
+          "8844a902c5fffff",
+          "8844a902cbfffff",
+          "8844a902d1fffff",
+          "8844a902d3fffff",
+          "8844a902d5fffff",
+          "8844a902e1fffff",
+          "8844a902e3fffff",
+          "8844a902e7fffff",
+          "8844a902ebfffff",
+          "8844a90401fffff",
+          "8844a90403fffff",
+          "8844a90405fffff",
+          "8844a90409fffff",
+          "8844a9040bfffff",
+          "8844a9040dfffff",
+          "8844a90411fffff",
+          "8844a90415fffff",
+          "8844a90419fffff",
+          "8844a9041bfffff",
+          "8844a9041dfffff",
+          "8844a9042bfffff",
+          "8844a90431fffff",
+          "8844a90433fffff",
+          "8844a90435fffff",
+          "8844a90437fffff",
+          "8844a90439fffff",
+          "8844a9043bfffff",
+          "8844a9043dfffff",
+          "8844a90443fffff",
+          "8844a90447fffff",
+          "8844a90451fffff",
+          "8844a90453fffff",
+          "8844a90455fffff",
+          "8844a90457fffff",
+          "8844a90459fffff",
+          "8844a9045dfffff",
+          "8844a904e5fffff",
+          "8844a905c1fffff",
+          "8844a905c3fffff",
+          "8844a905cbfffff",
+          "8844a905d9fffff",
+          "8844a905ddfffff",
+          "8844a90603fffff",
+          "8844a9060dfffff",
+          "8844a90621fffff",
+          "8844a90625fffff",
+          "8844a90629fffff",
+          "8844a9062bfffff",
+          "8844a9062dfffff",
+          "8844a90633fffff",
+          "8844a90639fffff",
+          "8844a9063bfffff",
+          "8844a9063dfffff",
+          "8844a90647fffff",
+          "8844a90661fffff",
+          "8844a90663fffff",
+          "8844a90665fffff",
+          "8844a9066bfffff",
+          "8844a906a5fffff",
+          "8844a906adfffff",
+          "8844a906e1fffff",
+          "8844a906e5fffff",
+          "8844a906edfffff",
+          "8844a90701fffff",
+          "8844a9070bfffff",
+          "8844a90719fffff",
+          "8844a9071dfffff",
+          "8844a90741fffff",
+          "8844a90743fffff",
+          "8844a90745fffff",
+          "8844a90749fffff",
+          "8844a9074bfffff",
+          "8844a9074dfffff",
+          "8844a90753fffff",
+          "8844a90759fffff",
+          "8844a9075bfffff",
+          "8844a90761fffff",
+          "8844a90765fffff",
+          "8844a9076bfffff",
+          "8844a9076dfffff",
+          "8844a91423fffff",
+          "8844a91427fffff",
+          "8844a9142bfffff",
+          "8844a91435fffff",
+          "8844a91585fffff",
+          "8844a91587fffff",
+          "8844a9158dfffff",
+          "8844a915a1fffff",
+          "8844a915a5fffff",
+          "8844a915a9fffff",
+          "8844a915abfffff",
+          "8844a915adfffff",
+          "8844a915b1fffff",
+          "8844a915b3fffff",
+          "8844a915b5fffff",
+          "8844a915b7fffff",
+          "8844a915b9fffff",
+          "8844a915bbfffff",
+          "8844a915c1fffff",
+          "8844a915c3fffff",
+          "8844a915c5fffff",
+          "8844a915c7fffff",
+          "8844a915c9fffff",
+          "8844a915cbfffff",
+          "8844a915ddfffff",
+          "8844a915e1fffff",
+          "8844a915e5fffff",
+          "8844a915e9fffff",
+          "8844a915ebfffff"
+        ],
+        "jobs_selected_hexagons": 37,
+        "population_selected_hexagons": 94,
+        "missing_job_hexagons": 2,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.4419460059787,
+          28.474664536315117
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91605fffff",
+        "hexagon_count": 3,
+        "total_jobs": 90400,
+        "total_population": 41.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a91605fffff",
+          "8844a9160dfffff",
+          "8844a9166bfffff"
+        ],
+        "jobs_selected_hexagons": 3,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.52177000709072,
+          28.363565420184745
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a905a1fffff",
+        "hexagon_count": 23,
+        "total_jobs": 61329,
+        "total_population": 30399.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a905a1fffff",
+          "8844a905a3fffff",
+          "8844a905a7fffff",
+          "8844a905abfffff",
+          "8844a905adfffff",
+          "8844a905b1fffff",
+          "8844a905b3fffff",
+          "8844a905bdfffff",
+          "8844a93a2dfffff",
+          "8844a93b05fffff",
+          "8844a93b09fffff",
+          "8844a93b0bfffff",
+          "8844a93b0dfffff",
+          "8844a93b19fffff",
+          "8844a93b29fffff",
+          "8844a93b2dfffff",
+          "8844a93b41fffff",
+          "8844a93b43fffff",
+          "8844a93b47fffff",
+          "8844a93b49fffff",
+          "8844a93b53fffff",
+          "8844a93b57fffff",
+          "8844a93b5bfffff"
+        ],
+        "jobs_selected_hexagons": 14,
+        "population_selected_hexagons": 14,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.39529475551832,
+          28.64394825425034
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a93985fffff",
+        "hexagon_count": 8,
+        "total_jobs": 28670,
+        "total_population": 4784.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a93985fffff",
+          "8844a939a9fffff",
+          "8844a939abfffff",
+          "8844a939adfffff",
+          "8844a939e5fffff",
+          "8844a976d3fffff",
+          "8844a976d9fffff",
+          "8844a976dbfffff"
+        ],
+        "jobs_selected_hexagons": 8,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.35474569666184,
+          28.763822457667725
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90251fffff",
+        "hexagon_count": 19,
+        "total_jobs": 25636,
+        "total_population": 19152.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a90251fffff",
+          "8844a90255fffff",
+          "8844a90259fffff",
+          "8844a9025bfffff",
+          "8844a91095fffff",
+          "8844a91097fffff",
+          "8844a910b3fffff",
+          "8844a910b9fffff",
+          "8844a910bbfffff",
+          "8844a910bdfffff",
+          "8844a91521fffff",
+          "8844a91523fffff",
+          "8844a91525fffff",
+          "8844a9152dfffff",
+          "8844a91561fffff",
+          "8844a91563fffff",
+          "8844a91565fffff",
+          "8844a9156bfffff",
+          "8844a9156dfffff"
+        ],
+        "jobs_selected_hexagons": 11,
+        "population_selected_hexagons": 8,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.40905964217623,
+          28.413568228264637
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9159dfffff",
+        "hexagon_count": 1,
+        "total_jobs": 25199,
+        "total_population": 330.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a9159dfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.47358429758184,
+          28.481742604888847
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90e89fffff",
+        "hexagon_count": 10,
+        "total_jobs": 23493,
+        "total_population": 11946.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a90e89fffff",
+          "8844a90ec3fffff",
+          "8844a90ec5fffff",
+          "8844a90ec7fffff",
+          "8844a90ec9fffff",
+          "8844a90ecdfffff",
+          "8844a90ed5fffff",
+          "8844a90ed7fffff",
+          "8844a90ee9fffff",
+          "8844a90eebfffff"
+        ],
+        "jobs_selected_hexagons": 9,
+        "population_selected_hexagons": 3,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.36055376694071,
+          28.59953588669839
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90025fffff",
+        "hexagon_count": 49,
+        "total_jobs": 22886,
+        "total_population": 93352.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a90025fffff",
+          "8844a90027fffff",
+          "8844a90037fffff",
+          "8844a900a5fffff",
+          "8844a90119fffff",
+          "8844a9011bfffff",
+          "8844a90131fffff",
+          "8844a90133fffff",
+          "8844a90135fffff",
+          "8844a9013dfffff",
+          "8844a90151fffff",
+          "8844a90153fffff",
+          "8844a90181fffff",
+          "8844a90183fffff",
+          "8844a90187fffff",
+          "8844a90189fffff",
+          "8844a9018bfffff",
+          "8844a90191fffff",
+          "8844a90193fffff",
+          "8844a90195fffff",
+          "8844a90199fffff",
+          "8844a9019dfffff",
+          "8844a901a3fffff",
+          "8844a901a5fffff",
+          "8844a901a7fffff",
+          "8844a901adfffff",
+          "8844a901b1fffff",
+          "8844a901b3fffff",
+          "8844a901b9fffff",
+          "8844a901bbfffff",
+          "8844a901bdfffff",
+          "8844a901c1fffff",
+          "8844a901c5fffff",
+          "8844a901c7fffff",
+          "8844a901cbfffff",
+          "8844a901cdfffff",
+          "8844a901d1fffff",
+          "8844a901d3fffff",
+          "8844a901d5fffff",
+          "8844a901d7fffff",
+          "8844a901e1fffff",
+          "8844a901e5fffff",
+          "8844a901e7fffff",
+          "8844a901e9fffff",
+          "8844a901ebfffff",
+          "8844a901edfffff",
+          "8844a90ad9fffff",
+          "8844a90adbfffff",
+          "8844a90e4dfffff"
+        ],
+        "jobs_selected_hexagons": 5,
+        "population_selected_hexagons": 44,
+        "missing_job_hexagons": 1,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.3084108731229,
+          28.481058751371684
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90d21fffff",
+        "hexagon_count": 9,
+        "total_jobs": 21761,
+        "total_population": 12969.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a90d21fffff",
+          "8844a90d25fffff",
+          "8844a90d29fffff",
+          "8844a90d2dfffff",
+          "8844a90d67fffff",
+          "8844a97211fffff",
+          "8844a97219fffff",
+          "8844a97251fffff",
+          "8844a97253fffff"
+        ],
+        "jobs_selected_hexagons": 5,
+        "population_selected_hexagons": 4,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.20714797071913,
+          28.606247456116577
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90885fffff",
+        "hexagon_count": 15,
+        "total_jobs": 19644,
+        "total_population": 24522.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a90885fffff",
+          "8844a90887fffff",
+          "8844a908a9fffff",
+          "8844a908abfffff",
+          "8844a908b1fffff",
+          "8844a908b3fffff",
+          "8844a908b7fffff",
+          "8844a908b9fffff",
+          "8844a908bdfffff",
+          "8844a908e1fffff",
+          "8844a908e3fffff",
+          "8844a908e9fffff",
+          "8844a908edfffff",
+          "8844a97241fffff",
+          "8844a9724bfffff"
+        ],
+        "jobs_selected_hexagons": 6,
+        "population_selected_hexagons": 11,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.20032210143505,
+          28.56966098622682
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90331fffff",
+        "hexagon_count": 3,
+        "total_jobs": 17981,
+        "total_population": 25.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90331fffff",
+          "8844a90335fffff",
+          "8844a90337fffff"
+        ],
+        "jobs_selected_hexagons": 3,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.30569905255082,
+          28.43553137068781
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91001fffff",
+        "hexagon_count": 25,
+        "total_jobs": 15215,
+        "total_population": 49810.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a91001fffff",
+          "8844a91003fffff",
+          "8844a91007fffff",
+          "8844a91009fffff",
+          "8844a9100bfffff",
+          "8844a91039fffff",
+          "8844a91051fffff",
+          "8844a91053fffff",
+          "8844a91055fffff",
+          "8844a91059fffff",
+          "8844a9105bfffff",
+          "8844a91231fffff",
+          "8844a91233fffff",
+          "8844a91237fffff",
+          "8844a9123bfffff",
+          "8844a91289fffff",
+          "8844a9128dfffff",
+          "8844a912a1fffff",
+          "8844a912a5fffff",
+          "8844a912a7fffff",
+          "8844a912adfffff",
+          "8844a912e3fffff",
+          "8844a912e7fffff",
+          "8844a912e9fffff",
+          "8844a912edfffff"
+        ],
+        "jobs_selected_hexagons": 5,
+        "population_selected_hexagons": 21,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.41056514686534,
+          28.303668189791846
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91021fffff",
+        "hexagon_count": 30,
+        "total_jobs": 14101,
+        "total_population": 57810.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a91021fffff",
+          "8844a91023fffff",
+          "8844a91025fffff",
+          "8844a91027fffff",
+          "8844a91029fffff",
+          "8844a9102dfffff",
+          "8844a91037fffff",
+          "8844a9106dfffff",
+          "8844a91111fffff",
+          "8844a91113fffff",
+          "8844a91119fffff",
+          "8844a9111bfffff",
+          "8844a91153fffff",
+          "8844a91159fffff",
+          "8844a9115bfffff",
+          "8844a9118bfffff",
+          "8844a91191fffff",
+          "8844a91199fffff",
+          "8844a9119dfffff",
+          "8844a911c1fffff",
+          "8844a911c3fffff",
+          "8844a911c5fffff",
+          "8844a911c9fffff",
+          "8844a911cbfffff",
+          "8844a911cdfffff",
+          "8844a911d1fffff",
+          "8844a911d3fffff",
+          "8844a911d5fffff",
+          "8844a91333fffff",
+          "8844a9133bfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 29,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.36078106127073,
+          28.304670686512804
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91465fffff",
+        "hexagon_count": 4,
+        "total_jobs": 12771,
+        "total_population": 603.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a91465fffff",
+          "8844a9146dfffff",
+          "8844a91553fffff",
+          "8844a9155bfffff"
+        ],
+        "jobs_selected_hexagons": 4,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.4684998470181,
+          28.412120508681806
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a98ca9fffff",
+        "hexagon_count": 3,
+        "total_jobs": 10056,
+        "total_population": 1212.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a98ca9fffff",
+          "8844a98cadfffff",
+          "8844a98dd3fffff"
+        ],
+        "jobs_selected_hexagons": 3,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.54116325814077,
+          28.32838048607822
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a97453fffff",
+        "hexagon_count": 1,
+        "total_jobs": 8535,
+        "total_population": 679.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a97453fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.28302836614118,
+          28.761617754363996
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a92b49fffff",
+        "hexagon_count": 1,
+        "total_jobs": 8290,
+        "total_population": 189.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a92b49fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.35450902491962,
+          28.789255353558286
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a936bdfffff",
+        "hexagon_count": 1,
+        "total_jobs": 7735,
+        "total_population": 790.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a936bdfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.73077744139033,
+          28.81309239050206
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a906c9fffff",
+        "hexagon_count": 4,
+        "total_jobs": 6771,
+        "total_population": 2174.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a906c9fffff",
+          "8844a9a923fffff",
+          "8844a9a931fffff",
+          "8844a9a935fffff"
+        ],
+        "jobs_selected_hexagons": 3,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.53346134789612,
+          28.551399622712342
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9034dfffff",
+        "hexagon_count": 1,
+        "total_jobs": 5488,
+        "total_population": 1.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a9034dfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.31702235221151,
+          28.382433904334416
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a93685fffff",
+        "hexagon_count": 1,
+        "total_jobs": 4836,
+        "total_population": 1505.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a93685fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.73185106796329,
+          28.798729287809763
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a92b29fffff",
+        "hexagon_count": 2,
+        "total_jobs": 4772,
+        "total_population": 2342.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a92b29fffff",
+          "8844a92b67fffff"
+        ],
+        "jobs_selected_hexagons": 2,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.32450744138534,
+          28.81185088356988
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a93917fffff",
+        "hexagon_count": 3,
+        "total_jobs": 4639,
+        "total_population": 1853.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a93917fffff",
+          "8844a9393bfffff",
+          "8844a939e9fffff"
+        ],
+        "jobs_selected_hexagons": 2,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.36324399463166,
+          28.741902121155324
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91531fffff",
+        "hexagon_count": 1,
+        "total_jobs": 4597,
+        "total_population": 20.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a91531fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.42904314209812,
+          28.442049852771987
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90519fffff",
+        "hexagon_count": 2,
+        "total_jobs": 4385,
+        "total_population": 67.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90519fffff",
+          "8844a90553fffff"
+        ],
+        "jobs_selected_hexagons": 2,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.41638136880829,
+          28.57488376362109
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a93945fffff",
+        "hexagon_count": 2,
+        "total_jobs": 4289,
+        "total_population": 809.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a93945fffff",
+          "8844a93947fffff"
+        ],
+        "jobs_selected_hexagons": 2,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.35051657973192,
+          28.698408112569517
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90889fffff",
+        "hexagon_count": 1,
+        "total_jobs": 4269,
+        "total_population": 234.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90889fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.21777547447974,
+          28.547194743809037
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91719fffff",
+        "hexagon_count": 3,
+        "total_jobs": 4049,
+        "total_population": 5812.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a91719fffff",
+          "8844a9171bfffff",
+          "8844a91757fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.49317504212684,
+          28.388639333302475
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9394bfffff",
+        "hexagon_count": 1,
+        "total_jobs": 3960,
+        "total_population": 755.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a9394bfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.36606528270525,
+          28.696502333594438
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90235fffff",
+        "hexagon_count": 1,
+        "total_jobs": 3914,
+        "total_population": 39.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90235fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.36031811384764,
+          28.43644777368007
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9a865fffff",
+        "hexagon_count": 2,
+        "total_jobs": 3861,
+        "total_population": 905.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a9a865fffff",
+          "8844a9a867fffff"
+        ],
+        "jobs_selected_hexagons": 2,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.58515749827257,
+          28.523091504667214
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9c481fffff",
+        "hexagon_count": 8,
+        "total_jobs": 3801,
+        "total_population": 12035.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a9c481fffff",
+          "8844a9c489fffff",
+          "8844a9c48dfffff",
+          "8844a9c4c3fffff",
+          "8844a9c4e1fffff",
+          "8844a9c4e3fffff",
+          "8844a9c4e7fffff",
+          "8844a9c4ebfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 7,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.29371202432374,
+          28.246901700333876
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90ed9fffff",
+        "hexagon_count": 1,
+        "total_jobs": 3780,
+        "total_population": 565.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90ed9fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.38620582229416,
+          28.60443556385198
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a974a9fffff",
+        "hexagon_count": 2,
+        "total_jobs": 3578,
+        "total_population": 1953.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a974a9fffff",
+          "8844a974adfffff"
+        ],
+        "jobs_selected_hexagons": 2,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.26108695817626,
+          28.810196133985613
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844f4d88bfffff",
+        "hexagon_count": 2,
+        "total_jobs": 3566,
+        "total_population": 1252.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844f4d88bfffff",
+          "8844f4d8d7fffff"
+        ],
+        "jobs_selected_hexagons": 2,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.87409751842499,
+          28.81017606052783
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90f01fffff",
+        "hexagon_count": 8,
+        "total_jobs": 3489,
+        "total_population": 15375.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a90f01fffff",
+          "8844a90f05fffff",
+          "8844a90f09fffff",
+          "8844a90f29fffff",
+          "8844a90f2bfffff",
+          "8844a90f41fffff",
+          "8844a90f43fffff",
+          "8844a90f5dfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 7,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.27781209390292,
+          28.54298840375305
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91507fffff",
+        "hexagon_count": 1,
+        "total_jobs": 3077,
+        "total_population": 19.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a91507fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.43014771889506,
+          28.42771080666271
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90317fffff",
+        "hexagon_count": 1,
+        "total_jobs": 2971,
+        "total_population": 0.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90317fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 1,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.32598271540851,
+          28.433635790503715
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9a187fffff",
+        "hexagon_count": 3,
+        "total_jobs": 2970,
+        "total_population": 4384.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a9a187fffff",
+          "8844a9a1b1fffff",
+          "8844a9a1b9fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.72417331477392,
+          28.552635883151606
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90351fffff",
+        "hexagon_count": 1,
+        "total_jobs": 2935,
+        "total_population": 7.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90351fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.3367951401038,
+          28.4056809440322
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9a835fffff",
+        "hexagon_count": 2,
+        "total_jobs": 2864,
+        "total_population": 3066.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a9a835fffff",
+          "8844a9a9cbfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.58908940496454,
+          28.562714812635523
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90465fffff",
+        "hexagon_count": 3,
+        "total_jobs": 2856,
+        "total_population": 3907.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a90465fffff",
+          "8844a90467fffff",
+          "8844a90733fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.42670804376249,
+          28.553255538911362
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a98d4bfffff",
+        "hexagon_count": 1,
+        "total_jobs": 2680,
+        "total_population": 110.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a98d4bfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.49115035557598,
+          28.252206494822353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91099fffff",
+        "hexagon_count": 5,
+        "total_jobs": 2647,
+        "total_population": 10385.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a91099fffff",
+          "8844a910c3fffff",
+          "8844a910d3fffff",
+          "8844a910d5fffff",
+          "8844a910d7fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 5,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.42356086559394,
+          28.364590918377502
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a92b6bfffff",
+        "hexagon_count": 1,
+        "total_jobs": 2456,
+        "total_population": 23.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a92b6bfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.33616685567816,
+          28.802129482876296
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90cc5fffff",
+        "hexagon_count": 1,
+        "total_jobs": 2382,
+        "total_population": 2056.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a90cc5fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.322661445105,
+          28.64242283902696
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9a913fffff",
+        "hexagon_count": 1,
+        "total_jobs": 2360,
+        "total_population": 123.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a9a913fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.56770031901245,
+          28.554326478555463
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a974d1fffff",
+        "hexagon_count": 1,
+        "total_jobs": 2276,
+        "total_population": 18.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a974d1fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.30547228683635,
+          28.806748121481316
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9c4d1fffff",
+        "hexagon_count": 2,
+        "total_jobs": 2256,
+        "total_population": 2243.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a9c4d1fffff",
+          "8844a9c4d7fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.31692104436316,
+          28.25499100986561
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9150bfffff",
+        "hexagon_count": 2,
+        "total_jobs": 2076,
+        "total_population": 1806.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a9150bfffff",
+          "8844a91555fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.44375754936266,
+          28.42135289584608
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90e83fffff",
+        "hexagon_count": 1,
+        "total_jobs": 2037,
+        "total_population": 434.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90e83fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.36303256927225,
+          28.624150451151568
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90233fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1971,
+        "total_population": 5.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90233fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.3726429984783,
+          28.444666811528638
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91667fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1944,
+        "total_population": 806.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a91667fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.5081689091041,
+          28.369057917149515
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a93845fffff",
+        "hexagon_count": 2,
+        "total_jobs": 1929,
+        "total_population": 2322.0,
+        "criteria": "both",
+        "hexagons": [
+          "8844a93845fffff",
+          "8844a93b13fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.40562789641004,
+          28.69308929423753
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9b965fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1928,
+        "total_population": 7.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a9b965fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.56463281962195,
+          28.3663529892646
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a98cd3fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1894,
+        "total_population": 33.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a98cd3fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.58886604649443,
+          28.332172930151913
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9bb2bfffff",
+        "hexagon_count": 1,
+        "total_jobs": 1879,
+        "total_population": 262.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a9bb2bfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.60984444796767,
+          28.341058386293234
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9164bfffff",
+        "hexagon_count": 1,
+        "total_jobs": 1865,
+        "total_population": 18.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a9164bfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.54366628584081,
+          28.35745991956406
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a98d9bfffff",
+        "hexagon_count": 1,
+        "total_jobs": 1843,
+        "total_population": 38.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a98d9bfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.52755535853501,
+          28.341734222282565
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a93b3bfffff",
+        "hexagon_count": 1,
+        "total_jobs": 1811,
+        "total_population": 368.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a93b3bfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.3881423984952,
+          28.6911289454164
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90613fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1804,
+        "total_population": 1419.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90613fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.50737977264265,
+          28.549436545289215
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90c9dfffff",
+        "hexagon_count": 1,
+        "total_jobs": 1800,
+        "total_population": 287.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90c9dfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.33762410173864,
+          28.672504019178096
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9bb15fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1788,
+        "total_population": 280.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a9bb15fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.63083224796708,
+          28.349943125082998
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91433fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1786,
+        "total_population": 1326.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a91433fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.49298973301977,
+          28.45444798165095
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a918c5fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1750,
+        "total_population": 54.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a918c5fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.25216828931535,
+          28.384321149234914
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91651fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1736,
+        "total_population": 105.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a91651fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.55117979922176,
+          28.372499971962377
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90103fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1704,
+        "total_population": 115.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90103fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.28457431508295,
+          28.466271994635566
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90e11fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1678,
+        "total_population": 965.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90e11fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.34917962587753,
+          28.579743132203948
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a98c13fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1657,
+        "total_population": 648.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a98c13fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.55662683498511,
+          28.300728736878447
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a976e5fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1645,
+        "total_population": 471.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a976e5fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.29275410700873,
+          28.74802573074688
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90dc7fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1640,
+        "total_population": 643.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90dc7fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.26623981628555,
+          28.644915254156743
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a93437fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1626,
+        "total_population": 470.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a93437fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.66909281405975,
+          28.822520095572447
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a97281fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1574,
+        "total_population": 198.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a97281fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.20500199514858,
+          28.654175920075623
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91abdfffff",
+        "hexagon_count": 1,
+        "total_jobs": 1537,
+        "total_population": 12.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a91abdfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.27900013154547,
+          28.372110991981287
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9005dfffff",
+        "hexagon_count": 1,
+        "total_jobs": 1505,
+        "total_population": 444.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a9005dfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.35920548494639,
+          28.45077915668409
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a93109fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1499,
+        "total_population": 521.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a93109fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.51098074592103,
+          28.672415238191974
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a98a37fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1496,
+        "total_population": 235.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a98a37fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.44734586313659,
+          28.147681185401975
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90263fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1494,
+        "total_population": 3.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90263fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.36254255956341,
+          28.407783797739576
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a97435fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1472,
+        "total_population": 2.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a97435fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.2426385328336,
+          28.77981533666379
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90201fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1469,
+        "total_population": 72.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a90201fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.37486479990564,
+          28.416000514070415
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a904b7fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1466,
+        "total_population": 190.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a904b7fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.46898082373433,
+          28.654535158413402
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a914bdfffff",
+        "hexagon_count": 1,
+        "total_jobs": 1458,
+        "total_population": 390.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a914bdfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.51176493615556,
+          28.492053136378114
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9058dfffff",
+        "hexagon_count": 1,
+        "total_jobs": 1447,
+        "total_population": 1345.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a9058dfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.415767208509,
+          28.614086353111006
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844f4ce4dfffff",
+        "hexagon_count": 1,
+        "total_jobs": 1446,
+        "total_population": 473.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844f4ce4dfffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.9441460978838,
+          28.938731079901114
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a97481fffff",
+        "hexagon_count": 1,
+        "total_jobs": 1429,
+        "total_population": 798.0,
+        "criteria": "jobs",
+        "hexagons": [
+          "8844a97481fffff"
+        ],
+        "jobs_selected_hexagons": 1,
+        "population_selected_hexagons": 0,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.28339327952439,
+          28.81208672815119
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a93a0bfffff",
+        "hexagon_count": 1,
+        "total_jobs": 933,
+        "total_population": 1900.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a93a0bfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.45440121392141,
+          28.674977268853745
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a93a53fffff",
+        "hexagon_count": 2,
+        "total_jobs": 829,
+        "total_population": 3410.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a93a53fffff",
+          "8844a93a5bfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.47392877809821,
+          28.673183432474385
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90cc3fffff",
+        "hexagon_count": 2,
+        "total_jobs": 522,
+        "total_population": 4237.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90cc3fffff",
+          "8844a90cddfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.34155724327982,
+          28.65120508673016
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90691fffff",
+        "hexagon_count": 5,
+        "total_jobs": 331,
+        "total_population": 8579.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90691fffff",
+          "8844a90699fffff",
+          "8844a9069dfffff",
+          "8844a906d3fffff",
+          "8844a906d7fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 5,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.53179932682099,
+          28.586201086208494
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90dd1fffff",
+        "hexagon_count": 3,
+        "total_jobs": 326,
+        "total_population": 4993.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90dd1fffff",
+          "8844a90dd5fffff",
+          "8844a90ddbfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 3,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.2818598965512,
+          28.653429572495842
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a972a1fffff",
+        "hexagon_count": 1,
+        "total_jobs": 317,
+        "total_population": 1478.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a972a1fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.18297935831066,
+          28.659518684972248
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a97693fffff",
+        "hexagon_count": 2,
+        "total_jobs": 313,
+        "total_population": 3285.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a97693fffff",
+          "8844a97697fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.33703808682357,
+          28.787787282090004
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a974c9fffff",
+        "hexagon_count": 1,
+        "total_jobs": 303,
+        "total_population": 1744.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a974c9fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.2942471595766,
+          28.784181916133537
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91149fffff",
+        "hexagon_count": 2,
+        "total_jobs": 257,
+        "total_population": 3033.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a91149fffff",
+          "8844a91335fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.34147529009925,
+          28.28347700714335
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a93115fffff",
+        "hexagon_count": 4,
+        "total_jobs": 235,
+        "total_population": 7019.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a93115fffff",
+          "8844a93117fffff",
+          "8844a9311dfffff",
+          "8844a931edfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 4,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.51408582721146,
+          28.702057389310408
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91219fffff",
+        "hexagon_count": 1,
+        "total_jobs": 220,
+        "total_population": 1639.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a91219fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.43743771896037,
+          28.276782802879595
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9163bfffff",
+        "hexagon_count": 1,
+        "total_jobs": 218,
+        "total_population": 1591.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a9163bfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.53178748680764,
+          28.399826649240346
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a93b65fffff",
+        "hexagon_count": 1,
+        "total_jobs": 207,
+        "total_population": 1469.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a93b65fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.36080388180247,
+          28.65280558912004
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90eadfffff",
+        "hexagon_count": 1,
+        "total_jobs": 206,
+        "total_population": 1470.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90eadfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.33349463206063,
+          28.61448978712741
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9c6a3fffff",
+        "hexagon_count": 2,
+        "total_jobs": 204,
+        "total_population": 3263.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a9c6a3fffff",
+          "8844a9c6b5fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.31221694869932,
+          28.22352914573268
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90723fffff",
+        "hexagon_count": 2,
+        "total_jobs": 192,
+        "total_population": 4329.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90723fffff",
+          "8844a9073dfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.41424150000832,
+          28.534619925899275
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90d15fffff",
+        "hexagon_count": 1,
+        "total_jobs": 187,
+        "total_population": 1692.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90d15fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.24645847106473,
+          28.621641480182802
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a912dbfffff",
+        "hexagon_count": 1,
+        "total_jobs": 182,
+        "total_population": 2022.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a912dbfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.47332921531059,
+          28.31574153115146
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a97651fffff",
+        "hexagon_count": 1,
+        "total_jobs": 169,
+        "total_population": 1693.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a97651fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.31332304926488,
+          28.706512886749675
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9140dfffff",
+        "hexagon_count": 1,
+        "total_jobs": 159,
+        "total_population": 1713.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a9140dfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.49143203862042,
+          28.4182364798687
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9108dfffff",
+        "hexagon_count": 2,
+        "total_jobs": 148,
+        "total_population": 3635.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a9108dfffff",
+          "8844a910e3fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.39809657469257,
+          28.360186600686315
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90655fffff",
+        "hexagon_count": 1,
+        "total_jobs": 147,
+        "total_population": 1521.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90655fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.50096214064578,
+          28.5200470694102
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90ce1fffff",
+        "hexagon_count": 1,
+        "total_jobs": 136,
+        "total_population": 1511.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90ce1fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.3092064517643,
+          28.648508636234496
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a972cdfffff",
+        "hexagon_count": 1,
+        "total_jobs": 131,
+        "total_population": 1831.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a972cdfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.20726623553027,
+          28.62555435205527
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90ca9fffff",
+        "hexagon_count": 1,
+        "total_jobs": 130,
+        "total_population": 1484.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90ca9fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.30808585343746,
+          28.6628301152114
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a909d7fffff",
+        "hexagon_count": 1,
+        "total_jobs": 128,
+        "total_population": 2357.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a909d7fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.17005263549916,
+          28.550399575779007
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a904c1fffff",
+        "hexagon_count": 2,
+        "total_jobs": 106,
+        "total_population": 2966.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a904c1fffff",
+          "8844a904c9fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.48832439132437,
+          28.60180242956059
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9089dfffff",
+        "hexagon_count": 4,
+        "total_jobs": 106,
+        "total_population": 6535.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a9089dfffff",
+          "8844a908d1fffff",
+          "8844a908d7fffff",
+          "8844a908d9fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 4,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.23186362657543,
+          28.552925345122837
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90a87fffff",
+        "hexagon_count": 1,
+        "total_jobs": 102,
+        "total_population": 1700.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90a87fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.24203872408839,
+          28.5131935024026
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a904e9fffff",
+        "hexagon_count": 1,
+        "total_jobs": 101,
+        "total_population": 1730.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a904e9fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.46853062901714,
+          28.60399440540219
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9ba39fffff",
+        "hexagon_count": 1,
+        "total_jobs": 85,
+        "total_population": 1616.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a9ba39fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.68253133194975,
+          28.35402270433691
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90d0dfffff",
+        "hexagon_count": 2,
+        "total_jobs": 72,
+        "total_population": 4375.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90d0dfffff",
+          "8844a90d47fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.2381732835534,
+          28.595029796879775
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90583fffff",
+        "hexagon_count": 2,
+        "total_jobs": 63,
+        "total_population": 3506.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90583fffff",
+          "8844a9058bfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.42519535733021,
+          28.62642658137466
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90823fffff",
+        "hexagon_count": 1,
+        "total_jobs": 57,
+        "total_population": 4608.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90823fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.16860587058157,
+          28.51426751093785
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9c453fffff",
+        "hexagon_count": 1,
+        "total_jobs": 52,
+        "total_population": 2168.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a9c453fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.29615486717678,
+          28.20770437814172
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a98a85fffff",
+        "hexagon_count": 5,
+        "total_jobs": 46,
+        "total_population": 9017.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a98a85fffff",
+          "8844a98a87fffff",
+          "8844a98ae3fffff",
+          "8844a98ae5fffff",
+          "8844a98ae7fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 5,
+        "missing_job_hexagons": 1,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.473451788353,
+          28.168107797941552
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a912b1fffff",
+        "hexagon_count": 1,
+        "total_jobs": 44,
+        "total_population": 1459.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a912b1fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.43676953555996,
+          28.34166813905276
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90241fffff",
+        "hexagon_count": 1,
+        "total_jobs": 42,
+        "total_population": 1604.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90241fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.38082302758362,
+          28.394849018549483
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90d4dfffff",
+        "hexagon_count": 1,
+        "total_jobs": 38,
+        "total_population": 1637.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90d4dfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.24125655079227,
+          28.577975905487595
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90cc9fffff",
+        "hexagon_count": 1,
+        "total_jobs": 37,
+        "total_population": 1499.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90cc9fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.33611746338158,
+          28.63633454241629
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90989fffff",
+        "hexagon_count": 2,
+        "total_jobs": 35,
+        "total_population": 3939.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90989fffff",
+          "8844a909c7fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.15553617939054,
+          28.53765738067841
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90449fffff",
+        "hexagon_count": 1,
+        "total_jobs": 33,
+        "total_population": 1782.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90449fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.4643275430823,
+          28.545929898684644
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a93a6bfffff",
+        "hexagon_count": 1,
+        "total_jobs": 33,
+        "total_population": 1907.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a93a6bfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.43827659149561,
+          28.65922001875173
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a904bbfffff",
+        "hexagon_count": 1,
+        "total_jobs": 32,
+        "total_population": 1810.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a904bbfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.48245744277988,
+          28.648427431801856
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9000dfffff",
+        "hexagon_count": 1,
+        "total_jobs": 31,
+        "total_population": 1614.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a9000dfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.33718368312924,
+          28.45618465389268
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a97205fffff",
+        "hexagon_count": 2,
+        "total_jobs": 30,
+        "total_population": 3312.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a97205fffff",
+          "8844a97207fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.17222463346374,
+          28.604596859591393
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9a19bfffff",
+        "hexagon_count": 1,
+        "total_jobs": 30,
+        "total_population": 1848.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a9a19bfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.75385030818715,
+          28.56201806803752
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90ac3fffff",
+        "hexagon_count": 2,
+        "total_jobs": 29,
+        "total_population": 3516.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90ac3fffff",
+          "8844a90ac7fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 2,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.25481890255385,
+          28.492637500016247
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a975d9fffff",
+        "hexagon_count": 1,
+        "total_jobs": 27,
+        "total_population": 1642.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a975d9fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.25010856471714,
+          28.794856552583223
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a974c5fffff",
+        "hexagon_count": 1,
+        "total_jobs": 23,
+        "total_population": 1897.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a974c5fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.28077861938772,
+          28.790249618173686
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a972e3fffff",
+        "hexagon_count": 1,
+        "total_jobs": 22,
+        "total_population": 1695.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a972e3fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.19269491678493,
+          28.64593498141584
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9764bfffff",
+        "hexagon_count": 1,
+        "total_jobs": 21,
+        "total_population": 1525.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a9764bfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.30584383722345,
+          28.691471774462677
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a98a89fffff",
+        "hexagon_count": 3,
+        "total_jobs": 19,
+        "total_population": 4926.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a98a89fffff",
+          "8844a98a8bfffff",
+          "8844a98a9dfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 3,
+        "missing_job_hexagons": 1,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.49012326875838,
+          28.167404044909752
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a98addfffff",
+        "hexagon_count": 1,
+        "total_jobs": 16,
+        "total_population": 1511.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a98addfffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.50255813221088,
+          28.15926805676929
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a914e7fffff",
+        "hexagon_count": 1,
+        "total_jobs": 14,
+        "total_population": 1541.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a914e7fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.50049770322352,
+          28.469489337004404
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a90485fffff",
+        "hexagon_count": 1,
+        "total_jobs": 12,
+        "total_population": 1940.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a90485fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.47118481451103,
+          28.625856947737365
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a98a05fffff",
+        "hexagon_count": 1,
+        "total_jobs": 12,
+        "total_population": 1775.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a98a05fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.44954473187808,
+          28.118987848651454
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a91ac7fffff",
+        "hexagon_count": 1,
+        "total_jobs": 7,
+        "total_population": 1493.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a91ac7fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.28981135157971,
+          28.344162958541204
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a9ae17fffff",
+        "hexagon_count": 1,
+        "total_jobs": 7,
+        "total_population": 1638.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a9ae17fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.76687345700381,
+          28.62087763592679
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "center_8844a98da9fffff",
+        "hexagon_count": 1,
+        "total_jobs": 6,
+        "total_population": 1493.0,
+        "criteria": "population",
+        "hexagons": [
+          "8844a98da9fffff"
+        ],
+        "jobs_selected_hexagons": 0,
+        "population_selected_hexagons": 1,
+        "missing_job_hexagons": 0,
+        "missing_population_hexagons": 0,
+        "centroid_weight": "jobs"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.48566831108701,
+          28.3239473361598
+        ]
+      }
+    }
+  ]
+}
