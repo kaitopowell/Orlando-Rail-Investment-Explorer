@@ -272,3 +272,25 @@ For each run:
 4. Which cost datasets and peer cities are used, and the low/high bounds.
 5. How hospitality shares of jobs (LODES WAC workplace industry columns) are presented in the tourism story.
 6. **Resolved (2026-10-30):** no-vehicle and poverty measures are shares (percent of households / people in the poverty universe). High need is strictly above the equity layer's existing 80th-percentile break: **8.41136486219713%** for no-vehicle share and **18.970607565181936%** for poverty share. These exact strings are copied from the [Equity section of `analysis/README.md`](../analysis/README.md#equity); equality belongs to the lower class.
+
+## Candidate connections
+
+The independent candidate generator is `analysis/rail/centers.py`. It uses only
+supplied modeled population per H3 resolution-8 cell and workplace-based LODES
+2023 jobs, aggregated by block internal point. **Existing transit and existing
+plans are not inputs**; this preserves the meaning of later comparisons.
+
+All choices are assumptions: **TOP_SHARE=0.05** independently per source's
+observed-cell universe (ceiling count, ties by ID), union and **k=1** adjacency
+clustering, job-weighted spherical center points with population fallback, and
+**K_NEAREST=3**, **MAX_KM=40** for deduplicated undirected great-circle connections.
+IDs and ordering are deterministic. Missing cross-source values are flagged,
+not described as measured zeros. No OD fallback was needed for this run.
+
+These are **illustrative candidates, not routes or proposals**; straight lines
+ignore water, terrain and feasibility. No costs, speeds, ridership or connection
+forcing are included. The run yields 146 centers and 270 connections in three
+components (136/5/5), with no center lacking a connection. See the
+[candidate contract](../data/CANDIDATE_CONNECTIONS_CONTRACT.md) and summary for
+thresholds, coverage, component IDs and workplace-concentration caveats.
+No score or greedy implementation is part of this step.
