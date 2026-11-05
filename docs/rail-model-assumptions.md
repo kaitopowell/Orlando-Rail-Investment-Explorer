@@ -294,3 +294,25 @@ components (136/5/5), with no center lacking a connection. See the
 [candidate contract](../data/CANDIDATE_CONNECTIONS_CONTRACT.md) and summary for
 thresholds, coverage, component IDs and workplace-concentration caveats.
 No score or greedy implementation is part of this step.
+
+
+## Center-level demand
+
+`analysis/rail/center_od.py` aggregates existing hexagon-pair baseline times
+into the independent PR #42 centers. Existing membership takes precedence;
+other baseline hexagons go to the nearest center centroid within **3, 5 or 8
+km**, with **5 km default**, great-circle distance and ties by ascending ID.
+These radii are assumptions, not measured walking catchments or calibrated
+service areas. Membership and candidate outputs are not regenerated.
+
+Directed center-pair totals retain intra-center jobs and explicitly report
+unassigned roles. Per-mode job-weighted means use only times ≤120 minutes
+transit / ≤60 minutes car and exclude the agreed no-car role pairs from
+averages, while retaining and separately reporting their 3,863 jobs. All
+three runs reconcile to 591,177 hexagon pairs and 1,006,088 jobs. Existing
+same-hexagon times are retained; the future model's treatment remains TBD.
+No competitiveness ratio or threshold, score, or greedy implementation is
+part of this aggregation. The means summarize original hexagon-pair routes,
+not new routes between center centroids, and may use different job subsets
+for transit and car. See the [contract](../data/CENTER_OD_BASELINE_CONTRACT.md)
+for exact sensitivity results, concentration, source hashes and limitations.
