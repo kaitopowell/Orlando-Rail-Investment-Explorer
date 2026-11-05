@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import {useCandidates} from "./components/useCandidates";
+import type {CandidateSelection} from "./data/candidates";
+import { useCallback, useEffect, useState } from "react";
 import MapView from "./map/MapView";
 import type { PopulationStatus } from "./components/PopulationOverlay";
 import Sidebar from "./components/Sidebar";
@@ -14,6 +16,8 @@ export default function App() {
   const [busVisible, setBusVisible] = useState(false);
   const [equityVisible, setEquityVisible] = useState(false);
   const [open, setOpen] = useState(() => window.innerWidth > 600);
+  const candidates = useCandidates();
+  const selectCandidate = useCallback((selection: CandidateSelection) => { candidates.select(selection); setOpen(true); }, [candidates.select]);
   const [countiesVisible, setCountiesVisible] = useState(true);
   const [transitVisible, setTransitVisible] = useState(false);
   const [employmentVisible, setEmploymentVisible] = useState(false);
@@ -23,6 +27,8 @@ export default function App() {
   return (
     <main>
       <MapView
+        candidates={candidates}
+        onCandidateSelect={selectCandidate}
         busVisible={busVisible}
         equityVisible={equityVisible}
         employmentVisible={employmentVisible}
@@ -35,6 +41,7 @@ export default function App() {
         onPopulationStatus={setPopulationStatus}
       />
       <Sidebar
+        candidates={candidates}
         onTrainMotionToggle={() => { setTrainMotion(!trainMotion); setTrainPaused(false); }}
         onTrainPauseToggle={() => setTrainPaused(!trainPaused)}
         busVisible={busVisible}

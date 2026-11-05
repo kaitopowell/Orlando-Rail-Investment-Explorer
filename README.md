@@ -43,7 +43,7 @@ Document and acquire authoritative regional datasets, validate licenses/coverage
 
 ## Browser smoke checks
 
-With the dev server running, run `npx playwright install chromium` once, then `npm run test:smoke`. To use an installed Chromium instead, run `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:smoke`.
+With the dev server running, run `npx playwright install chromium` once, then `npm run test:smoke` and `npm run test:candidates`. To use an installed Chromium instead, run `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:smoke`.
 
 The smoke check substitutes an empty test-only basemap style but loads the real generated Census geometry. It checks phone (390 px), laptop (1440 px), and ultrawide (2560 px) camera constraints, county toggle, hover, label fading, attribution, disabled analytical controls, sidebar keyboard access, and data/resource failures. It does **not** validate live geographic tiles. No fixture data appears in the application.
 
@@ -110,3 +110,33 @@ Timestamps are precomputed from distances along the existing GeoJSON paths;
 no new data files are created. Motion sits above the rail lines and below
 station markers, labels and county outlines. Pause preserves position, hidden
 tabs do not advance the clock, and unmount cancels animation and clears layers.
+
+### Candidate connections
+
+Under **Model candidates**, enable **Candidate connections** (off by default).
+Amber circles are sized by the square root of workplace jobs, bounded to 3–11
+pixels; faint pale arcs have uniform width and do not encode importance. These
+static layers sit below labels, work in flat or pitched views, and can coexist
+with Population and Employment. Hover highlights; click a center or arc to open
+its sidebar inspection. The **Inspect candidate center** and **Inspect candidate
+connection** selectors offer the same information by keyboard, including each
+center’s neighbors and connected group. No animation or hover transitions run.
+
+Expand **Assumptions and sources** for the summary-derived parameters and source
+links. Counts and shares come from the supplied summary; disconnected groups are
+computed from the loaded connections. Population is a modeled estimate, not a
+measured count. These candidates are built independently of existing plans.
+Straight lines are not routes, ignore water and terrain, and imply no costs,
+speeds or ridership. The flagged Disney-area cell is preserved; the sidebar
+separately identifies the actual largest WAC cell from the summary rather than
+confusing it with the OD hotspot. Employer location assignment is a possibility
+to check, not a finding.
+
+The two candidate GeoJSON files and `candidate_connections_summary.json` in
+`public/data/` are byte-identical copies of PR #42’s processed outputs; no analysis
+is rerun. All three files are validated together. Missing or inconsistent files
+produce a visible sidebar error and Retry button, with no partial candidate
+layer. `npm run test:candidates` checks delivery, validation, graph topology,
+keyboard/pointer inspection, failures, cleanup and demand-layer coexistence on
+phone and laptop. Browser tests use a controlled basemap fixture; this does not
+verify live basemap availability.
