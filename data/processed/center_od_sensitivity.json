@@ -6,6 +6,7 @@
       "car_usable_jobs": 15118,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 4.139429,
       "home_center": "center_8844a90085fffff",
       "intra_center": true,
       "jobs": 15118,
@@ -13,6 +14,7 @@
       "transit_mean_min": 48.691217,
       "transit_option_share": 0.993319222119328,
       "transit_usable_jobs": 15017,
+      "work_access_mean_km": 2.911495,
       "work_center": "center_8844a90085fffff"
     },
     {
@@ -20,6 +22,7 @@
       "car_usable_jobs": 13787,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 5.933178,
       "home_center": "center_8844a90213fffff",
       "intra_center": true,
       "jobs": 13787,
@@ -27,6 +30,7 @@
       "transit_mean_min": 66.285155,
       "transit_option_share": 0.9449481395517516,
       "transit_usable_jobs": 13028,
+      "work_access_mean_km": 4.077495,
       "work_center": "center_8844a90213fffff"
     },
     {
@@ -34,6 +38,7 @@
       "car_usable_jobs": 12758,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 7.312859,
       "home_center": "center_8844a90213fffff",
       "intra_center": false,
       "jobs": 12758,
@@ -41,6 +46,7 @@
       "transit_mean_min": 76.077731,
       "transit_option_share": 0.9398024768772535,
       "transit_usable_jobs": 11990,
+      "work_access_mean_km": 2.776201,
       "work_center": "center_8844a90085fffff"
     },
     {
@@ -48,6 +54,7 @@
       "car_usable_jobs": 8748,
       "excluded_jobs": 212,
       "excluded_pair_count": 58,
+      "home_access_mean_km": 3.642974,
       "home_center": "center_8844a90025fffff",
       "intra_center": false,
       "jobs": 8967,
@@ -55,6 +62,7 @@
       "transit_mean_min": 73.158845,
       "transit_option_share": 0.9077729452436712,
       "transit_usable_jobs": 8140,
+      "work_access_mean_km": 2.861453,
       "work_center": "center_8844a90085fffff"
     },
     {
@@ -62,6 +70,7 @@
       "car_usable_jobs": 5765,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 6.294929,
       "home_center": "center_8844a90213fffff",
       "intra_center": false,
       "jobs": 5765,
@@ -69,6 +78,7 @@
       "transit_mean_min": 100.01912,
       "transit_option_share": 0.843712055507372,
       "transit_usable_jobs": 4864,
+      "work_access_mean_km": 0.857579,
       "work_center": "center_8844a91605fffff"
     },
     {
@@ -76,6 +86,7 @@
       "car_usable_jobs": 4285,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 5.761224,
       "home_center": "center_8844a90213fffff",
       "intra_center": false,
       "jobs": 4285,
@@ -83,6 +94,7 @@
       "transit_mean_min": 70.325401,
       "transit_option_share": 0.9904317386231039,
       "transit_usable_jobs": 4244,
+      "work_access_mean_km": 0.173917,
       "work_center": "center_8844a9159dfffff"
     },
     {
@@ -90,6 +102,7 @@
       "car_usable_jobs": 3961,
       "excluded_jobs": 101,
       "excluded_pair_count": 60,
+      "home_access_mean_km": 3.423654,
       "home_center": "center_8844a90025fffff",
       "intra_center": false,
       "jobs": 4062,
@@ -97,6 +110,7 @@
       "transit_mean_min": 102.116259,
       "transit_option_share": 0.5738552437223042,
       "transit_usable_jobs": 2331,
+      "work_access_mean_km": 3.986397,
       "work_center": "center_8844a90213fffff"
     },
     {
@@ -104,6 +118,7 @@
       "car_usable_jobs": 4041,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 4.33859,
       "home_center": "center_8844a90085fffff",
       "intra_center": false,
       "jobs": 4041,
@@ -111,6 +126,7 @@
       "transit_mean_min": 88.158794,
       "transit_option_share": 0.7386785449146251,
       "transit_usable_jobs": 2985,
+      "work_access_mean_km": 3.906359,
       "work_center": "center_8844a90213fffff"
     },
     {
@@ -118,6 +134,7 @@
       "car_usable_jobs": 3971,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 2.233441,
       "home_center": "center_8844a90f01fffff",
       "intra_center": false,
       "jobs": 3971,
@@ -125,6 +142,7 @@
       "transit_mean_min": 78.774885,
       "transit_option_share": 0.9866532359607152,
       "transit_usable_jobs": 3918,
+      "work_access_mean_km": 3.145594,
       "work_center": "center_8844a90085fffff"
     },
     {
@@ -132,6 +150,7 @@
       "car_usable_jobs": 2943,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 2.205085,
       "home_center": "center_8844a905a1fffff",
       "intra_center": false,
       "jobs": 2943,
@@ -139,6 +158,7 @@
       "transit_mean_min": 105.012129,
       "transit_option_share": 0.7563710499490316,
       "transit_usable_jobs": 2226,
+      "work_access_mean_km": 2.883183,
       "work_center": "center_8844a90085fffff"
     },
     {
@@ -146,6 +166,7 @@
       "car_usable_jobs": 2656,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 4.142793,
       "home_center": "center_8844a91021fffff",
       "intra_center": false,
       "jobs": 2656,
@@ -153,6 +174,7 @@
       "transit_mean_min": 80.675676,
       "transit_option_share": 0.45971385542168675,
       "transit_usable_jobs": 1221,
+      "work_access_mean_km": 2.865186,
       "work_center": "center_8844a90085fffff"
     },
     {
@@ -160,6 +182,7 @@
       "car_usable_jobs": 2266,
       "excluded_jobs": 56,
       "excluded_pair_count": 29,
+      "home_access_mean_km": 3.204659,
       "home_center": "center_8844a90025fffff",
       "intra_center": true,
       "jobs": 2564,
@@ -167,6 +190,7 @@
       "transit_mean_min": 48.569888,
       "transit_option_share": 0.9040561622464899,
       "transit_usable_jobs": 2318,
+      "work_access_mean_km": 2.551809,
       "work_center": "center_8844a90025fffff"
     },
     {
@@ -174,6 +198,7 @@
       "car_usable_jobs": 2425,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 3.971282,
       "home_center": "center_8844a91021fffff",
       "intra_center": false,
       "jobs": 2425,
@@ -181,6 +206,7 @@
       "transit_mean_min": 95.050251,
       "transit_option_share": 0.24618556701030928,
       "transit_usable_jobs": 597,
+      "work_access_mean_km": 3.763619,
       "work_center": "center_8844a90213fffff"
     },
     {
@@ -188,6 +214,7 @@
       "car_usable_jobs": 2372,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 2.827603,
       "home_center": "center_8844a93437fffff",
       "intra_center": true,
       "jobs": 2372,
@@ -195,6 +222,7 @@
       "transit_mean_min": 61.369356,
       "transit_option_share": 0.8777403035413154,
       "transit_usable_jobs": 2082,
+      "work_access_mean_km": 2.670223,
       "work_center": "center_8844a93437fffff"
     },
     {
@@ -202,6 +230,7 @@
       "car_usable_jobs": 2363,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 2.343697,
       "home_center": "center_8844a93115fffff",
       "intra_center": false,
       "jobs": 2363,
@@ -209,6 +238,7 @@
       "transit_mean_min": 106.587658,
       "transit_option_share": 0.30173508252221753,
       "transit_usable_jobs": 713,
+      "work_access_mean_km": 2.667072,
       "work_center": "center_8844a90085fffff"
     },
     {
@@ -216,6 +246,7 @@
       "car_usable_jobs": 2329,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 7.60295,
       "home_center": "center_8844a90213fffff",
       "intra_center": false,
       "jobs": 2329,
@@ -223,6 +254,7 @@
       "transit_mean_min": 97.976555,
       "transit_option_share": 0.4761700300558179,
       "transit_usable_jobs": 1109,
+      "work_access_mean_km": 2.222984,
       "work_center": "center_8844a905a1fffff"
     },
     {
@@ -230,6 +262,7 @@
       "car_usable_jobs": 2176,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 1.858207,
       "home_center": "center_8844a9ba39fffff",
       "intra_center": false,
       "jobs": 2176,
@@ -237,6 +270,7 @@
       "transit_mean_min": null,
       "transit_option_share": 0.0,
       "transit_usable_jobs": 0,
+      "work_access_mean_km": 0.85613,
       "work_center": "center_8844a91605fffff"
     },
     {
@@ -244,6 +278,7 @@
       "car_usable_jobs": 2163,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 2.260398,
       "home_center": "center_8844a90691fffff",
       "intra_center": false,
       "jobs": 2163,
@@ -251,6 +286,7 @@
       "transit_mean_min": 101.816794,
       "transit_option_share": 0.3028201571890892,
       "transit_usable_jobs": 655,
+      "work_access_mean_km": 2.615184,
       "work_center": "center_8844a90085fffff"
     },
     {
@@ -258,6 +294,7 @@
       "car_usable_jobs": 2129,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 2.762171,
       "home_center": "center_8844a9a865fffff",
       "intra_center": false,
       "jobs": 2129,
@@ -265,6 +302,7 @@
       "transit_mean_min": 107.653595,
       "transit_option_share": 0.07186472522310944,
       "transit_usable_jobs": 153,
+      "work_access_mean_km": 2.503152,
       "work_center": "center_8844a90085fffff"
     },
     {
@@ -272,6 +310,7 @@
       "car_usable_jobs": 2102,
       "excluded_jobs": 0,
       "excluded_pair_count": 0,
+      "home_access_mean_km": 1.995425,
       "home_center": "center_8844a90885fffff",
       "intra_center": false,
       "jobs": 2102,
@@ -279,6 +318,7 @@
       "transit_mean_min": 101.005859,
       "transit_option_share": 0.4871550903901047,
       "transit_usable_jobs": 1024,
+      "work_access_mean_km": 2.958637,
       "work_center": "center_8844a90085fffff"
     }
   ],
@@ -414,6 +454,23 @@
   },
   "scenarios": [
     {
+      "access_distance_km": {
+        "home": {
+          "assigned_job_ends": 739530,
+          "median_km": 1.6760885811474804,
+          "p90_km": 4.908166807762365
+        },
+        "pooled_ends": {
+          "assigned_job_ends": 1654998,
+          "median_km": 1.523261454836201,
+          "p90_km": 4.088335234837383
+        },
+        "work": {
+          "assigned_job_ends": 915468,
+          "median_km": 1.4434106151603003,
+          "p90_km": 3.2908541405313403
+        }
+      },
       "assign_max_km": 3,
       "center_pair_count": 18205,
       "center_pairs_at_least_50_jobs": 2265,
@@ -471,6 +528,23 @@
       "top_100_share_assigned_jobs": 0.2607108619237138
     },
     {
+      "access_distance_km": {
+        "home": {
+          "assigned_job_ends": 869630,
+          "median_km": 1.8270398829804155,
+          "p90_km": 4.720980444370915
+        },
+        "pooled_ends": {
+          "assigned_job_ends": 1833700,
+          "median_km": 1.6610278276454022,
+          "p90_km": 4.287730387533619
+        },
+        "work": {
+          "assigned_job_ends": 964070,
+          "median_km": 1.4928572315666013,
+          "p90_km": 3.9011943670768443
+        }
+      },
       "assign_max_km": 5,
       "center_pair_count": 18916,
       "center_pairs_at_least_50_jobs": 2865,
@@ -528,6 +602,23 @@
       "top_100_share_assigned_jobs": 0.24324208989051735
     },
     {
+      "access_distance_km": {
+        "home": {
+          "assigned_job_ends": 954270,
+          "median_km": 2.1914121963909525,
+          "p90_km": 6.138537456147572
+        },
+        "pooled_ends": {
+          "assigned_job_ends": 1945760,
+          "median_km": 1.7648330136239243,
+          "p90_km": 5.278447416350858
+        },
+        "work": {
+          "assigned_job_ends": 991490,
+          "median_km": 1.513988258700478,
+          "p90_km": 4.241441113047013
+        }
+      },
       "assign_max_km": 8,
       "center_pair_count": 19226,
       "center_pairs_at_least_50_jobs": 3174,

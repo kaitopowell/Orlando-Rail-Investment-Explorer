@@ -2,7 +2,7 @@
 
 This is an offline aggregation of existing baseline times into the independent
 PR #42 activity centers, **not a routing run, ridership estimate, or rail score**.
-No competitiveness ratio or threshold is computed. No existing data is edited.
+No competitiveness ratio or threshold is computed. No source data is edited.
 
 ## Inputs and inspected schemas
 
@@ -113,6 +113,7 @@ The pair count in this schema counts original hexagon OD rows, not center pairs.
 | `excluded_pair_count`, `excluded_jobs` | Role-specific no-car exclusions from time averages only |
 | `transit_usable_jobs`, `car_usable_jobs` | S000 denominator for each mode's mean after exclusions/cutoffs |
 | `transit_mean_min`, `car_mean_min` | Job-weighted mean of original hexagon-pair times, float minutes; blank if denominator zero |
+| `home_access_mean_km`, `work_access_mean_km` | Job-weighted mean great-circle access distance at each end, kilometers; denominator is all `jobs` in the center pair, including time-excluded jobs |
 
 These are **not times rerouted between center centroids**. Job totals reconcile
 only when the separate unassigned categories are added. The output has no
@@ -175,8 +176,7 @@ py -3.14 -m unittest discover -s analysis/rail -p test_rail_center_od.py
 On Linux, replace `py -3.14` with `python3`. The analysis itself imports only
 standard library modules and h3 v4; it does not import the routing stack.
 Use `--output-dir <directory>` to reproduce into a separate directory for
-comparison. Only the three newly defined outputs are written. No membership
-file, raw data, baseline routes or candidate-center outputs are regenerated.
+comparison. Only the four documented outputs are written. No center-membership recomputation, raw data, baseline routes or candidate-center outputs are regenerated.
 
 The supplied files were processed here using Linux Python 3.13 and h3 4.4.2.
 Windows Python 3.14 execution was not directly tested. Fixture tests use tiny
@@ -202,3 +202,73 @@ synthetic data without network or large inputs.
 - No competitiveness threshold is applied; its cited value and the same-
   hexagon model treatment remain open decisions. No score or greedy code is
   created or edited by this task.
+
+
+## Access distance extension (follow-up to PR #44)
+
+**Access distance is carried forward for a later model step and is not charged
+in this dataset.** No speeds, access penalties, distance-to-time conversion or
+changes to stored transit/car times are introduced. Those model choices require
+cited sources and remain outside this task. All pre-existing CSV columns and
+JSON values are preserved; `center_od_unassigned.csv` remains byte-identical.
+
+For every assigned baseline hexagon, compute
+`h3.great_circle_distance(h3.cell_to_latlng(hexagon), assigned_centroid, unit='km')`.
+This is distance to the **assigned** center, not necessarily the closest center
+for member hexagons. The PR #44 zero marker for member assignment is not used as
+an access measurement. Members retain their original owner regardless of distance;
+therefore actual access distances can exceed 3, 5 or 8 km even in that radius's
+scenario. Nonmembers retain the existing inclusive radius and nearest-ID tie rules.
+These are straight-line distances, not routed walking distances or travel times.
+
+### Per-hexagon record
+
+`data/processed/center_hex_access.csv.gz` has one row per assigned baseline
+hexagon **per radius**, sorted by radius and H3 ID:
+
+| Column | Meaning / units |
+| --- | --- |
+| `assign_max_km` | Existing assignment scenario: 3, 5 or 8 km |
+| `hexagon` | Original H3 resolution-8 ID, string |
+| `center_id` | Assigned PR #42 center ID, string |
+| `access_km` | Actual great-circle distance to the assigned centroid, kilometers |
+
+A hexagon appearing in both roles has a single record per radius. Unassigned
+hexagons have no record for that radius; no zero distance is fabricated for them.
+The file records assignments for baseline hexagons, not unused center members.
+
+### Pair means and sensitivity percentiles
+
+The two new columns at the end of `center_od_baseline.csv.gz` use
+`sum(S000 * endpoint_access_km) / sum(S000)` for all original rows in the
+assigned/assigned center pair. They use the existing six-decimal output precision.
+Time exclusions and missing/over-limit times do not remove geometrically assigned
+jobs from these distance means. Intra-center pairs can have nonzero access at both
+ends. Existing time means, denominators, job counts and exclusions do not change.
+
+Each sensitivity scenario adds `access_distance_km` with `home`, `work`, and
+`pooled_ends` objects. Each reports `assigned_job_ends`, `median_km`, and `p90_km`:
+
+- Home and work distributions weight each assigned endpoint distance by S000,
+  including rows whose other end is unassigned and jobs excluded from time means.
+- The pooled distribution combines the two role distributions. A job with both
+  ends assigned contributes **two endpoint observations**, one per end; a job
+  with only one assigned end contributes one. This is not a distinct-job count
+  or the distribution of summed home-plus-work distance per commute.
+- Percentiles use the **inverse weighted empirical CDF**: the smallest distance
+  where cumulative job weight reaches at least 50% or 90%. There is no linear
+  interpolation. Values are computed from unrounded distances; empty weighted
+  distributions would report null percentiles and zero assigned job ends.
+
+The observed results below are in km, rounded to six decimals for this table;
+JSON and per-hexagon records retain full calculated float precision.
+
+| Radius | Home median | Home P90 | Work median | Work P90 | Pooled median | Pooled P90 |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 3 | 1.676089 | 4.908167 | 1.443411 | 3.290854 | 1.523261 | 4.088335 |
+| 5 | 1.827040 | 4.720980 | 1.492857 | 3.901194 | 1.661028 | 4.287730 |
+| 8 | 2.191412 | 6.138537 | 1.513988 | 4.241441 | 1.764833 | 5.278447 |
+
+These conditional distributions need not vary monotonically with assignment
+radius: additional assigned jobs change their weights, while member distances
+remain unconstrained by the radius. No distance is capped or converted to time.

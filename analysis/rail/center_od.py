@@ -39,7 +39,8 @@ OUTPUT_DIR = ROOT / 'data/processed'
 GROUPS = ('assigned_both', 'home_only', 'work_only', 'unassigned')
 OD_FIELDS = ('home_center', 'work_center', 'intra_center', 'pair_count', 'jobs',
              'excluded_pair_count', 'excluded_jobs', 'transit_usable_jobs',
-             'transit_mean_min', 'car_usable_jobs', 'car_mean_min')
+             'transit_mean_min', 'car_usable_jobs', 'car_mean_min',
+             'home_access_mean_km', 'work_access_mean_km')
 
 
 @dataclass(frozen=True)
@@ -171,6 +172,60 @@ def assignments(nearest, radius):
             for cell_id, (center_id, distance) in nearest.items()}
 
 
+def access_distances(nearest, centers):
+    """Actual distance to the assigned owner, including nonzero member distances.
+
+    nearest's zero for members is an assignment sentinel, not access distance.
+    Keep it unchanged so membership continues to override the radius cutoff.
+    """
+    by_id = {center.id: center for center in centers}
+    return {id_: h3.great_circle_distance(h3.cell_to_latlng(cell(id_)),
+                (by_id[center_id].lat, by_id[center_id].lon), unit='km')
+            for id_, (center_id, _) in sorted(nearest.items())}
+
+
+def weighted_access_percentiles(weights, distances):
+    """Inverse empirical CDF: smallest distance reaching 50% / 90% of job weight."""
+    total = sum(weights.values())
+    result = {'assigned_job_ends': total, 'median_km': None, 'p90_km': None}
+    if not total:
+        return result
+    ordered = sorted((distances[id_], id_, jobs) for id_, jobs in weights.items())
+    for name, percentile in (('median_km', 50), ('p90_km', 90)):
+        cumulative = 0
+        for distance, _, jobs in ordered:
+            cumulative += jobs
+            if cumulative * 100 >= percentile * total:
+                result[name] = distance
+                break
+    return result
+
+
+def add_access(rows, mapping, distances, pairs):
+    """All jobs weight distances, including time-excluded jobs and zero times."""
+    weights = {'home': defaultdict(int), 'work': defaultdict(int)}
+    pair_sums = defaultdict(lambda: [0.0, 0.0])
+    for row in sorted(rows, key=lambda row: (row.home, row.work)):
+        home, work = mapping[row.home], mapping[row.work]
+        for role, id_ in (('home', row.home), ('work', row.work)):
+            if mapping[id_] is not None:
+                weights[role][id_] += row.jobs
+        if home is not None and work is not None:
+            sums = pair_sums[home, work]
+            sums[0] += row.jobs * distances[row.home]
+            sums[1] += row.jobs * distances[row.work]
+    for pair in pairs:
+        sums = pair_sums[pair['home_center'], pair['work_center']]
+        pair['home_access_mean_km'] = round(sums[0] / pair['jobs'], MEAN_DECIMALS)
+        pair['work_access_mean_km'] = round(sums[1] / pair['jobs'], MEAN_DECIMALS)
+    pooled = defaultdict(int)
+    for role in weights.values():
+        for id_, jobs in role.items():
+            pooled[id_] += jobs
+    return {role: weighted_access_percentiles(values, distances)
+            for role, values in (*weights.items(), ('pooled_ends', pooled))}
+
+
 def bucket():
     return dict(pair_count=0, jobs=0, excluded_pair_count=0, excluded_jobs=0,
                 transit_usable_jobs=0, transit_weighted_minutes=0.0,
@@ -284,11 +339,20 @@ def run(baseline=BASELINE, centers_path=CENTERS, output_dir=OUTPUT_DIR):
                        home_count=len(no_home), work_count=len(no_work), distinct_count=len(no_home | no_work),
                        overlap_count=len(no_home & no_work), pair_count=len(excluded), jobs=sum(row.jobs for row in excluded)),
                    scenarios=[])
+    distances = access_distances(nearest, centers)
+    access_records = []
     unassigned, main = [], None
     center_ids = {c.id for c in centers}
     for radius in ASSIGN_RADII_KM:
-        pairs, groups, active = aggregate(rows, assignments(nearest, radius), no_home, no_work, EXPECTED_PAIRS, EXPECTED_JOBS)
-        summary['scenarios'].append(summarize(radius, pairs, groups, center_ids, active))
+        mapping = assignments(nearest, radius)
+        pairs, groups, active = aggregate(rows, mapping, no_home, no_work, EXPECTED_PAIRS, EXPECTED_JOBS)
+        access = add_access(rows, mapping, distances, pairs)
+        scenario = summarize(radius, pairs, groups, center_ids, active)
+        scenario['access_distance_km'] = access
+        summary['scenarios'].append(scenario)
+        access_records.extend(dict(assign_max_km=radius, hexagon=id_, center_id=center_id,
+                                   access_km=distances[id_])
+                              for id_, center_id in sorted(mapping.items()) if center_id is not None)
         for name, category in (('work_only', 'home_unassigned'), ('home_only', 'work_unassigned'), ('unassigned', 'both_unassigned')):
             unassigned.append(dict(assign_max_km=radius, category=category,
                                   **{field: groups[name][field] for field in ('pair_count', 'jobs', 'excluded_pair_count', 'excluded_jobs')}))
@@ -304,6 +368,7 @@ def run(baseline=BASELINE, centers_path=CENTERS, output_dir=OUTPUT_DIR):
     output_dir.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(dir=output_dir) as temporary:
         temporary = Path(temporary)
+        write_csv(temporary / 'center_hex_access.csv.gz', ('assign_max_km', 'hexagon', 'center_id', 'access_km'), access_records, compressed=True)
         write_csv(temporary / 'center_od_baseline.csv.gz', OD_FIELDS, main, compressed=True)
         write_csv(temporary / 'center_od_unassigned.csv', ('assign_max_km', 'category', 'pair_count', 'jobs', 'excluded_pair_count', 'excluded_jobs'), sorted(unassigned, key=lambda row: (row['assign_max_km'], row['category'])))
         (temporary / 'center_od_sensitivity.json').write_text(json.dumps(summary, indent=2, sort_keys=True, allow_nan=False) + '\n', encoding='utf-8')
