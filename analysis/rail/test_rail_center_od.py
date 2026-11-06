@@ -91,6 +91,38 @@ class CenterODTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Reconciliation'):
             c.reconcile(groups, 4, 18)
 
+    def test_member_access_is_actual_distance_without_changing_assignment(self):
+        owner_position = h3.cell_to_latlng(self.b)
+        centers = [c.Center('owner', *owner_position, (self.a,)),
+                   c.Center('closer', *self.position, ())]
+        nearest = c.nearest_centers([self.a], centers)
+        mapping = c.assignments(nearest, 0)
+        distance = c.access_distances(nearest, centers)[self.a]
+        self.assertEqual(mapping[self.a], 'owner')
+        self.assertGreater(distance, 0)
+        self.assertEqual(distance, h3.great_circle_distance(self.position, owner_position, unit='km'))
+        self.assertEqual(nearest[self.a], ('owner', 0.0))
+
+    def test_access_job_weights_partial_assignment_and_unchanged_fields(self):
+        rows = [c.Flow('h1', 'w', 1, 10, 5), c.Flow('h2', 'w', 3, None, None),
+                c.Flow('h1', 'u', 6, None, None), c.Flow('u', 'u', 99, None, None)]
+        mapping = {'h1': 'A', 'h2': 'A', 'w': 'A', 'u': None}
+        pairs, groups, active = c.aggregate(rows, mapping, {'h2'}, set(), 4, 109)
+        original = json.loads(json.dumps(pairs))
+        summary = c.add_access(rows, mapping, {'h1': 1.0, 'h2': 5.0, 'w': 2.0}, pairs)
+        for old, new in zip(original, pairs):
+            self.assertEqual(old, {key: new[key] for key in old})
+        self.assertTrue(pairs[0]['intra_center'])
+        self.assertEqual(pairs[0]['excluded_jobs'], 3)
+        self.assertEqual(pairs[0]['home_access_mean_km'], 4.0)
+        self.assertEqual(pairs[0]['work_access_mean_km'], 2.0)
+        self.assertEqual(summary['home'], {'assigned_job_ends': 10, 'median_km': 1.0, 'p90_km': 5.0})
+        self.assertEqual(summary['work'], {'assigned_job_ends': 4, 'median_km': 2.0, 'p90_km': 2.0})
+        self.assertEqual(summary['pooled_ends'], {'assigned_job_ends': 14, 'median_km': 1.0, 'p90_km': 5.0})
+        self.assertEqual(c.weighted_access_percentiles({}, {}),
+                         {'assigned_job_ends': 0, 'median_km': None, 'p90_km': None})
+        self.assertEqual(c.weighted_access_percentiles({'a': 1, 'b': 9}, {'a': 1, 'b': 10})['median_km'], 10)
+
     def test_tiny_file_validation_and_deterministic_gzip(self):
         with tempfile.TemporaryDirectory() as directory:
             directory = Path(directory)
