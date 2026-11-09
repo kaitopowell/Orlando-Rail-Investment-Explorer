@@ -1,0 +1,4 @@
+import {placeName,type CenterLabels} from '../data/centerLabels';
+import type {LabelState} from './useCenterLabels';
+export function CenterName({id,labels}:{id:string;labels:CenterLabels}) {return <span className="center-name"><span>{placeName(labels,id)}</span><small>{id}</small></span>;}
+export function LabelNotice({state}:{state:LabelState}) {return <div className="label-notice"><p>Place names are editorial labels.</p>{state.loading&&<p role="status">Loading place names…</p>}{state.error&&<div role="alert">Place names unavailable: {state.error} Showing “Unnamed center”. <button onClick={state.retry}>Retry place names</button></div>}{state.missing.length>0&&<details><summary>{state.missing.length} centers have no label; shown as “Unnamed center”</summary><ul>{state.missing.map(id=><li key={id}>Unnamed center<br/><small>{id}</small></li>)}</ul></details>}</div>;}

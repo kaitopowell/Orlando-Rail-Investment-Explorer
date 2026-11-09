@@ -57,7 +57,7 @@ try {
   assert.ok(await page.evaluate(()=>{const ls=window.deck._deck.props.layers.flat(Infinity);return ls.some(l=>l.id.startsWith('population-hexagon'))&&ls.some(l=>l.id==='candidate-centers');}));
   await shot('combined',45);
   await page.getByRole('button',{name:'Toggle population 3D view'}).click();await page.getByRole('button',{name:'Toggle employment 3D view'}).click();await shot('combined',0);
-  const underlying=await page.evaluate(()=>window.deck._deck.props.layers.flat(Infinity).filter(l=>!l.id.startsWith('candidate-')).map(l=>l.id));
+  const underlying=await page.evaluate(()=>window.deck._deck.props.layers.flat(Infinity).filter(l=>!l.id.startsWith('candidate-')&&!l.id.startsWith('flow-')).map(l=>l.id));
   await expand(page);await toggle.uncheck();await page.waitForTimeout(150);assert.deepEqual(await layers(page),[]);assert.deepEqual(await page.evaluate(()=>window.deck._deck.props.layers.flat(Infinity).map(l=>l.id)),underlying);
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.deepEqual(errors,[]);await page.close();
   console.log(`PASS candidates ${name}: keyboard/pointer center and arc inspection, hover, graph note, off cleanup, label ordering, 2D/3D coexistence, reduced motion and layout`);
