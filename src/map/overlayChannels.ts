@@ -10,6 +10,7 @@ export function overlayChannels(overlay: MapboxOverlay, labelLayerId?: string) {
     { layers: [] },
     { layers: [] },
     { layers: [] },
+    { layers: [] },
   ];
   return state.map((_, index) => ({
     setProps(props: Props) {
@@ -28,7 +29,7 @@ export function overlayChannels(overlay: MapboxOverlay, labelLayerId?: string) {
         layers: layers.map((layer) =>
           // Transit and demand share a slot below labels and county outlines,
           // preserving demand < bus < rail order even across overlay updates.
-          (layer.id.startsWith("candidate-") || transitActive || layers.some(l => l.id.startsWith("population-hexagon")))
+          (layer.id.startsWith("candidate-") || layer.id.startsWith("flow-") || transitActive || layers.some(l => l.id.startsWith("population-hexagon")))
             ? layer.clone({ beforeId: labelLayerId })
             : layer.id === "equity-tracts" || layer.id === "employment-block-needles"
               ? layer.clone({ beforeId: pillars ? labelLayerId : undefined })

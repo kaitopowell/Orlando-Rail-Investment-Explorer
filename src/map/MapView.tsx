@@ -1,3 +1,6 @@
+import FlowOverlay from "./FlowOverlay";
+import type {FlowState} from "../components/useFlows";
+import type {LabelState} from "../components/useCenterLabels";
 import CandidateOverlay from "./CandidateOverlay";
 import type {CandidateState} from "../components/useCandidates";
 import type {CandidateSelection} from "../data/candidates";
@@ -23,6 +26,7 @@ import {
 
 export default function MapView({
   candidates,
+  flows, labels, onFlowSelect,
   onCandidateSelect,
   busVisible,
   equityVisible,
@@ -36,6 +40,7 @@ export default function MapView({
   employmentVisible,
 }: {
   candidates: CandidateState;
+  flows: FlowState; labels: LabelState; onFlowSelect: (id:string) => void;
   onCandidateSelect: (s: CandidateSelection) => void;
   busVisible: boolean;
   equityVisible: boolean;
@@ -54,6 +59,7 @@ export default function MapView({
     overlay: Pick<MapboxOverlay, "setProps">;
     equityOverlay: Pick<MapboxOverlay, "setProps">;
     employmentOverlay: Pick<MapboxOverlay, "setProps">;
+    flowOverlay: Pick<MapboxOverlay, "setProps">;
     candidateOverlay: Pick<MapboxOverlay, "setProps">;
     busOverlay: Pick<MapboxOverlay, "setProps">;
     transitOverlay: Pick<MapboxOverlay, "setProps">;
@@ -186,6 +192,7 @@ export default function MapView({
             populationOverlay,
             employmentOverlay,
             candidateOverlay,
+            flowOverlay,
             busOverlay,
             transitOverlay,
           ] = overlayChannels(overlay, labelLayerId);
@@ -196,6 +203,7 @@ export default function MapView({
             equityOverlay,
             employmentOverlay,
             candidateOverlay,
+            flowOverlay,
             busOverlay,
             transitOverlay,
           });
@@ -276,6 +284,7 @@ export default function MapView({
       )}
       </div>
       <div className={busVisible ? "transit-stack" : undefined}>
+      {scene && <FlowOverlay map={scene.map} overlay={scene.flowOverlay} state={flows} candidates={candidates} labels={labels} onSelect={onFlowSelect}/>}
       {scene && <CandidateOverlay state={candidates} overlay={scene.candidateOverlay} onSelect={onCandidateSelect}/>}
       {scene && <BusOverlay map={scene.map} overlay={scene.busOverlay} enabled={busVisible}/>}
       {scene && (

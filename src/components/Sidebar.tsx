@@ -1,3 +1,6 @@
+import FlowControls from "./FlowControls";
+import type {FlowState} from "./useFlows";
+import type {LabelState} from "./useCenterLabels";
 import CandidateControls from "./CandidateControls";
 import type {CandidateState} from "./useCandidates";
 import type { PopulationStatus } from "./PopulationOverlay";
@@ -6,6 +9,7 @@ import CountyAttribution from "./CountyAttribution";
 import { plannedLayers } from "../data/layers";
 export default function Sidebar({
   candidates,
+  flows, labels, onFlowsToggle,
   busVisible,
   onBusToggle,
   equityVisible,
@@ -27,6 +31,7 @@ export default function Sidebar({
   onPopulationToggle,
 }: {
   candidates: CandidateState;
+  flows: FlowState; labels: LabelState; onFlowsToggle: () => void;
   busVisible: boolean;
   onBusToggle: () => void;
   equityVisible: boolean;
@@ -264,7 +269,8 @@ export default function Sidebar({
             Accessed 2026-10-13 · tract boundaries 2024.
           </p>
         </section>
-        <CandidateControls state={candidates}/>
+        <CandidateControls state={candidates} labels={labels}/>
+        <FlowControls state={flows} candidates={candidates} labels={labels} onToggle={onFlowsToggle}/>
         <section className="study">
           <p className="eyebrow">STUDY AREA</p>
           <h2>

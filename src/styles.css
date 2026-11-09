@@ -849,3 +849,16 @@ main .demand-comparison > .population-panel {
 .candidate-inspector dd { margin: 0 0 8px; color: #f0d8b0; }
 .candidate-inspector ul { padding-left: 16px; }
 .candidate-inspector li { margin-bottom: 6px; }
+
+.center-name { display: inline-block; }
+.center-name small, .center-id, .flow-ranked-list small { display: block; font-size: 10px; color: #9fadb5; overflow-wrap: anywhere; }
+.flow-symbol { color: #ef705b; }
+.flow-ranked-list { padding-left: 22px; }
+.flow-ranked-list li { margin: 8px 0; }
+.flow-ranked-list button { width: 100%; text-align: left; }
+.flow-ranked-list button[aria-pressed="true"] { border-color: #ef705b; background: #352824; }
+.flow-direction { border-top: 1px solid #34444c; }
+.flow-table-scroll { overflow-x: auto; }
+.flow-table-scroll table { border-collapse: collapse; font-size: 10px; width: 100%; }
+.flow-table-scroll th, .flow-table-scroll td { padding: 5px 3px; border-bottom: 1px solid #34444c; text-align: right; }
+.flow-caveat { border-left: 2px solid #ef705b; padding-left: 8px; }

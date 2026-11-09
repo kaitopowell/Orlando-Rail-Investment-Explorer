@@ -43,7 +43,7 @@ Document and acquire authoritative regional datasets, validate licenses/coverage
 
 ## Browser smoke checks
 
-With the dev server running, run `npx playwright install chromium` once, then `npm run test:smoke` and `npm run test:candidates`. To use an installed Chromium instead, run `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:smoke`.
+With the dev server running, run `npx playwright install chromium` once, then `npm run test:smoke`, `npm run test:candidates`, and `npm run test:flows`. To use an installed Chromium instead, run `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:smoke`.
 
 The smoke check substitutes an empty test-only basemap style but loads the real generated Census geometry. It checks phone (390 px), laptop (1440 px), and ultrawide (2560 px) camera constraints, county toggle, hover, label fading, attribution, disabled analytical controls, sidebar keyboard access, and data/resource failures. It does **not** validate live geographic tiles. No fixture data appears in the application.
 
@@ -140,3 +140,38 @@ layer. `npm run test:candidates` checks delivery, validation, graph topology,
 keyboard/pointer inspection, failures, cleanup and demand-layer coexistence on
 phone and laptop. Browser tests use a controlled basemap fixture; this does not
 verify live basemap availability.
+
+### Place names and top commute flows
+
+**Place names are editorial labels** supplied by the author in
+`data/center_labels.csv`. Names lead candidate selectors and panels; IDs remain
+secondary. Missing names display **Unnamed center**, with a sidebar report.
+Missing or invalid label files show an error and Retry without discarding valid
+map geometry. Notes/confidence are editorial metadata, not analytical findings.
+
+Enable **Top commute flows** under **Commute demand** independently of
+**Candidate connections**. Choose 5, 10 or 20 combined bidirectional pairs.
+Coral arc widths scale with √jobs; these are commute summaries, not routes or
+rail proposals. Intra-center jobs are reported but not drawn. Ordered-list ranks
+include intra-center pairs, so some numbers are skipped. Click a line or press
+Enter/Space on its ranked-list button to inspect both directions and a computed
+“Why it stands out” explanation. Expand the assignment-radius section to compare
+3/5/8 km coverage. Population, Employment and candidates can remain enabled in
+flat or pitched views; existing narrow-screen demand panels still occupy map space.
+
+Combined mean times use **usable-job counts for each mode**, not all jobs or an
+unweighted average of directions. Driving is free-flow, without congestion;
+“today” means the stored baseline snapshot, not live service. A blank time alone
+does not establish no route. Small flows carry Census privacy noise, and results
+depend on assignment radius. Jobs are not unique people or predicted riders.
+Access distance is not charged as time. The Disney caveat is based on center
+membership, and direct candidate linkage is looked up in the existing edges.
+
+Place labels are limited to top-flow endpoints and centers with at least 20,000
+workplace jobs, with zoom gates and screen-space collision handling that gives
+basemap symbols priority. Some map names are hidden to avoid clutter; all remain
+available in the controls. No animation or hover transitions are added.
+`npm run test:flows` (dev server running) validates the adapters and browser
+behavior. A modern browser supporting `DecompressionStream('gzip')` is required.
+See [the frontend data contract](data/TOP_COMMUTE_FLOWS_CONTRACT.md) for source
+schemas, denominators, display constants and limitations.

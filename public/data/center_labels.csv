@@ -1,0 +1,147 @@
+center_id,name,confidence,note
+center_8844a90085fffff,Downtown Orlando,high,merged downtown / Parramore / Thornton Park / hospital area (65 hexagons)
+center_8844a90213fffff,Universal / I-Drive / Millenia area,medium,"very large merged cluster (127 hexagons); the dot sits near Kirkman Rd, so the name is general"
+center_8844a91605fffff,Walt Disney World (EPCOT / Disney Springs),medium,"few hexagons, almost no residents; job count may reflect how LODES assigns a large employer's jobs to one location"
+center_8844a905a1fffff,Maitland / Altamonte Springs (I-4),medium,merged I-4 corridor cluster (23 hexagons)
+center_8844a93985fffff,Heathrow / Lake Mary,medium,
+center_8844a90251fffff,South Orlando (Taft),medium,merged cluster; dot is near the Taft label on the map
+center_8844a9159dfffff,Universal Orlando Resort,high,single hexagon
+center_8844a90e89fffff,Winter Park,high,
+center_8844a90025fffff,East Orlando (Conway / Semoran),medium,large mostly residential cluster (49 hexagons)
+center_8844a90d21fffff,UCF / Research Park,high,
+center_8844a90885fffff,Alafaya Trail (Colonial / University Blvd),medium,
+center_8844a90331fffff,Orlando International Airport (MCO),high,
+center_8844a91001fffff,Kissimmee,high,
+center_8844a91021fffff,Buenaventura Lakes / East Kissimmee,medium,
+center_8844a91465fffff,Convention Center / SeaWorld,medium,International Drive south end
+center_8844a98ca9fffff,Walt Disney World (Wide World of Sports),low,best guess from coordinates
+center_8844a97453fffff,Lake Mary (east),low,best guess from coordinates
+center_8844a92b49fffff,Sanford (Seminole Towne Center),medium,
+center_8844a936bdfffff,Tavares (downtown),medium,
+center_8844a906c9fffff,Ocoee,medium,SR-50 corridor
+center_8844a9034dfffff,MCO south (Tradeport),low,best guess from coordinates
+center_8844a93685fffff,Tavares (south),low,best guess from coordinates
+center_8844a92b29fffff,West Sanford (SR-46),low,best guess from coordinates
+center_8844a93917fffff,Lake Mary (I-4 / Lake Mary Blvd),medium,
+center_8844a91531fffff,Sand Lake Rd (Orange Blossom Trail),low,best guess from coordinates
+center_8844a90519fffff,West Colonial Dr (Mercy Dr),low,best guess from coordinates
+center_8844a93945fffff,Longwood,medium,
+center_8844a90889fffff,Waterford Lakes,medium,
+center_8844a91719fffff,Lake Buena Vista (Palm Pkwy),low,best guess from coordinates
+center_8844a9394bfffff,Longwood (SR-434 / Rangeline Rd),low,best guess from coordinates
+center_8844a90235fffff,Boggy Creek Rd (southeast Orlando),low,best guess from coordinates
+center_8844a9a865fffff,Winter Garden (south),low,best guess from coordinates
+center_8844a9c481fffff,St. Cloud,high,
+center_8844a90ed9fffff,Winter Park (Fairbanks Ave / I-4),low,best guess from coordinates
+center_8844a974a9fffff,Downtown Sanford,high,
+center_8844f4d88bfffff,Leesburg,high,
+center_8844a90f01fffff,East Orlando (East Colonial Dr),low,best guess from coordinates
+center_8844a91507fffff,Oak Ridge,medium,near the Oak Ridge label on the map
+center_8844a90317fffff,MCO (north),low,airport complex; best guess from coordinates
+center_8844a9a187fffff,Clermont (US-27 / SR-50),medium,
+center_8844a90351fffff,MCO south (Boggy Creek Rd),low,best guess from coordinates
+center_8844a9a835fffff,Winter Garden,medium,
+center_8844a90465fffff,West Orlando (Colonial Dr),low,best guess from coordinates
+center_8844a98d4bfffff,,low,could not identify from coordinates; left blank so the app shows Unnamed center
+center_8844a91099fffff,Hunter's Creek,medium,
+center_8844a92b6bfffff,West Sanford (I-4),low,best guess from coordinates
+center_8844a90cc5fffff,Casselberry (south),low,best guess from coordinates
+center_8844a9a913fffff,Winter Garden (east),low,best guess from coordinates
+center_8844a974d1fffff,Sanford (SR-46 / Airport Blvd),low,best guess from coordinates
+center_8844a9c4d1fffff,"St. Cloud (north, Narcoossee Rd)",low,best guess from coordinates
+center_8844a9150bfffff,Universal Blvd / Sand Lake Rd,low,best guess from coordinates
+center_8844a90e83fffff,Maitland,medium,
+center_8844a90233fffff,South Orange Ave (Sand Lake Rd),low,best guess from coordinates
+center_8844a91667fffff,Disney Springs (east),low,best guess from coordinates
+center_8844a93845fffff,Forest City (Wekiva Springs Rd),low,best guess from coordinates
+center_8844a9b965fffff,Walt Disney World (Hollywood Studios),low,best guess from coordinates
+center_8844a98cd3fffff,"Walt Disney World (Animal Kingdom, south)",low,best guess from coordinates
+center_8844a9bb2bfffff,Walt Disney World (southwest),low,best guess from coordinates
+center_8844a9164bfffff,Walt Disney World (EPCOT south),low,best guess from coordinates
+center_8844a98d9bfffff,"Walt Disney World (south, Osceola Pkwy)",low,best guess from coordinates
+center_8844a93b3bfffff,Longwood (SR-434 / Wekiva Springs Rd),low,best guess from coordinates
+center_8844a90613fffff,Orlando West (Hiawassee Rd),low,best guess from coordinates
+center_8844a90c9dfffff,Casselberry,medium,
+center_8844a9bb15fffff,Walt Disney World (far west),low,best guess from coordinates
+center_8844a91433fffff,Dr. Phillips,medium,
+center_8844a918c5fffff,Lake Nona (Medical City),medium,
+center_8844a91651fffff,EPCOT,high,single hexagon
+center_8844a90103fffff,East Orlando (Semoran Blvd / Hoffner Ave),low,best guess from coordinates
+center_8844a90e11fffff,Colonialtown / Audubon Park,low,best guess from coordinates
+center_8844a98c13fffff,Reunion (US-192 West),low,best guess from coordinates
+center_8844a976e5fffff,Lake Mary (Rinehart Rd),low,best guess from coordinates
+center_8844a90dc7fffff,"Oviedo (west, SR-426)",low,best guess from coordinates
+center_8844a93437fffff,Eustis / Mount Dora (US-441),low,best guess from coordinates
+center_8844a97281fffff,Oviedo,medium,
+center_8844a91abdfffff,Lake Nona (VA Medical Center),medium,
+center_8844a9005dfffff,Southeast Orlando (Sand Lake Rd / Semoran),low,best guess from coordinates
+center_8844a93109fffff,Apopka,medium,
+center_8844a98a37fffff,Poinciana (east),low,Poinciana area; sub-area guessed
+center_8844a90263fffff,Taft (east),low,best guess from coordinates
+center_8844a97435fffff,Orlando Sanford Airport,high,
+center_8844a90201fffff,Taft (Orange Ave),low,best guess from coordinates
+center_8844a904b7fffff,Apopka (south),low,best guess from coordinates
+center_8844a914bdfffff,Windermere,low,best guess from coordinates
+center_8844a9058dfffff,Lee Rd / Orange Blossom Trail,low,best guess from coordinates
+center_8844f4ce4dfffff,Lady Lake / The Villages,medium,
+center_8844a97481fffff,Sanford (west of downtown),low,best guess from coordinates
+center_8844a93a0bfffff,Apopka (Rock Springs),low,best guess from coordinates
+center_8844a93a53fffff,Apopka (east),low,best guess from coordinates
+center_8844a90cc3fffff,Lake Howell (Casselberry),low,best guess from coordinates
+center_8844a90691fffff,Ocoee (north),low,best guess from coordinates
+center_8844a90dd1fffff,Oviedo / Winter Springs (Aloma Ave),low,best guess from coordinates
+center_8844a972a1fffff,Oviedo (east),low,best guess from coordinates
+center_8844a97693fffff,Sanford (Lake Mary Blvd),low,best guess from coordinates
+center_8844a974c9fffff,Sanford (Mellonville Ave),low,best guess from coordinates
+center_8844a91149fffff,East Kissimmee (Boggy Creek Rd),low,best guess from coordinates
+center_8844a93115fffff,Apopka (north),low,best guess from coordinates
+center_8844a91219fffff,Kissimmee (Pleasant Hill Rd),low,best guess from coordinates
+center_8844a9163bfffff,Bonnet Creek / Lake Buena Vista,low,best guess from coordinates
+center_8844a93b65fffff,Altamonte Springs,medium,
+center_8844a90eadfffff,Winter Park (Aloma Ave),low,best guess from coordinates
+center_8844a9c6a3fffff,St. Cloud (south),low,best guess from coordinates
+center_8844a90723fffff,Holden Heights,low,best guess from coordinates
+center_8844a90d15fffff,Dean Rd (Winter Park east),low,best guess from coordinates
+center_8844a912dbfffff,Kissimmee West (US-192),low,best guess from coordinates
+center_8844a97651fffff,Winter Springs,medium,
+center_8844a9140dfffff,Dr. Phillips (south),low,best guess from coordinates
+center_8844a9108dfffff,Southchase,low,best guess from coordinates
+center_8844a90655fffff,Windermere (north),low,best guess from coordinates
+center_8844a90ce1fffff,Casselberry (east),low,best guess from coordinates
+center_8844a972cdfffff,Alafaya Trail (north of UCF),low,best guess from coordinates
+center_8844a90ca9fffff,Winter Springs (south),low,best guess from coordinates
+center_8844a909d7fffff,Avalon Park (north),low,best guess from coordinates
+center_8844a904c1fffff,Clarcona,medium,
+center_8844a9089dfffff,Waterford Lakes (west),low,best guess from coordinates
+center_8844a90a87fffff,Dowden Rd (southeast Orlando),low,best guess from coordinates
+center_8844a904e9fffff,Pine Hills (north),low,best guess from coordinates
+center_8844a9ba39fffff,Four Corners (US-27),low,best guess from coordinates
+center_8844a90d0dfffff,Union Park (University Blvd),low,best guess from coordinates
+center_8844a90583fffff,Fairview Shores (Lee Rd),low,best guess from coordinates
+center_8844a90823fffff,Avalon Park,medium,
+center_8844a9c453fffff,St. Cloud (far south),low,best guess from coordinates
+center_8844a98a85fffff,Poinciana (north),low,Poinciana area; sub-area guessed
+center_8844a912b1fffff,Hunter's Creek (south),low,best guess from coordinates
+center_8844a90241fffff,Southchase (north),low,best guess from coordinates
+center_8844a90d4dfffff,Union Park,low,best guess from coordinates
+center_8844a90cc9fffff,Winter Park (north),low,best guess from coordinates
+center_8844a90989fffff,Avalon Park (northwest),low,best guess from coordinates
+center_8844a90449fffff,Pine Hills (south),low,best guess from coordinates
+center_8844a93a6bfffff,Forest City,low,best guess from coordinates
+center_8844a904bbfffff,Apopka (southwest),low,best guess from coordinates
+center_8844a9000dfffff,Conway (south),low,best guess from coordinates
+center_8844a97205fffff,Oviedo (southeast),low,best guess from coordinates
+center_8844a9a19bfffff,Clermont,low,best guess from coordinates
+center_8844a90ac3fffff,Narcoossee Rd (southeast Orlando),low,best guess from coordinates
+center_8844a975d9fffff,Sanford (east),low,best guess from coordinates
+center_8844a974c5fffff,Sanford (central),low,best guess from coordinates
+center_8844a972e3fffff,Oviedo (south),low,best guess from coordinates
+center_8844a9764bfffff,Winter Springs (east),low,best guess from coordinates
+center_8844a98a89fffff,Poinciana (northwest),low,Poinciana area; sub-area guessed
+center_8844a98addfffff,Poinciana (west),low,Poinciana area; sub-area guessed
+center_8844a914e7fffff,Dr. Phillips (north),low,best guess from coordinates
+center_8844a90485fffff,Clarcona (south),low,best guess from coordinates
+center_8844a98a05fffff,Poinciana (south),low,Poinciana area; sub-area guessed
+center_8844a91ac7fffff,Lake Nona (south),low,best guess from coordinates
+center_8844a9ae17fffff,Minneola,low,best guess from coordinates
+center_8844a98da9fffff,Celebration (east),low,best guess from coordinates

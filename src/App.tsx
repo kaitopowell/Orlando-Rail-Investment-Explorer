@@ -1,3 +1,5 @@
+import {useFlows} from "./components/useFlows";
+import {useCenterLabels} from "./components/useCenterLabels";
 import {useCandidates} from "./components/useCandidates";
 import type {CandidateSelection} from "./data/candidates";
 import { useCallback, useEffect, useState } from "react";
@@ -16,7 +18,11 @@ export default function App() {
   const [busVisible, setBusVisible] = useState(false);
   const [equityVisible, setEquityVisible] = useState(false);
   const [open, setOpen] = useState(() => window.innerWidth > 600);
-  const candidates = useCandidates();
+  const [flowsVisible, setFlowsVisible] = useState(false);
+  const candidates = useCandidates(flowsVisible);
+  const labels = useCenterLabels(candidates.data, candidates.enabled || flowsVisible);
+  const flows = useFlows(flowsVisible, candidates.data);
+  const selectFlow = useCallback((id:string) => { flows.select(id); setOpen(true); }, [flows.select]);
   const selectCandidate = useCallback((selection: CandidateSelection) => { candidates.select(selection); setOpen(true); }, [candidates.select]);
   const [countiesVisible, setCountiesVisible] = useState(true);
   const [transitVisible, setTransitVisible] = useState(false);
@@ -27,6 +33,9 @@ export default function App() {
   return (
     <main>
       <MapView
+        flows={flows}
+        labels={labels}
+        onFlowSelect={selectFlow}
         candidates={candidates}
         onCandidateSelect={selectCandidate}
         busVisible={busVisible}
@@ -41,6 +50,9 @@ export default function App() {
         onPopulationStatus={setPopulationStatus}
       />
       <Sidebar
+        flows={flows}
+        labels={labels}
+        onFlowsToggle={() => setFlowsVisible(!flowsVisible)}
         candidates={candidates}
         onTrainMotionToggle={() => { setTrainMotion(!trainMotion); setTrainPaused(false); }}
         onTrainPauseToggle={() => setTrainPaused(!trainPaused)}
