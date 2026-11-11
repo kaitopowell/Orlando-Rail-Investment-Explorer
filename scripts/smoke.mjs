@@ -45,7 +45,7 @@ try {
       (inputs) => inputs.map((input) => input.getAttribute("aria-label")),
     );
     assert.deepEqual(await names(sidebar), [
-      "County boundaries", "Population", "Employment", "Equity", "Existing transit", "Bus baseline (LYNX)", "Candidate connections", "Top commute flows",
+      "County boundaries", "Population", "Employment", "Equity", "Existing transit", "Bus baseline (LYNX)", "Proposed rail network", "Candidate connections", "Top commute flows",
     ]);
     assert.deepEqual(await names(sidebar.getByRole("region", {name:"Model candidates",exact:true})), ["Candidate connections"]);
     assert.deepEqual(await names(data), ["Population", "Employment", "Equity"]);
@@ -107,7 +107,7 @@ try {
     .click();
   await checkCamera();
   await checkSidebar();
-  assert.equal(await page.getByRole("checkbox").count(), 8);
+  assert.equal(await page.getByRole("checkbox").count(), 9);
   for (const name of ["Equity", "Bus baseline (LYNX)"])
     assert.equal(
       await page.getByRole("checkbox", { name, exact: true }).isDisabled(),
