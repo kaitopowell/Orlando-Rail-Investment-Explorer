@@ -1,0 +1,4015 @@
+{
+ "radii_km": [
+  0.8,
+  2.0
+ ],
+ "region": {
+  "tracts": 490,
+  "households": 1022315.0,
+  "hh_no_vehicle": 50303.0,
+  "population": 2793746.0,
+  "poverty_population_base": 2781122.0,
+  "people_in_poverty": 326346.2,
+  "median_income": 78676.0
+ },
+ "benchmarks": {
+  "all_candidate_centers": {
+   "stations": 146,
+   "0.8": {
+    "tracts": 56,
+    "households": 105831,
+    "share_of_households": 0.10352093043729184,
+    "share_of_no_vehicle_households": 0.10993380116494046,
+    "no_vehicle_ratio": 1.0619475762105253,
+    "share_of_people_in_poverty": 0.13072412435804862,
+    "poverty_ratio": 1.2634701254327756,
+    "median_income_covered": 70557.0,
+    "median_income_region": 78676.0,
+    "small_base_tracts": 0
+   },
+   "2.0": {
+    "tracts": 240,
+    "households": 476318,
+    "share_of_households": 0.4659209734768638,
+    "share_of_no_vehicle_households": 0.48684969087330776,
+    "no_vehicle_ratio": 1.044919028307025,
+    "share_of_people_in_poverty": 0.5094268742008949,
+    "poverty_ratio": 1.118977083231389,
+    "median_income_covered": 71455.0,
+    "median_income_region": 78676.0,
+    "small_base_tracts": 1
+   }
+  },
+  "anchor_centers_only": {
+   "stations": 16,
+   "0.8": {
+    "tracts": 9,
+    "households": 17076,
+    "share_of_households": 0.01670326660569394,
+    "share_of_no_vehicle_households": 0.02810965548774427,
+    "no_vehicle_ratio": 1.6828837227660625,
+    "share_of_people_in_poverty": 0.028024865003606306,
+    "poverty_ratio": 1.8444415980443376,
+    "median_income_covered": 60578.0,
+    "median_income_region": 78676.0,
+    "small_base_tracts": 0
+   },
+   "2.0": {
+    "tracts": 52,
+    "households": 98622,
+    "share_of_households": 0.09646928784181001,
+    "share_of_no_vehicle_households": 0.14134345864063774,
+    "no_vehicle_ratio": 1.4651653578329742,
+    "share_of_people_in_poverty": 0.12158807086658105,
+    "poverty_ratio": 1.4034899675623718,
+    "median_income_covered": 62278.0,
+    "median_income_region": 78676.0,
+    "small_base_tracts": 1
+   }
+  }
+ },
+ "scenarios": {
+  "high-oh10-connected-r1.5": {
+   "2500": {
+    "stations": 5,
+    "0.8": {
+     "tracts": 3,
+     "households": 6398,
+     "share_of_households": 0.006258345030641241,
+     "share_of_no_vehicle_households": 0.013040971711428742,
+     "no_vehicle_ratio": 2.0837732096232067,
+     "share_of_people_in_poverty": 0.010237593944070372,
+     "poverty_ratio": 1.7715279831334545,
+     "median_income_covered": 53919.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 11,
+     "households": 21987,
+     "share_of_households": 0.021507069738779142,
+     "share_of_no_vehicle_households": 0.0388644812436634,
+     "no_vehicle_ratio": 1.8070560850782622,
+     "share_of_people_in_poverty": 0.03050850577966857,
+     "poverty_ratio": 1.4909133124400529,
+     "median_income_covered": 55642.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 9,
+    "0.8": {
+     "tracts": 4,
+     "households": 10270,
+     "share_of_households": 0.010045827362407868,
+     "share_of_no_vehicle_households": 0.016420491819573384,
+     "no_vehicle_ratio": 1.6345584317942712,
+     "share_of_people_in_poverty": 0.016292513319551682,
+     "poverty_ratio": 1.7757364591565707,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 22,
+     "households": 43494,
+     "share_of_households": 0.042544616874446724,
+     "share_of_no_vehicle_households": 0.05146810329403813,
+     "no_vehicle_ratio": 1.2097441950394212,
+     "share_of_people_in_poverty": 0.05318544576244639,
+     "poverty_ratio": 1.2706291784259771,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 20,
+    "0.8": {
+     "tracts": 7,
+     "households": 15913,
+     "share_of_households": 0.01556565246523821,
+     "share_of_no_vehicle_households": 0.022364471303898376,
+     "no_vehicle_ratio": 1.4367834148837344,
+     "share_of_people_in_poverty": 0.02435381802196512,
+     "poverty_ratio": 1.5661419077596985,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 44,
+     "households": 82209,
+     "share_of_households": 0.08041454933166392,
+     "share_of_no_vehicle_households": 0.09540186469991849,
+     "no_vehicle_ratio": 1.1863756682443183,
+     "share_of_people_in_poverty": 0.12081990003806742,
+     "poverty_ratio": 1.4678010258149872,
+     "median_income_covered": 61448.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "15000": {
+    "stations": 30,
+    "0.8": {
+     "tracts": 12,
+     "households": 24819,
+     "share_of_households": 0.02427725309713738,
+     "share_of_no_vehicle_households": 0.030157247082678966,
+     "no_vehicle_ratio": 1.2422017829618013,
+     "share_of_people_in_poverty": 0.03771635258407372,
+     "poverty_ratio": 1.552463930546788,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 71,
+     "households": 138109,
+     "share_of_households": 0.13509436915236497,
+     "share_of_no_vehicle_households": 0.1459952686718486,
+     "no_vehicle_ratio": 1.0806909983582598,
+     "share_of_people_in_poverty": 0.17461068741064012,
+     "poverty_ratio": 1.307008080272306,
+     "median_income_covered": 66707.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 40,
+    "0.8": {
+     "tracts": 13,
+     "households": 26844,
+     "share_of_households": 0.026258051579014296,
+     "share_of_no_vehicle_households": 0.03208556149732621,
+     "no_vehicle_ratio": 1.2219323052502995,
+     "share_of_people_in_poverty": 0.0402958011411506,
+     "poverty_ratio": 1.5567530569161392,
+     "median_income_covered": 61194.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 84,
+     "households": 163835,
+     "share_of_households": 0.16025882433496524,
+     "share_of_no_vehicle_households": 0.16625250979066855,
+     "no_vehicle_ratio": 1.0374000338550817,
+     "share_of_people_in_poverty": 0.2001214178275741,
+     "poverty_ratio": 1.271569322594074,
+     "median_income_covered": 67194.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 56,
+    "0.8": {
+     "tracts": 18,
+     "households": 38665,
+     "share_of_households": 0.03782102385272641,
+     "share_of_no_vehicle_households": 0.04123014531936465,
+     "no_vehicle_ratio": 1.0901382648950282,
+     "share_of_people_in_poverty": 0.056695774232799014,
+     "poverty_ratio": 1.5178993350520362,
+     "median_income_covered": 62196.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 113,
+     "households": 227113,
+     "share_of_households": 0.222155597834327,
+     "share_of_no_vehicle_households": 0.22380374927936703,
+     "no_vehicle_ratio": 1.007418905762929,
+     "share_of_people_in_poverty": 0.27491737154496043,
+     "poverty_ratio": 1.2547118647674198,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "high-oh10-connected-r2.0": {
+   "2500": {
+    "stations": 7,
+    "0.8": {
+     "tracts": 2,
+     "households": 4114,
+     "share_of_households": 0.004024199977502042,
+     "share_of_no_vehicle_households": 0.01137109118740433,
+     "no_vehicle_ratio": 2.825677464086353,
+     "share_of_people_in_poverty": 0.007197877334517003,
+     "poverty_ratio": 1.9476722133028406,
+     "median_income_covered": 53919.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 11,
+     "households": 22955,
+     "share_of_households": 0.0224539403217208,
+     "share_of_no_vehicle_households": 0.03192652525694292,
+     "no_vehicle_ratio": 1.4218673782640645,
+     "share_of_people_in_poverty": 0.025745993195548673,
+     "poverty_ratio": 1.258661722823631,
+     "median_income_covered": 60807.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 13,
+    "0.8": {
+     "tracts": 4,
+     "households": 7737,
+     "share_of_households": 0.007568117458904545,
+     "share_of_no_vehicle_households": 0.015426515317177902,
+     "no_vehicle_ratio": 2.0383556942588505,
+     "share_of_people_in_poverty": 0.011385785683555203,
+     "poverty_ratio": 1.531276128043929,
+     "median_income_covered": 53919.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 19,
+     "households": 38098,
+     "share_of_households": 0.03726640027780087,
+     "share_of_no_vehicle_households": 0.05132894658370276,
+     "no_vehicle_ratio": 1.377351882689855,
+     "share_of_people_in_poverty": 0.056052418703835274,
+     "poverty_ratio": 1.5386832372000412,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 25,
+    "0.8": {
+     "tracts": 9,
+     "households": 18338,
+     "share_of_households": 0.01793771978304143,
+     "share_of_no_vehicle_households": 0.023736158877204143,
+     "no_vehicle_ratio": 1.3232539678563067,
+     "share_of_people_in_poverty": 0.023267449155947417,
+     "poverty_ratio": 1.369515655692842,
+     "median_income_covered": 61194.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 49,
+     "households": 100854,
+     "share_of_households": 0.09865256794627879,
+     "share_of_no_vehicle_households": 0.10866151124187425,
+     "no_vehicle_ratio": 1.1014564902258381,
+     "share_of_people_in_poverty": 0.1194015694633962,
+     "poverty_ratio": 1.271233454186638,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "15000": {
+    "stations": 36,
+    "0.8": {
+     "tracts": 15,
+     "households": 29622,
+     "share_of_households": 0.028975413644522482,
+     "share_of_no_vehicle_households": 0.036021708446812316,
+     "no_vehicle_ratio": 1.243181853716931,
+     "share_of_people_in_poverty": 0.04552691489556146,
+     "poverty_ratio": 1.5977576736765726,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 74,
+     "households": 149528,
+     "share_of_households": 0.14626411624597116,
+     "share_of_no_vehicle_households": 0.16486094268731488,
+     "no_vehicle_ratio": 1.1271455153776035,
+     "share_of_people_in_poverty": 0.18405960721544357,
+     "poverty_ratio": 1.3043269018981156,
+     "median_income_covered": 66942.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 44,
+    "0.8": {
+     "tracts": 20,
+     "households": 37407,
+     "share_of_households": 0.036590483363738185,
+     "share_of_no_vehicle_households": 0.04353617080492217,
+     "no_vehicle_ratio": 1.1898222379884515,
+     "share_of_people_in_poverty": 0.051521006751373194,
+     "poverty_ratio": 1.509260836950352,
+     "median_income_covered": 61194.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 91,
+     "households": 180640,
+     "share_of_households": 0.17669700630431912,
+     "share_of_no_vehicle_households": 0.2130290439934,
+     "no_vehicle_ratio": 1.2056177320090387,
+     "share_of_people_in_poverty": 0.2045712968919796,
+     "poverty_ratio": 1.2506682340672184,
+     "median_income_covered": 70784.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 62,
+    "0.8": {
+     "tracts": 27,
+     "households": 50915,
+     "share_of_households": 0.04980363195296949,
+     "share_of_no_vehicle_households": 0.05868437270142934,
+     "no_vehicle_ratio": 1.1783151228176711,
+     "share_of_people_in_poverty": 0.0682089313076617,
+     "poverty_ratio": 1.4456656819660925,
+     "median_income_covered": 62196.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 126,
+     "households": 246557,
+     "share_of_households": 0.24117517594870466,
+     "share_of_no_vehicle_households": 0.2704808858318589,
+     "no_vehicle_ratio": 1.1215121322825832,
+     "share_of_people_in_poverty": 0.27657562601795604,
+     "poverty_ratio": 1.2096853995884471,
+     "median_income_covered": 70875.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "high-oh10-connected-r3.0": {
+   "2500": {
+    "stations": 0,
+    "0.8": {
+     "tracts": 0,
+     "households": 0,
+     "share_of_households": 0.0,
+     "share_of_no_vehicle_households": 0.0,
+     "no_vehicle_ratio": null,
+     "share_of_people_in_poverty": 0.0,
+     "poverty_ratio": null,
+     "median_income_covered": null,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 0,
+     "households": 0,
+     "share_of_households": 0.0,
+     "share_of_no_vehicle_households": 0.0,
+     "no_vehicle_ratio": null,
+     "share_of_people_in_poverty": 0.0,
+     "poverty_ratio": null,
+     "median_income_covered": null,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 12,
+    "0.8": {
+     "tracts": 4,
+     "households": 8319,
+     "share_of_households": 0.008137413615177318,
+     "share_of_no_vehicle_households": 0.015863864978231914,
+     "no_vehicle_ratio": 1.9494971901936722,
+     "share_of_people_in_poverty": 0.014947525211163423,
+     "poverty_ratio": 1.8532785524640563,
+     "median_income_covered": 58553.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 28,
+     "households": 52106,
+     "share_of_households": 0.05096863491194006,
+     "share_of_no_vehicle_households": 0.06327654414249648,
+     "no_vehicle_ratio": 1.2414800641967583,
+     "share_of_people_in_poverty": 0.06629476096990558,
+     "poverty_ratio": 1.3065223303770301,
+     "median_income_covered": 63878.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 17,
+    "0.8": {
+     "tracts": 5,
+     "households": 10211,
+     "share_of_households": 0.009988115209108738,
+     "share_of_no_vehicle_households": 0.015863864978231914,
+     "no_vehicle_ratio": 1.58827412841261,
+     "share_of_people_in_poverty": 0.016911696931651034,
+     "poverty_ratio": 1.6205034589976293,
+     "median_income_covered": 58553.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 38,
+     "households": 72943,
+     "share_of_households": 0.07135080674743108,
+     "share_of_no_vehicle_households": 0.0801940242132676,
+     "no_vehicle_ratio": 1.1239399786626088,
+     "share_of_people_in_poverty": 0.09914895561948717,
+     "poverty_ratio": 1.3521833495992635,
+     "median_income_covered": 66810.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "15000": {
+    "stations": 31,
+    "0.8": {
+     "tracts": 8,
+     "households": 15905,
+     "share_of_households": 0.015557827088519683,
+     "share_of_no_vehicle_households": 0.021251217621215436,
+     "no_vehicle_ratio": 1.365950238442808,
+     "share_of_people_in_poverty": 0.02683584468903995,
+     "poverty_ratio": 1.647689819261572,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 61,
+     "households": 118558,
+     "share_of_households": 0.11597012662437703,
+     "share_of_no_vehicle_households": 0.11464524978629505,
+     "no_vehicle_ratio": 0.9885757058593787,
+     "share_of_people_in_poverty": 0.1576017923350569,
+     "poverty_ratio": 1.3393566217753126,
+     "median_income_covered": 63878.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "20000": {
+    "stations": 45,
+    "0.8": {
+     "tracts": 14,
+     "households": 26211,
+     "share_of_households": 0.02563886864616092,
+     "share_of_no_vehicle_households": 0.0380494205116991,
+     "no_vehicle_ratio": 1.4840522425858482,
+     "share_of_people_in_poverty": 0.04085739346362874,
+     "poverty_ratio": 1.6406207886854474,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 97,
+     "households": 188064,
+     "share_of_households": 0.18395895589911132,
+     "share_of_no_vehicle_households": 0.22263085700654037,
+     "no_vehicle_ratio": 1.2102202685290184,
+     "share_of_people_in_poverty": 0.22409250884804585,
+     "poverty_ratio": 1.2700755374799675,
+     "median_income_covered": 67446.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "30000": {
+    "stations": 64,
+    "0.8": {
+     "tracts": 26,
+     "households": 44226,
+     "share_of_households": 0.04326063884419186,
+     "share_of_no_vehicle_households": 0.0569548535872612,
+     "no_vehicle_ratio": 1.316551375775809,
+     "share_of_people_in_poverty": 0.06037216408090961,
+     "poverty_ratio": 1.4669341916950103,
+     "median_income_covered": 61448.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 140,
+     "households": 268799,
+     "share_of_households": 0.2629316795703868,
+     "share_of_no_vehicle_households": 0.28916764407689405,
+     "no_vehicle_ratio": 1.099782439869456,
+     "share_of_people_in_poverty": 0.2965354769212021,
+     "poverty_ratio": 1.1898357556765582,
+     "median_income_covered": 70557.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "high-oh10-minutes": {
+   "2500": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 7,
+     "households": 11999,
+     "share_of_households": 0.01173708690569932,
+     "share_of_no_vehicle_households": 0.02331868874619804,
+     "no_vehicle_ratio": 1.9867526698532754,
+     "share_of_people_in_poverty": 0.01741122868699624,
+     "poverty_ratio": 1.7772425731643673,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 26,
+     "households": 50069,
+     "share_of_households": 0.04897609836498535,
+     "share_of_no_vehicle_households": 0.08416993022284953,
+     "no_vehicle_ratio": 1.7185919873728739,
+     "share_of_people_in_poverty": 0.04430334318301786,
+     "poverty_ratio": 1.1743407173000733,
+     "median_income_covered": 71391.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 14,
+    "0.8": {
+     "tracts": 8,
+     "households": 14283,
+     "share_of_households": 0.013971231958838518,
+     "share_of_no_vehicle_households": 0.02498856927022245,
+     "no_vehicle_ratio": 1.7885730724278839,
+     "share_of_people_in_poverty": 0.02045094529654961,
+     "poverty_ratio": 1.7214459408302252,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 34,
+     "households": 67261,
+     "share_of_households": 0.06579283293309791,
+     "share_of_no_vehicle_households": 0.097051865693895,
+     "no_vehicle_ratio": 1.4751130384153412,
+     "share_of_people_in_poverty": 0.06429164735704357,
+     "poverty_ratio": 1.1979773733428634,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 24,
+    "0.8": {
+     "tracts": 9,
+     "households": 16175,
+     "share_of_households": 0.015821933552769937,
+     "share_of_no_vehicle_households": 0.02498856927022245,
+     "no_vehicle_ratio": 1.5793625467380197,
+     "share_of_people_in_poverty": 0.02241511701703722,
+     "poverty_ratio": 1.5729108336148308,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 55,
+     "households": 108874,
+     "share_of_households": 0.10649750810660119,
+     "share_of_no_vehicle_households": 0.13931574657575094,
+     "no_vehicle_ratio": 1.3081596842275367,
+     "share_of_people_in_poverty": 0.1193038684130673,
+     "poverty_ratio": 1.228174140602787,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "15000": {
+    "stations": 33,
+    "0.8": {
+     "tracts": 11,
+     "households": 20054,
+     "share_of_households": 0.019616263089165278,
+     "share_of_no_vehicle_households": 0.03061447627378089,
+     "no_vehicle_ratio": 1.5606681116899526,
+     "share_of_people_in_poverty": 0.029555833460010335,
+     "poverty_ratio": 1.6112905999131781,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 72,
+     "households": 142254,
+     "share_of_households": 0.1391488924646513,
+     "share_of_no_vehicle_households": 0.18861698109456693,
+     "no_vehicle_ratio": 1.3555047241391607,
+     "share_of_people_in_poverty": 0.16058441643948096,
+     "poverty_ratio": 1.2338514018593274,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "20000": {
+    "stations": 46,
+    "0.8": {
+     "tracts": 18,
+     "households": 29983,
+     "share_of_households": 0.02932853376894597,
+     "share_of_no_vehicle_households": 0.04136930202970002,
+     "no_vehicle_ratio": 1.4105479106324508,
+     "share_of_people_in_poverty": 0.04069581904656872,
+     "poverty_ratio": 1.464962044816476,
+     "median_income_covered": 61194.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 98,
+     "households": 189979,
+     "share_of_households": 0.1858321554511085,
+     "share_of_no_vehicle_households": 0.2360296602588315,
+     "no_vehicle_ratio": 1.2701228142452972,
+     "share_of_people_in_poverty": 0.20689451176513896,
+     "poverty_ratio": 1.1971813509601745,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "30000": {
+    "stations": 61,
+    "0.8": {
+     "tracts": 24,
+     "households": 40474,
+     "share_of_households": 0.03959053716320312,
+     "share_of_no_vehicle_households": 0.05232292308609825,
+     "no_vehicle_ratio": 1.3216017471652057,
+     "share_of_people_in_poverty": 0.057494165193726465,
+     "poverty_ratio": 1.528123777362758,
+     "median_income_covered": 61194.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 131,
+     "households": 248523,
+     "share_of_households": 0.24309826227728243,
+     "share_of_no_vehicle_households": 0.2775579985289148,
+     "no_vehicle_ratio": 1.1417522936150277,
+     "share_of_people_in_poverty": 0.28055413427421694,
+     "poverty_ratio": 1.2180145911322875,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "high-oh20-connected-r1.5": {
+   "2500": {
+    "stations": 0,
+    "0.8": {
+     "tracts": 0,
+     "households": 0,
+     "share_of_households": 0.0,
+     "share_of_no_vehicle_households": 0.0,
+     "no_vehicle_ratio": null,
+     "share_of_people_in_poverty": 0.0,
+     "poverty_ratio": null,
+     "median_income_covered": null,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 0,
+     "households": 0,
+     "share_of_households": 0.0,
+     "share_of_no_vehicle_households": 0.0,
+     "no_vehicle_ratio": null,
+     "share_of_people_in_poverty": 0.0,
+     "poverty_ratio": null,
+     "median_income_covered": null,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 14,
+    "0.8": {
+     "tracts": 4,
+     "households": 7659,
+     "share_of_households": 0.0074918200358989155,
+     "share_of_no_vehicle_households": 0.008587956980696976,
+     "no_vehicle_ratio": 1.1463111686540317,
+     "share_of_people_in_poverty": 0.011661000667344212,
+     "poverty_ratio": 1.6591970478852796,
+     "median_income_covered": 63327.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 28,
+     "households": 55364,
+     "share_of_households": 0.05415551958055981,
+     "share_of_no_vehicle_households": 0.060135578394926746,
+     "no_vehicle_ratio": 1.1104238101800725,
+     "share_of_people_in_poverty": 0.0610795796406591,
+     "poverty_ratio": 1.1905813278107986,
+     "median_income_covered": 70784.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 20,
+    "0.8": {
+     "tracts": 5,
+     "households": 9943,
+     "share_of_households": 0.009725965089038115,
+     "share_of_no_vehicle_households": 0.010257837504721388,
+     "no_vehicle_ratio": 1.0546858240610726,
+     "share_of_people_in_poverty": 0.014700717276897583,
+     "poverty_ratio": 1.6134367890513006,
+     "median_income_covered": 63327.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 35,
+     "households": 68087,
+     "share_of_households": 0.06660080307928574,
+     "share_of_no_vehicle_households": 0.07250064608472656,
+     "no_vehicle_ratio": 1.0885851631311003,
+     "share_of_people_in_poverty": 0.07817697960189429,
+     "poverty_ratio": 1.2146556526890364,
+     "median_income_covered": 70784.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "15000": {
+    "stations": 20,
+    "0.8": {
+     "tracts": 5,
+     "households": 9943,
+     "share_of_households": 0.009725965089038115,
+     "share_of_no_vehicle_households": 0.010257837504721388,
+     "no_vehicle_ratio": 1.0546858240610726,
+     "share_of_people_in_poverty": 0.014700717276897583,
+     "poverty_ratio": 1.6134367890513006,
+     "median_income_covered": 63327.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 35,
+     "households": 68087,
+     "share_of_households": 0.06660080307928574,
+     "share_of_no_vehicle_households": 0.07250064608472656,
+     "no_vehicle_ratio": 1.0885851631311003,
+     "share_of_people_in_poverty": 0.07817697960189429,
+     "poverty_ratio": 1.2146556526890364,
+     "median_income_covered": 70784.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "20000": {
+    "stations": 20,
+    "0.8": {
+     "tracts": 5,
+     "households": 9943,
+     "share_of_households": 0.009725965089038115,
+     "share_of_no_vehicle_households": 0.010257837504721388,
+     "no_vehicle_ratio": 1.0546858240610726,
+     "share_of_people_in_poverty": 0.014700717276897583,
+     "poverty_ratio": 1.6134367890513006,
+     "median_income_covered": 63327.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 35,
+     "households": 68087,
+     "share_of_households": 0.06660080307928574,
+     "share_of_no_vehicle_households": 0.07250064608472656,
+     "no_vehicle_ratio": 1.0885851631311003,
+     "share_of_people_in_poverty": 0.07817697960189429,
+     "poverty_ratio": 1.2146556526890364,
+     "median_income_covered": 70784.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "30000": {
+    "stations": 20,
+    "0.8": {
+     "tracts": 5,
+     "households": 9943,
+     "share_of_households": 0.009725965089038115,
+     "share_of_no_vehicle_households": 0.010257837504721388,
+     "no_vehicle_ratio": 1.0546858240610726,
+     "share_of_people_in_poverty": 0.014700717276897583,
+     "poverty_ratio": 1.6134367890513006,
+     "median_income_covered": 63327.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 35,
+     "households": 68087,
+     "share_of_households": 0.06660080307928574,
+     "share_of_no_vehicle_households": 0.07250064608472656,
+     "no_vehicle_ratio": 1.0885851631311003,
+     "share_of_people_in_poverty": 0.07817697960189429,
+     "poverty_ratio": 1.2146556526890364,
+     "median_income_covered": 70784.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   }
+  },
+  "high-oh20-connected-r2.0": {
+   "2500": {
+    "stations": 5,
+    "0.8": {
+     "tracts": 3,
+     "households": 6398,
+     "share_of_households": 0.006258345030641241,
+     "share_of_no_vehicle_households": 0.013040971711428742,
+     "no_vehicle_ratio": 2.0837732096232067,
+     "share_of_people_in_poverty": 0.010237593944070372,
+     "poverty_ratio": 1.7715279831334545,
+     "median_income_covered": 53919.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 11,
+     "households": 21987,
+     "share_of_households": 0.021507069738779142,
+     "share_of_no_vehicle_households": 0.0388644812436634,
+     "no_vehicle_ratio": 1.8070560850782622,
+     "share_of_people_in_poverty": 0.03050850577966857,
+     "poverty_ratio": 1.4909133124400529,
+     "median_income_covered": 55642.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 10,
+    "0.8": {
+     "tracts": 5,
+     "households": 12191,
+     "share_of_households": 0.011924895946943946,
+     "share_of_no_vehicle_households": 0.019243385086376557,
+     "no_vehicle_ratio": 1.6137151361314945,
+     "share_of_people_in_poverty": 0.02100244458664473,
+     "poverty_ratio": 1.8324244162912087,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 25,
+     "households": 49232,
+     "share_of_households": 0.04815736832580956,
+     "share_of_no_vehicle_households": 0.05999642168459138,
+     "no_vehicle_ratio": 1.245840953739093,
+     "share_of_people_in_poverty": 0.06469949620147704,
+     "poverty_ratio": 1.3740068745311034,
+     "median_income_covered": 62196.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 16,
+    "0.8": {
+     "tracts": 6,
+     "households": 14574,
+     "share_of_households": 0.014255880036974904,
+     "share_of_no_vehicle_households": 0.019978927698149216,
+     "no_vehicle_ratio": 1.4014517270298763,
+     "share_of_people_in_poverty": 0.02320562628248029,
+     "poverty_ratio": 1.67022975615901,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 34,
+     "households": 64038,
+     "share_of_households": 0.06264018428762172,
+     "share_of_no_vehicle_households": 0.0770928175257937,
+     "no_vehicle_ratio": 1.230724628328208,
+     "share_of_people_in_poverty": 0.0914329551967628,
+     "poverty_ratio": 1.4421939962382462,
+     "median_income_covered": 63017.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "15000": {
+    "stations": 33,
+    "0.8": {
+     "tracts": 11,
+     "households": 24710,
+     "share_of_households": 0.02417063233934746,
+     "share_of_no_vehicle_households": 0.030932548754547443,
+     "no_vehicle_ratio": 1.2797575305546407,
+     "share_of_people_in_poverty": 0.04024128716470012,
+     "poverty_ratio": 1.7275775530558664,
+     "median_income_covered": 62196.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 64,
+     "households": 124614,
+     "share_of_households": 0.12189393680030128,
+     "share_of_no_vehicle_households": 0.14241695326322484,
+     "no_vehicle_ratio": 1.168367820431843,
+     "share_of_people_in_poverty": 0.1596711350931831,
+     "poverty_ratio": 1.3375932460589646,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 36,
+    "0.8": {
+     "tracts": 14,
+     "households": 30013,
+     "share_of_households": 0.029357878931640442,
+     "share_of_no_vehicle_households": 0.036657853408345424,
+     "no_vehicle_ratio": 1.2486546965365892,
+     "share_of_people_in_poverty": 0.04929368315016429,
+     "poverty_ratio": 1.7314810885868346,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 68,
+     "households": 131007,
+     "share_of_households": 0.12814739097049344,
+     "share_of_no_vehicle_households": 0.14585611196151324,
+     "no_vehicle_ratio": 1.138190257771985,
+     "share_of_people_in_poverty": 0.16744690684235938,
+     "poverty_ratio": 1.3308288246088051,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 56,
+    "0.8": {
+     "tracts": 20,
+     "households": 42090,
+     "share_of_households": 0.04117126326034539,
+     "share_of_no_vehicle_households": 0.04631930501162952,
+     "no_vehicle_ratio": 1.1250396840808752,
+     "share_of_people_in_poverty": 0.06234687441523472,
+     "poverty_ratio": 1.5316973257786508,
+     "median_income_covered": 61448.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 107,
+     "households": 215153,
+     "share_of_households": 0.2104566596401305,
+     "share_of_no_vehicle_households": 0.2138441047253643,
+     "no_vehicle_ratio": 1.016095689682741,
+     "share_of_people_in_poverty": 0.25793516205865175,
+     "poverty_ratio": 1.2414214084657333,
+     "median_income_covered": 70275.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "high-oh20-connected-r3.0": {
+   "2500": {
+    "stations": 4,
+    "0.8": {
+     "tracts": 4,
+     "households": 5408,
+     "share_of_households": 0.005289954661723637,
+     "share_of_no_vehicle_households": 0.00958193348309246,
+     "no_vehicle_ratio": 1.8113451051715361,
+     "share_of_people_in_poverty": 0.004838691137603622,
+     "poverty_ratio": 1.2974344749319766,
+     "median_income_covered": 70557.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 19,
+     "households": 36089,
+     "share_of_households": 0.035301252549361006,
+     "share_of_no_vehicle_households": 0.05878377035166889,
+     "no_vehicle_ratio": 1.665203529803164,
+     "share_of_people_in_poverty": 0.0244808363814042,
+     "poverty_ratio": 0.9675860532754013,
+     "median_income_covered": 84467.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 4,
+    "0.8": {
+     "tracts": 4,
+     "households": 5408,
+     "share_of_households": 0.005289954661723637,
+     "share_of_no_vehicle_households": 0.00958193348309246,
+     "no_vehicle_ratio": 1.8113451051715361,
+     "share_of_people_in_poverty": 0.004838691137603622,
+     "poverty_ratio": 1.2974344749319766,
+     "median_income_covered": 70557.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 19,
+     "households": 36089,
+     "share_of_households": 0.035301252549361006,
+     "share_of_no_vehicle_households": 0.05878377035166889,
+     "no_vehicle_ratio": 1.665203529803164,
+     "share_of_people_in_poverty": 0.0244808363814042,
+     "poverty_ratio": 0.9675860532754013,
+     "median_income_covered": 84467.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 26,
+    "0.8": {
+     "tracts": 9,
+     "households": 15619,
+     "share_of_households": 0.015278069870832375,
+     "share_of_no_vehicle_households": 0.025445798461324373,
+     "no_vehicle_ratio": 1.6655113294057768,
+     "share_of_people_in_poverty": 0.021750388069254657,
+     "poverty_ratio": 1.535447323787736,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 62,
+     "households": 120107,
+     "share_of_households": 0.11748531519150164,
+     "share_of_no_vehicle_households": 0.1466115341033338,
+     "no_vehicle_ratio": 1.2479136976766525,
+     "share_of_people_in_poverty": 0.1346572589420018,
+     "poverty_ratio": 1.2409398226004453,
+     "median_income_covered": 70275.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "15000": {
+    "stations": 33,
+    "0.8": {
+     "tracts": 11,
+     "households": 18836,
+     "share_of_households": 0.01842484948376968,
+     "share_of_no_vehicle_households": 0.028467487028606644,
+     "no_vehicle_ratio": 1.5450594076051178,
+     "share_of_people_in_poverty": 0.026299875611767956,
+     "poverty_ratio": 1.4905274425568822,
+     "median_income_covered": 61117.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 73,
+     "households": 141187,
+     "share_of_households": 0.13810518284481788,
+     "share_of_no_vehicle_households": 0.1653778104685605,
+     "no_vehicle_ratio": 1.1974772203472448,
+     "share_of_people_in_poverty": 0.1649534366447218,
+     "poverty_ratio": 1.2713124262252724,
+     "median_income_covered": 67446.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "20000": {
+    "stations": 42,
+    "0.8": {
+     "tracts": 16,
+     "households": 26095,
+     "share_of_households": 0.025525400683742292,
+     "share_of_no_vehicle_households": 0.03466990040355446,
+     "no_vehicle_ratio": 1.3582509764728787,
+     "share_of_people_in_poverty": 0.03599882422285285,
+     "poverty_ratio": 1.4778961962167156,
+     "median_income_covered": 61117.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 91,
+     "households": 170552,
+     "share_of_households": 0.16682920626225772,
+     "share_of_no_vehicle_households": 0.1858934854780033,
+     "no_vehicle_ratio": 1.1142742307709375,
+     "share_of_people_in_poverty": 0.20137759070953704,
+     "poverty_ratio": 1.273823588025631,
+     "median_income_covered": 69375.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 64,
+    "0.8": {
+     "tracts": 26,
+     "households": 46538,
+     "share_of_households": 0.045522172715845896,
+     "share_of_no_vehicle_households": 0.05520545494304514,
+     "no_vehicle_ratio": 1.2127157305878895,
+     "share_of_people_in_poverty": 0.0633521260393733,
+     "poverty_ratio": 1.4672961864360994,
+     "median_income_covered": 61448.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 133,
+     "households": 254084,
+     "share_of_households": 0.2485378772687479,
+     "share_of_no_vehicle_households": 0.27896944516231637,
+     "no_vehicle_ratio": 1.1224423746914935,
+     "share_of_people_in_poverty": 0.2864121132627054,
+     "poverty_ratio": 1.2143558870470281,
+     "median_income_covered": 70275.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "high-oh20-minutes": {
+   "2500": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 7,
+     "households": 11999,
+     "share_of_households": 0.01173708690569932,
+     "share_of_no_vehicle_households": 0.02331868874619804,
+     "no_vehicle_ratio": 1.9867526698532754,
+     "share_of_people_in_poverty": 0.01741122868699624,
+     "poverty_ratio": 1.7772425731643673,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 26,
+     "households": 50069,
+     "share_of_households": 0.04897609836498535,
+     "share_of_no_vehicle_households": 0.08416993022284953,
+     "no_vehicle_ratio": 1.7185919873728739,
+     "share_of_people_in_poverty": 0.04430334318301786,
+     "poverty_ratio": 1.1743407173000733,
+     "median_income_covered": 71391.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 14,
+    "0.8": {
+     "tracts": 8,
+     "households": 14283,
+     "share_of_households": 0.013971231958838518,
+     "share_of_no_vehicle_households": 0.02498856927022245,
+     "no_vehicle_ratio": 1.7885730724278839,
+     "share_of_people_in_poverty": 0.02045094529654961,
+     "poverty_ratio": 1.7214459408302252,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 34,
+     "households": 67261,
+     "share_of_households": 0.06579283293309791,
+     "share_of_no_vehicle_households": 0.097051865693895,
+     "no_vehicle_ratio": 1.4751130384153412,
+     "share_of_people_in_poverty": 0.06429164735704357,
+     "poverty_ratio": 1.1979773733428634,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 25,
+    "0.8": {
+     "tracts": 9,
+     "households": 16175,
+     "share_of_households": 0.015821933552769937,
+     "share_of_no_vehicle_households": 0.02498856927022245,
+     "no_vehicle_ratio": 1.5793625467380197,
+     "share_of_people_in_poverty": 0.02241511701703722,
+     "poverty_ratio": 1.5729108336148308,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 55,
+     "households": 108874,
+     "share_of_households": 0.10649750810660119,
+     "share_of_no_vehicle_households": 0.13931574657575094,
+     "no_vehicle_ratio": 1.3081596842275367,
+     "share_of_people_in_poverty": 0.1193038684130673,
+     "poverty_ratio": 1.228174140602787,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "15000": {
+    "stations": 33,
+    "0.8": {
+     "tracts": 11,
+     "households": 20054,
+     "share_of_households": 0.019616263089165278,
+     "share_of_no_vehicle_households": 0.03061447627378089,
+     "no_vehicle_ratio": 1.5606681116899526,
+     "share_of_people_in_poverty": 0.029555833460010335,
+     "poverty_ratio": 1.6112905999131781,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 72,
+     "households": 142254,
+     "share_of_households": 0.1391488924646513,
+     "share_of_no_vehicle_households": 0.18861698109456693,
+     "no_vehicle_ratio": 1.3555047241391607,
+     "share_of_people_in_poverty": 0.16058441643948096,
+     "poverty_ratio": 1.2338514018593274,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "20000": {
+    "stations": 46,
+    "0.8": {
+     "tracts": 18,
+     "households": 29983,
+     "share_of_households": 0.02932853376894597,
+     "share_of_no_vehicle_households": 0.04136930202970002,
+     "no_vehicle_ratio": 1.4105479106324508,
+     "share_of_people_in_poverty": 0.04069581904656872,
+     "poverty_ratio": 1.464962044816476,
+     "median_income_covered": 61194.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 98,
+     "households": 189979,
+     "share_of_households": 0.1858321554511085,
+     "share_of_no_vehicle_households": 0.2360296602588315,
+     "no_vehicle_ratio": 1.2701228142452972,
+     "share_of_people_in_poverty": 0.20689451176513896,
+     "poverty_ratio": 1.1971813509601745,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "30000": {
+    "stations": 61,
+    "0.8": {
+     "tracts": 24,
+     "households": 40474,
+     "share_of_households": 0.03959053716320312,
+     "share_of_no_vehicle_households": 0.05232292308609825,
+     "no_vehicle_ratio": 1.3216017471652057,
+     "share_of_people_in_poverty": 0.057494165193726465,
+     "poverty_ratio": 1.528123777362758,
+     "median_income_covered": 61194.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 131,
+     "households": 248523,
+     "share_of_households": 0.24309826227728243,
+     "share_of_no_vehicle_households": 0.2775579985289148,
+     "no_vehicle_ratio": 1.1417522936150277,
+     "share_of_people_in_poverty": 0.28055413427421694,
+     "poverty_ratio": 1.2180145911322875,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "high-oh30-connected-r1.5": {
+   "2500": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 1,
+     "households": 2284,
+     "share_of_households": 0.0022341450531391987,
+     "share_of_no_vehicle_households": 0.001669880524024412,
+     "no_vehicle_ratio": 0.7474360367416887,
+     "share_of_people_in_poverty": 0.00303971660955337,
+     "poverty_ratio": 1.4590650218492038,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 7,
+     "households": 12723,
+     "share_of_households": 0.01244528349872593,
+     "share_of_no_vehicle_households": 0.012365067689799813,
+     "no_vehicle_ratio": 0.9935545213627051,
+     "share_of_people_in_poverty": 0.0170973999612352,
+     "poverty_ratio": 1.3092308481783737,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 1,
+     "households": 2284,
+     "share_of_households": 0.0022341450531391987,
+     "share_of_no_vehicle_households": 0.001669880524024412,
+     "no_vehicle_ratio": 0.7474360367416887,
+     "share_of_people_in_poverty": 0.00303971660955337,
+     "poverty_ratio": 1.4590650218492038,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 7,
+     "households": 12723,
+     "share_of_households": 0.01244528349872593,
+     "share_of_no_vehicle_households": 0.012365067689799813,
+     "no_vehicle_ratio": 0.9935545213627051,
+     "share_of_people_in_poverty": 0.0170973999612352,
+     "poverty_ratio": 1.3092308481783737,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 1,
+     "households": 2284,
+     "share_of_households": 0.0022341450531391987,
+     "share_of_no_vehicle_households": 0.001669880524024412,
+     "no_vehicle_ratio": 0.7474360367416887,
+     "share_of_people_in_poverty": 0.00303971660955337,
+     "poverty_ratio": 1.4590650218492038,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 7,
+     "households": 12723,
+     "share_of_households": 0.01244528349872593,
+     "share_of_no_vehicle_households": 0.012365067689799813,
+     "no_vehicle_ratio": 0.9935545213627051,
+     "share_of_people_in_poverty": 0.0170973999612352,
+     "poverty_ratio": 1.3092308481783737,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "15000": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 1,
+     "households": 2284,
+     "share_of_households": 0.0022341450531391987,
+     "share_of_no_vehicle_households": 0.001669880524024412,
+     "no_vehicle_ratio": 0.7474360367416887,
+     "share_of_people_in_poverty": 0.00303971660955337,
+     "poverty_ratio": 1.4590650218492038,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 7,
+     "households": 12723,
+     "share_of_households": 0.01244528349872593,
+     "share_of_no_vehicle_households": 0.012365067689799813,
+     "no_vehicle_ratio": 0.9935545213627051,
+     "share_of_people_in_poverty": 0.0170973999612352,
+     "poverty_ratio": 1.3092308481783737,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "20000": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 1,
+     "households": 2284,
+     "share_of_households": 0.0022341450531391987,
+     "share_of_no_vehicle_households": 0.001669880524024412,
+     "no_vehicle_ratio": 0.7474360367416887,
+     "share_of_people_in_poverty": 0.00303971660955337,
+     "poverty_ratio": 1.4590650218492038,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 7,
+     "households": 12723,
+     "share_of_households": 0.01244528349872593,
+     "share_of_no_vehicle_households": 0.012365067689799813,
+     "no_vehicle_ratio": 0.9935545213627051,
+     "share_of_people_in_poverty": 0.0170973999612352,
+     "poverty_ratio": 1.3092308481783737,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "30000": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 1,
+     "households": 2284,
+     "share_of_households": 0.0022341450531391987,
+     "share_of_no_vehicle_households": 0.001669880524024412,
+     "no_vehicle_ratio": 0.7474360367416887,
+     "share_of_people_in_poverty": 0.00303971660955337,
+     "poverty_ratio": 1.4590650218492038,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 7,
+     "households": 12723,
+     "share_of_households": 0.01244528349872593,
+     "share_of_no_vehicle_households": 0.012365067689799813,
+     "no_vehicle_ratio": 0.9935545213627051,
+     "share_of_people_in_poverty": 0.0170973999612352,
+     "poverty_ratio": 1.3092308481783737,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   }
+  },
+  "high-oh30-connected-r2.0": {
+   "2500": {
+    "stations": 0,
+    "0.8": {
+     "tracts": 0,
+     "households": 0,
+     "share_of_households": 0.0,
+     "share_of_no_vehicle_households": 0.0,
+     "no_vehicle_ratio": null,
+     "share_of_people_in_poverty": 0.0,
+     "poverty_ratio": null,
+     "median_income_covered": null,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 0,
+     "households": 0,
+     "share_of_households": 0.0,
+     "share_of_no_vehicle_households": 0.0,
+     "no_vehicle_ratio": null,
+     "share_of_people_in_poverty": 0.0,
+     "poverty_ratio": null,
+     "median_income_covered": null,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 14,
+    "0.8": {
+     "tracts": 4,
+     "households": 7659,
+     "share_of_households": 0.0074918200358989155,
+     "share_of_no_vehicle_households": 0.008587956980696976,
+     "no_vehicle_ratio": 1.1463111686540317,
+     "share_of_people_in_poverty": 0.011661000667344212,
+     "poverty_ratio": 1.6591970478852796,
+     "median_income_covered": 63327.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 28,
+     "households": 55364,
+     "share_of_households": 0.05415551958055981,
+     "share_of_no_vehicle_households": 0.060135578394926746,
+     "no_vehicle_ratio": 1.1104238101800725,
+     "share_of_people_in_poverty": 0.0610795796406591,
+     "poverty_ratio": 1.1905813278107986,
+     "median_income_covered": 70784.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 25,
+    "0.8": {
+     "tracts": 8,
+     "households": 16505,
+     "share_of_households": 0.01614473034240914,
+     "share_of_no_vehicle_households": 0.015863864978231914,
+     "no_vehicle_ratio": 0.9826032793226999,
+     "share_of_people_in_poverty": 0.021601828472442203,
+     "poverty_ratio": 1.4177873319709116,
+     "median_income_covered": 63469.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 54,
+     "households": 110403,
+     "share_of_households": 0.1079931332319295,
+     "share_of_no_vehicle_households": 0.10812476393058068,
+     "no_vehicle_ratio": 1.0012188802631412,
+     "share_of_people_in_poverty": 0.11754394678670124,
+     "poverty_ratio": 1.144245438739785,
+     "median_income_covered": 77411.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "15000": {
+    "stations": 34,
+    "0.8": {
+     "tracts": 9,
+     "households": 18789,
+     "share_of_households": 0.01837887539554834,
+     "share_of_no_vehicle_households": 0.017533745502256327,
+     "no_vehicle_ratio": 0.9540162346659841,
+     "share_of_people_in_poverty": 0.02464154508199557,
+     "poverty_ratio": 1.4227525149794404,
+     "median_income_covered": 63469.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 62,
+     "households": 125861,
+     "share_of_households": 0.12311371739630153,
+     "share_of_no_vehicle_households": 0.12331272488718367,
+     "no_vehicle_ratio": 1.001616452618692,
+     "share_of_people_in_poverty": 0.13642528678882204,
+     "poverty_ratio": 1.155317064275847,
+     "median_income_covered": 75208.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 37,
+    "0.8": {
+     "tracts": 11,
+     "households": 22541,
+     "share_of_households": 0.022048977076537076,
+     "share_of_no_vehicle_households": 0.022165676003419277,
+     "no_vehicle_ratio": 1.0052927138740773,
+     "share_of_people_in_poverty": 0.027519543969178717,
+     "poverty_ratio": 1.3198228830062642,
+     "median_income_covered": 63469.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 70,
+     "households": 143964,
+     "share_of_households": 0.14082156673823626,
+     "share_of_no_vehicle_households": 0.13492237043516292,
+     "no_vehicle_ratio": 0.9581087155915616,
+     "share_of_people_in_poverty": 0.149798969320152,
+     "poverty_ratio": 1.1123609490199633,
+     "median_income_covered": 77448.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 37,
+    "0.8": {
+     "tracts": 11,
+     "households": 22541,
+     "share_of_households": 0.022048977076537076,
+     "share_of_no_vehicle_households": 0.022165676003419277,
+     "no_vehicle_ratio": 1.0052927138740773,
+     "share_of_people_in_poverty": 0.027519543969178717,
+     "poverty_ratio": 1.3198228830062642,
+     "median_income_covered": 63469.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 70,
+     "households": 143964,
+     "share_of_households": 0.14082156673823626,
+     "share_of_no_vehicle_households": 0.13492237043516292,
+     "no_vehicle_ratio": 0.9581087155915616,
+     "share_of_people_in_poverty": 0.149798969320152,
+     "poverty_ratio": 1.1123609490199633,
+     "median_income_covered": 77448.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "high-oh30-connected-r3.0": {
+   "2500": {
+    "stations": 3,
+    "0.8": {
+     "tracts": 3,
+     "households": 6398,
+     "share_of_households": 0.006258345030641241,
+     "share_of_no_vehicle_households": 0.013040971711428742,
+     "no_vehicle_ratio": 2.0837732096232067,
+     "share_of_people_in_poverty": 0.010237593944070372,
+     "poverty_ratio": 1.7715279831334545,
+     "median_income_covered": 53919.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 8,
+     "households": 15687,
+     "share_of_households": 0.015344585572939847,
+     "share_of_no_vehicle_households": 0.027632546766594438,
+     "no_vehicle_ratio": 1.8008011122388596,
+     "share_of_people_in_poverty": 0.022492478914152833,
+     "poverty_ratio": 1.5528330836730848,
+     "median_income_covered": 55642.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 13,
+    "0.8": {
+     "tracts": 4,
+     "households": 7737,
+     "share_of_households": 0.007568117458904545,
+     "share_of_no_vehicle_households": 0.015426515317177902,
+     "no_vehicle_ratio": 2.0383556942588505,
+     "share_of_people_in_poverty": 0.011385785683555203,
+     "poverty_ratio": 1.531276128043929,
+     "median_income_covered": 53919.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 19,
+     "households": 38098,
+     "share_of_households": 0.03726640027780087,
+     "share_of_no_vehicle_households": 0.05132894658370276,
+     "no_vehicle_ratio": 1.377351882689855,
+     "share_of_people_in_poverty": 0.056052418703835274,
+     "poverty_ratio": 1.5386832372000412,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 22,
+    "0.8": {
+     "tracts": 5,
+     "households": 9629,
+     "share_of_households": 0.009418819052835965,
+     "share_of_no_vehicle_households": 0.015426515317177902,
+     "no_vehicle_ratio": 1.63783965172715,
+     "share_of_people_in_poverty": 0.013349957404042814,
+     "poverty_ratio": 1.361391179064475,
+     "median_income_covered": 53919.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 34,
+     "households": 69032,
+     "share_of_households": 0.06752517570416164,
+     "share_of_no_vehicle_households": 0.07776872154742262,
+     "no_vehicle_ratio": 1.151699654779716,
+     "share_of_people_in_poverty": 0.09527158585107359,
+     "poverty_ratio": 1.3809737180392019,
+     "median_income_covered": 66810.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "15000": {
+    "stations": 31,
+    "0.8": {
+     "tracts": 9,
+     "households": 16853,
+     "share_of_households": 0.016485134229665025,
+     "share_of_no_vehicle_households": 0.02397471323777906,
+     "no_vehicle_ratio": 1.4543232043956624,
+     "share_of_people_in_poverty": 0.027112284656600035,
+     "poverty_ratio": 1.5700691583286372,
+     "median_income_covered": 58553.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 53,
+     "households": 100135,
+     "share_of_households": 0.09794926221370126,
+     "share_of_no_vehicle_households": 0.10393018309047174,
+     "no_vehicle_ratio": 1.0610614183465883,
+     "share_of_people_in_poverty": 0.1447169954868959,
+     "poverty_ratio": 1.4284747576681156,
+     "median_income_covered": 66942.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 46,
+    "0.8": {
+     "tracts": 20,
+     "households": 35037,
+     "share_of_households": 0.03427221551087483,
+     "share_of_no_vehicle_households": 0.04417231576645528,
+     "no_vehicle_ratio": 1.2888666550442025,
+     "share_of_people_in_poverty": 0.04439943468389559,
+     "poverty_ratio": 1.3658412559669166,
+     "median_income_covered": 63469.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 96,
+     "households": 183945,
+     "share_of_households": 0.1799298650611602,
+     "share_of_no_vehicle_households": 0.20151879609566029,
+     "no_vehicle_ratio": 1.11998525662853,
+     "share_of_people_in_poverty": 0.20274371121906673,
+     "poverty_ratio": 1.2045635552158693,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 61,
+    "0.8": {
+     "tracts": 26,
+     "households": 47043,
+     "share_of_households": 0.04601614962120286,
+     "share_of_no_vehicle_households": 0.055304852593284694,
+     "no_vehicle_ratio": 1.201857457621832,
+     "share_of_people_in_poverty": 0.06215401193218039,
+     "poverty_ratio": 1.4195091684761763,
+     "median_income_covered": 63327.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 121,
+     "households": 232554,
+     "share_of_households": 0.22747783217501455,
+     "share_of_no_vehicle_households": 0.261217024829533,
+     "no_vehicle_ratio": 1.1483185958470035,
+     "share_of_people_in_poverty": 0.25903876148365007,
+     "poverty_ratio": 1.2063106964657737,
+     "median_income_covered": 70875.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "high-oh30-minutes": {
+   "2500": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 7,
+     "households": 11999,
+     "share_of_households": 0.01173708690569932,
+     "share_of_no_vehicle_households": 0.02331868874619804,
+     "no_vehicle_ratio": 1.9867526698532754,
+     "share_of_people_in_poverty": 0.01741122868699624,
+     "poverty_ratio": 1.7772425731643673,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 26,
+     "households": 50069,
+     "share_of_households": 0.04897609836498535,
+     "share_of_no_vehicle_households": 0.08416993022284953,
+     "no_vehicle_ratio": 1.7185919873728739,
+     "share_of_people_in_poverty": 0.04430334318301786,
+     "poverty_ratio": 1.1743407173000733,
+     "median_income_covered": 71391.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 14,
+    "0.8": {
+     "tracts": 8,
+     "households": 14283,
+     "share_of_households": 0.013971231958838518,
+     "share_of_no_vehicle_households": 0.02498856927022245,
+     "no_vehicle_ratio": 1.7885730724278839,
+     "share_of_people_in_poverty": 0.02045094529654961,
+     "poverty_ratio": 1.7214459408302252,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 34,
+     "households": 67261,
+     "share_of_households": 0.06579283293309791,
+     "share_of_no_vehicle_households": 0.097051865693895,
+     "no_vehicle_ratio": 1.4751130384153412,
+     "share_of_people_in_poverty": 0.06429164735704357,
+     "poverty_ratio": 1.1979773733428634,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 25,
+    "0.8": {
+     "tracts": 9,
+     "households": 16175,
+     "share_of_households": 0.015821933552769937,
+     "share_of_no_vehicle_households": 0.02498856927022245,
+     "no_vehicle_ratio": 1.5793625467380197,
+     "share_of_people_in_poverty": 0.02241511701703722,
+     "poverty_ratio": 1.5729108336148308,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 55,
+     "households": 108874,
+     "share_of_households": 0.10649750810660119,
+     "share_of_no_vehicle_households": 0.13931574657575094,
+     "no_vehicle_ratio": 1.3081596842275367,
+     "share_of_people_in_poverty": 0.1193038684130673,
+     "poverty_ratio": 1.228174140602787,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "15000": {
+    "stations": 34,
+    "0.8": {
+     "tracts": 11,
+     "households": 19436,
+     "share_of_households": 0.019011752737659135,
+     "share_of_no_vehicle_households": 0.0292030296403793,
+     "no_vehicle_ratio": 1.5360514121632212,
+     "share_of_people_in_poverty": 0.02586052911337865,
+     "poverty_ratio": 1.4526324745785353,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 70,
+     "households": 136685,
+     "share_of_households": 0.13370145209646733,
+     "share_of_no_vehicle_households": 0.17010913861996302,
+     "no_vehicle_ratio": 1.2723058422523867,
+     "share_of_people_in_poverty": 0.15363892010181654,
+     "poverty_ratio": 1.2255059491583684,
+     "median_income_covered": 67446.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "20000": {
+    "stations": 46,
+    "0.8": {
+     "tracts": 18,
+     "households": 29983,
+     "share_of_households": 0.02932853376894597,
+     "share_of_no_vehicle_households": 0.04136930202970002,
+     "no_vehicle_ratio": 1.4105479106324508,
+     "share_of_people_in_poverty": 0.04069581904656872,
+     "poverty_ratio": 1.464962044816476,
+     "median_income_covered": 61194.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 98,
+     "households": 189979,
+     "share_of_households": 0.1858321554511085,
+     "share_of_no_vehicle_households": 0.2360296602588315,
+     "no_vehicle_ratio": 1.2701228142452972,
+     "share_of_people_in_poverty": 0.20689451176513896,
+     "poverty_ratio": 1.1971813509601745,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "30000": {
+    "stations": 63,
+    "0.8": {
+     "tracts": 25,
+     "households": 44242,
+     "share_of_households": 0.043276289597628914,
+     "share_of_no_vehicle_households": 0.05095123551279248,
+     "no_vehicle_ratio": 1.1773475957972162,
+     "share_of_people_in_poverty": 0.059333887868581396,
+     "poverty_ratio": 1.4558757490193113,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 132,
+     "households": 254630,
+     "share_of_households": 0.2490719592297873,
+     "share_of_no_vehicle_households": 0.27805498678011253,
+     "no_vehicle_ratio": 1.1163640726156019,
+     "share_of_people_in_poverty": 0.2861056108123925,
+     "poverty_ratio": 1.2107914532696806,
+     "median_income_covered": 70557.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "low-oh10-connected-r1.5": {
+   "2500": {
+    "stations": 8,
+    "0.8": {
+     "tracts": 3,
+     "households": 6398,
+     "share_of_households": 0.006258345030641241,
+     "share_of_no_vehicle_households": 0.013040971711428742,
+     "no_vehicle_ratio": 2.0837732096232067,
+     "share_of_people_in_poverty": 0.010237593944070372,
+     "poverty_ratio": 1.7715279831334545,
+     "median_income_covered": 53919.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 20,
+     "households": 37452,
+     "share_of_households": 0.03663450110777989,
+     "share_of_no_vehicle_households": 0.04572291911019224,
+     "no_vehicle_ratio": 1.2480835749796053,
+     "share_of_people_in_poverty": 0.04545726322935433,
+     "poverty_ratio": 1.2499351890585444,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 19,
+    "0.8": {
+     "tracts": 7,
+     "households": 15913,
+     "share_of_households": 0.01556565246523821,
+     "share_of_no_vehicle_households": 0.022364471303898376,
+     "no_vehicle_ratio": 1.4367834148837344,
+     "share_of_people_in_poverty": 0.02435381802196512,
+     "poverty_ratio": 1.5661419077596985,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 41,
+     "households": 76415,
+     "share_of_households": 0.0747470202432714,
+     "share_of_no_vehicle_households": 0.09114764526966583,
+     "no_vehicle_ratio": 1.219415101404939,
+     "share_of_people_in_poverty": 0.11251786769373155,
+     "poverty_ratio": 1.476678608271953,
+     "median_income_covered": 59888.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "10000": {
+    "stations": 33,
+    "0.8": {
+     "tracts": 12,
+     "households": 24952,
+     "share_of_households": 0.024407349985082875,
+     "share_of_no_vehicle_households": 0.03208556149732621,
+     "no_vehicle_ratio": 1.3145860372771339,
+     "share_of_people_in_poverty": 0.03833162942066299,
+     "poverty_ratio": 1.630169552376376,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 72,
+     "households": 139201,
+     "share_of_households": 0.1361625330744438,
+     "share_of_no_vehicle_households": 0.15104466930401766,
+     "no_vehicle_ratio": 1.1092968520307815,
+     "share_of_people_in_poverty": 0.1689182775458515,
+     "poverty_ratio": 1.2914268298234424,
+     "median_income_covered": 63878.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "15000": {
+    "stations": 55,
+    "0.8": {
+     "tracts": 19,
+     "households": 40525,
+     "share_of_households": 0.039640423939783724,
+     "share_of_no_vehicle_households": 0.0458620758205276,
+     "no_vehicle_ratio": 1.1569522033920463,
+     "share_of_people_in_poverty": 0.05760960139949456,
+     "poverty_ratio": 1.4958810335773116,
+     "median_income_covered": 62196.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 114,
+     "households": 229498,
+     "share_of_households": 0.2244885382685376,
+     "share_of_no_vehicle_households": 0.22923086098244638,
+     "no_vehicle_ratio": 1.0211250104369958,
+     "share_of_people_in_poverty": 0.2664113610960884,
+     "poverty_ratio": 1.2206582975460314,
+     "median_income_covered": 70275.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 67,
+    "0.8": {
+     "tracts": 27,
+     "households": 52027,
+     "share_of_households": 0.05089135931684461,
+     "share_of_no_vehicle_households": 0.058843408941812614,
+     "no_vehicle_ratio": 1.156255398396009,
+     "share_of_people_in_poverty": 0.07153015303666209,
+     "poverty_ratio": 1.4516285684215624,
+     "median_income_covered": 62196.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 138,
+     "households": 269442,
+     "share_of_households": 0.26356064422413833,
+     "share_of_no_vehicle_households": 0.2604019640975687,
+     "no_vehicle_ratio": 0.9880153573919656,
+     "share_of_people_in_poverty": 0.3074569708376357,
+     "poverty_ratio": 1.2001781800865274,
+     "median_income_covered": 70291.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 67,
+    "0.8": {
+     "tracts": 27,
+     "households": 52027,
+     "share_of_households": 0.05089135931684461,
+     "share_of_no_vehicle_households": 0.058843408941812614,
+     "no_vehicle_ratio": 1.156255398396009,
+     "share_of_people_in_poverty": 0.07153015303666209,
+     "poverty_ratio": 1.4516285684215624,
+     "median_income_covered": 62196.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 138,
+     "households": 269442,
+     "share_of_households": 0.26356064422413833,
+     "share_of_no_vehicle_households": 0.2604019640975687,
+     "no_vehicle_ratio": 0.9880153573919656,
+     "share_of_people_in_poverty": 0.3074569708376357,
+     "poverty_ratio": 1.2001781800865274,
+     "median_income_covered": 70291.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "low-oh10-connected-r2.0": {
+   "2500": {
+    "stations": 8,
+    "0.8": {
+     "tracts": 3,
+     "households": 6398,
+     "share_of_households": 0.006258345030641241,
+     "share_of_no_vehicle_households": 0.013040971711428742,
+     "no_vehicle_ratio": 2.0837732096232067,
+     "share_of_people_in_poverty": 0.010237593944070372,
+     "poverty_ratio": 1.7715279831334545,
+     "median_income_covered": 53919.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 13,
+     "households": 26762,
+     "share_of_households": 0.026177841467649402,
+     "share_of_no_vehicle_households": 0.03526628630499175,
+     "no_vehicle_ratio": 1.3471808341636515,
+     "share_of_people_in_poverty": 0.033519945855263286,
+     "poverty_ratio": 1.3753973776078363,
+     "median_income_covered": 60807.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 23,
+    "0.8": {
+     "tracts": 7,
+     "households": 14743,
+     "share_of_households": 0.014421191120153769,
+     "share_of_no_vehicle_households": 0.0197403733375743,
+     "no_vehicle_ratio": 1.3688448598387215,
+     "share_of_people_in_poverty": 0.019099883391663755,
+     "poverty_ratio": 1.3665484782483261,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 41,
+     "households": 85882,
+     "share_of_households": 0.0840073754175572,
+     "share_of_no_vehicle_households": 0.08888137884420412,
+     "no_vehicle_ratio": 1.0580187561201713,
+     "share_of_people_in_poverty": 0.10584079313487235,
+     "poverty_ratio": 1.2868085031403087,
+     "median_income_covered": 72216.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "10000": {
+    "stations": 39,
+    "0.8": {
+     "tracts": 14,
+     "households": 29434,
+     "share_of_households": 0.028791517291637116,
+     "share_of_no_vehicle_households": 0.035663876905949944,
+     "no_vehicle_ratio": 1.2386939022595032,
+     "share_of_people_in_poverty": 0.043084695783985945,
+     "poverty_ratio": 1.5471515766469186,
+     "median_income_covered": 61194.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 75,
+     "households": 149708,
+     "share_of_households": 0.146440187222138,
+     "share_of_no_vehicle_households": 0.15348985149991054,
+     "no_vehicle_ratio": 1.0481402298883895,
+     "share_of_people_in_poverty": 0.17870780580141726,
+     "poverty_ratio": 1.2574273266728293,
+     "median_income_covered": 70275.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "15000": {
+    "stations": 58,
+    "0.8": {
+     "tracts": 23,
+     "households": 45467,
+     "share_of_households": 0.04447455040765322,
+     "share_of_no_vehicle_households": 0.05116991034331948,
+     "no_vehicle_ratio": 1.1505436226852588,
+     "share_of_people_in_poverty": 0.06355833601813403,
+     "poverty_ratio": 1.5016862338240162,
+     "median_income_covered": 62196.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 116,
+     "households": 231446,
+     "share_of_households": 0.2263940174994987,
+     "share_of_no_vehicle_households": 0.2514561755760094,
+     "no_vehicle_ratio": 1.110701503305255,
+     "share_of_people_in_poverty": 0.26574426152215924,
+     "poverty_ratio": 1.2287865914714846,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 70,
+    "0.8": {
+     "tracts": 30,
+     "households": 56545,
+     "share_of_households": 0.05531074081863222,
+     "share_of_no_vehicle_households": 0.0639524481641254,
+     "no_vehicle_ratio": 1.1562392261898995,
+     "share_of_people_in_poverty": 0.07448822599787332,
+     "poverty_ratio": 1.4178610621160883,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 147,
+     "households": 288573,
+     "share_of_households": 0.2822740544744037,
+     "share_of_no_vehicle_households": 0.30057849432439415,
+     "no_vehicle_ratio": 1.0648463419143268,
+     "share_of_people_in_poverty": 0.31952584202417683,
+     "poverty_ratio": 1.1888531002585534,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 70,
+    "0.8": {
+     "tracts": 30,
+     "households": 56545,
+     "share_of_households": 0.05531074081863222,
+     "share_of_no_vehicle_households": 0.0639524481641254,
+     "no_vehicle_ratio": 1.1562392261898995,
+     "share_of_people_in_poverty": 0.07448822599787332,
+     "poverty_ratio": 1.4178610621160883,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 147,
+     "households": 288573,
+     "share_of_households": 0.2822740544744037,
+     "share_of_no_vehicle_households": 0.30057849432439415,
+     "no_vehicle_ratio": 1.0648463419143268,
+     "share_of_people_in_poverty": 0.31952584202417683,
+     "poverty_ratio": 1.1888531002585534,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "low-oh10-connected-r3.0": {
+   "2500": {
+    "stations": 0,
+    "0.8": {
+     "tracts": 0,
+     "households": 0,
+     "share_of_households": 0.0,
+     "share_of_no_vehicle_households": 0.0,
+     "no_vehicle_ratio": null,
+     "share_of_people_in_poverty": 0.0,
+     "poverty_ratio": null,
+     "median_income_covered": null,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 0,
+     "households": 0,
+     "share_of_households": 0.0,
+     "share_of_no_vehicle_households": 0.0,
+     "no_vehicle_ratio": null,
+     "share_of_people_in_poverty": 0.0,
+     "poverty_ratio": null,
+     "median_income_covered": null,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 17,
+    "0.8": {
+     "tracts": 5,
+     "households": 10211,
+     "share_of_households": 0.009988115209108738,
+     "share_of_no_vehicle_households": 0.015863864978231914,
+     "no_vehicle_ratio": 1.58827412841261,
+     "share_of_people_in_poverty": 0.016911696931651034,
+     "poverty_ratio": 1.6205034589976293,
+     "median_income_covered": 58553.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 38,
+     "households": 72943,
+     "share_of_households": 0.07135080674743108,
+     "share_of_no_vehicle_households": 0.0801940242132676,
+     "no_vehicle_ratio": 1.1239399786626088,
+     "share_of_people_in_poverty": 0.09914895561948717,
+     "poverty_ratio": 1.3521833495992635,
+     "median_income_covered": 66810.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 39,
+    "0.8": {
+     "tracts": 11,
+     "households": 21539,
+     "share_of_households": 0.02106884864254168,
+     "share_of_no_vehicle_households": 0.027910860187265175,
+     "no_vehicle_ratio": 1.324745393581132,
+     "share_of_people_in_poverty": 0.03591739679930729,
+     "poverty_ratio": 1.6532714733744305,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 80,
+     "households": 156773,
+     "share_of_households": 0.15335097303668635,
+     "share_of_no_vehicle_households": 0.16460250879669205,
+     "no_vehicle_ratio": 1.0733711403142776,
+     "share_of_people_in_poverty": 0.20284078389220356,
+     "poverty_ratio": 1.317162672266916,
+     "median_income_covered": 64009.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "15000": {
+    "stations": 62,
+    "0.8": {
+     "tracts": 25,
+     "households": 43284,
+     "share_of_households": 0.04233920073558541,
+     "share_of_no_vehicle_households": 0.055523527423811704,
+     "no_vehicle_ratio": 1.311397628183025,
+     "share_of_people_in_poverty": 0.058516027218447904,
+     "poverty_ratio": 1.4568488156500872,
+     "median_income_covered": 61448.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 138,
+     "households": 264633,
+     "share_of_households": 0.25885661464421433,
+     "share_of_no_vehicle_households": 0.28473450887621016,
+     "no_vehicle_ratio": 1.0999699940739924,
+     "share_of_people_in_poverty": 0.2927914747649748,
+     "poverty_ratio": 1.1929852905827383,
+     "median_income_covered": 70291.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 70,
+    "0.8": {
+     "tracts": 30,
+     "households": 56545,
+     "share_of_households": 0.05531074081863222,
+     "share_of_no_vehicle_households": 0.0639524481641254,
+     "no_vehicle_ratio": 1.1562392261898995,
+     "share_of_people_in_poverty": 0.07448822599787332,
+     "poverty_ratio": 1.4178610621160883,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 147,
+     "households": 288573,
+     "share_of_households": 0.2822740544744037,
+     "share_of_no_vehicle_households": 0.30057849432439415,
+     "no_vehicle_ratio": 1.0648463419143268,
+     "share_of_people_in_poverty": 0.31952584202417683,
+     "poverty_ratio": 1.1888531002585534,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 70,
+    "0.8": {
+     "tracts": 30,
+     "households": 56545,
+     "share_of_households": 0.05531074081863222,
+     "share_of_no_vehicle_households": 0.0639524481641254,
+     "no_vehicle_ratio": 1.1562392261898995,
+     "share_of_people_in_poverty": 0.07448822599787332,
+     "poverty_ratio": 1.4178610621160883,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 147,
+     "households": 288573,
+     "share_of_households": 0.2822740544744037,
+     "share_of_no_vehicle_households": 0.30057849432439415,
+     "no_vehicle_ratio": 1.0648463419143268,
+     "share_of_people_in_poverty": 0.31952584202417683,
+     "poverty_ratio": 1.1888531002585534,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "low-oh10-minutes": {
+   "2500": {
+    "stations": 14,
+    "0.8": {
+     "tracts": 8,
+     "households": 14283,
+     "share_of_households": 0.013971231958838518,
+     "share_of_no_vehicle_households": 0.02498856927022245,
+     "no_vehicle_ratio": 1.7885730724278839,
+     "share_of_people_in_poverty": 0.02045094529654961,
+     "poverty_ratio": 1.7214459408302252,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 34,
+     "households": 67261,
+     "share_of_households": 0.06579283293309791,
+     "share_of_no_vehicle_households": 0.097051865693895,
+     "no_vehicle_ratio": 1.4751130384153412,
+     "share_of_people_in_poverty": 0.06429164735704357,
+     "poverty_ratio": 1.1979773733428634,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 24,
+    "0.8": {
+     "tracts": 9,
+     "households": 16175,
+     "share_of_households": 0.015821933552769937,
+     "share_of_no_vehicle_households": 0.02498856927022245,
+     "no_vehicle_ratio": 1.5793625467380197,
+     "share_of_people_in_poverty": 0.02241511701703722,
+     "poverty_ratio": 1.5729108336148308,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 55,
+     "households": 108874,
+     "share_of_households": 0.10649750810660119,
+     "share_of_no_vehicle_households": 0.13931574657575094,
+     "no_vehicle_ratio": 1.3081596842275367,
+     "share_of_people_in_poverty": 0.1193038684130673,
+     "poverty_ratio": 1.228174140602787,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 44,
+    "0.8": {
+     "tracts": 17,
+     "households": 28105,
+     "share_of_households": 0.02749152658427197,
+     "share_of_no_vehicle_households": 0.04073315706816691,
+     "no_vehicle_ratio": 1.4816622475766965,
+     "share_of_people_in_poverty": 0.037294523243540253,
+     "poverty_ratio": 1.4367925732746147,
+     "median_income_covered": 61194.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 93,
+     "households": 180676,
+     "share_of_households": 0.17673222049955248,
+     "share_of_no_vehicle_households": 0.22768025763870942,
+     "no_vehicle_ratio": 1.2882781475564946,
+     "share_of_people_in_poverty": 0.19297485748101717,
+     "poverty_ratio": 1.1748137075683387,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "15000": {
+    "stations": 60,
+    "0.8": {
+     "tracts": 23,
+     "households": 38178,
+     "share_of_households": 0.03734465404498614,
+     "share_of_no_vehicle_households": 0.04806870365584558,
+     "no_vehicle_ratio": 1.2871642510850692,
+     "share_of_people_in_poverty": 0.053475927022934557,
+     "poverty_ratio": 1.5190860046564232,
+     "median_income_covered": 61117.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 128,
+     "households": 243281,
+     "share_of_households": 0.23797068418246822,
+     "share_of_no_vehicle_households": 0.27312486332823094,
+     "no_vehicle_ratio": 1.1477248311762958,
+     "share_of_people_in_poverty": 0.27304660993834534,
+     "poverty_ratio": 1.2153009444326297,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 70,
+    "0.8": {
+     "tracts": 30,
+     "households": 56545,
+     "share_of_households": 0.05531074081863222,
+     "share_of_no_vehicle_households": 0.0639524481641254,
+     "no_vehicle_ratio": 1.1562392261898995,
+     "share_of_people_in_poverty": 0.07448822599787332,
+     "poverty_ratio": 1.4178610621160883,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 147,
+     "households": 288573,
+     "share_of_households": 0.2822740544744037,
+     "share_of_no_vehicle_households": 0.30057849432439415,
+     "no_vehicle_ratio": 1.0648463419143268,
+     "share_of_people_in_poverty": 0.31952584202417683,
+     "poverty_ratio": 1.1888531002585534,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 70,
+    "0.8": {
+     "tracts": 30,
+     "households": 56545,
+     "share_of_households": 0.05531074081863222,
+     "share_of_no_vehicle_households": 0.0639524481641254,
+     "no_vehicle_ratio": 1.1562392261898995,
+     "share_of_people_in_poverty": 0.07448822599787332,
+     "poverty_ratio": 1.4178610621160883,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 147,
+     "households": 288573,
+     "share_of_households": 0.2822740544744037,
+     "share_of_no_vehicle_households": 0.30057849432439415,
+     "no_vehicle_ratio": 1.0648463419143268,
+     "share_of_people_in_poverty": 0.31952584202417683,
+     "poverty_ratio": 1.1888531002585534,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "low-oh20-connected-r1.5": {
+   "2500": {
+    "stations": 0,
+    "0.8": {
+     "tracts": 0,
+     "households": 0,
+     "share_of_households": 0.0,
+     "share_of_no_vehicle_households": 0.0,
+     "no_vehicle_ratio": null,
+     "share_of_people_in_poverty": 0.0,
+     "poverty_ratio": null,
+     "median_income_covered": null,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 0,
+     "households": 0,
+     "share_of_households": 0.0,
+     "share_of_no_vehicle_households": 0.0,
+     "no_vehicle_ratio": null,
+     "share_of_people_in_poverty": 0.0,
+     "poverty_ratio": null,
+     "median_income_covered": null,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 20,
+    "0.8": {
+     "tracts": 5,
+     "households": 9943,
+     "share_of_households": 0.009725965089038115,
+     "share_of_no_vehicle_households": 0.010257837504721388,
+     "no_vehicle_ratio": 1.0546858240610726,
+     "share_of_people_in_poverty": 0.014700717276897583,
+     "poverty_ratio": 1.6134367890513006,
+     "median_income_covered": 63327.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 35,
+     "households": 68087,
+     "share_of_households": 0.06660080307928574,
+     "share_of_no_vehicle_households": 0.07250064608472656,
+     "no_vehicle_ratio": 1.0885851631311003,
+     "share_of_people_in_poverty": 0.07817697960189429,
+     "poverty_ratio": 1.2146556526890364,
+     "median_income_covered": 70784.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 20,
+    "0.8": {
+     "tracts": 5,
+     "households": 9943,
+     "share_of_households": 0.009725965089038115,
+     "share_of_no_vehicle_households": 0.010257837504721388,
+     "no_vehicle_ratio": 1.0546858240610726,
+     "share_of_people_in_poverty": 0.014700717276897583,
+     "poverty_ratio": 1.6134367890513006,
+     "median_income_covered": 63327.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 35,
+     "households": 68087,
+     "share_of_households": 0.06660080307928574,
+     "share_of_no_vehicle_households": 0.07250064608472656,
+     "no_vehicle_ratio": 1.0885851631311003,
+     "share_of_people_in_poverty": 0.07817697960189429,
+     "poverty_ratio": 1.2146556526890364,
+     "median_income_covered": 70784.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "15000": {
+    "stations": 20,
+    "0.8": {
+     "tracts": 5,
+     "households": 9943,
+     "share_of_households": 0.009725965089038115,
+     "share_of_no_vehicle_households": 0.010257837504721388,
+     "no_vehicle_ratio": 1.0546858240610726,
+     "share_of_people_in_poverty": 0.014700717276897583,
+     "poverty_ratio": 1.6134367890513006,
+     "median_income_covered": 63327.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 35,
+     "households": 68087,
+     "share_of_households": 0.06660080307928574,
+     "share_of_no_vehicle_households": 0.07250064608472656,
+     "no_vehicle_ratio": 1.0885851631311003,
+     "share_of_people_in_poverty": 0.07817697960189429,
+     "poverty_ratio": 1.2146556526890364,
+     "median_income_covered": 70784.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "20000": {
+    "stations": 20,
+    "0.8": {
+     "tracts": 5,
+     "households": 9943,
+     "share_of_households": 0.009725965089038115,
+     "share_of_no_vehicle_households": 0.010257837504721388,
+     "no_vehicle_ratio": 1.0546858240610726,
+     "share_of_people_in_poverty": 0.014700717276897583,
+     "poverty_ratio": 1.6134367890513006,
+     "median_income_covered": 63327.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 35,
+     "households": 68087,
+     "share_of_households": 0.06660080307928574,
+     "share_of_no_vehicle_households": 0.07250064608472656,
+     "no_vehicle_ratio": 1.0885851631311003,
+     "share_of_people_in_poverty": 0.07817697960189429,
+     "poverty_ratio": 1.2146556526890364,
+     "median_income_covered": 70784.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "30000": {
+    "stations": 20,
+    "0.8": {
+     "tracts": 5,
+     "households": 9943,
+     "share_of_households": 0.009725965089038115,
+     "share_of_no_vehicle_households": 0.010257837504721388,
+     "no_vehicle_ratio": 1.0546858240610726,
+     "share_of_people_in_poverty": 0.014700717276897583,
+     "poverty_ratio": 1.6134367890513006,
+     "median_income_covered": 63327.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 35,
+     "households": 68087,
+     "share_of_households": 0.06660080307928574,
+     "share_of_no_vehicle_households": 0.07250064608472656,
+     "no_vehicle_ratio": 1.0885851631311003,
+     "share_of_people_in_poverty": 0.07817697960189429,
+     "poverty_ratio": 1.2146556526890364,
+     "median_income_covered": 70784.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   }
+  },
+  "low-oh20-connected-r2.0": {
+   "2500": {
+    "stations": 10,
+    "0.8": {
+     "tracts": 5,
+     "households": 12191,
+     "share_of_households": 0.011924895946943946,
+     "share_of_no_vehicle_households": 0.019243385086376557,
+     "no_vehicle_ratio": 1.6137151361314945,
+     "share_of_people_in_poverty": 0.02100244458664473,
+     "poverty_ratio": 1.8324244162912087,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 25,
+     "households": 49232,
+     "share_of_households": 0.04815736832580956,
+     "share_of_no_vehicle_households": 0.05999642168459138,
+     "no_vehicle_ratio": 1.245840953739093,
+     "share_of_people_in_poverty": 0.06469949620147704,
+     "poverty_ratio": 1.3740068745311034,
+     "median_income_covered": 62196.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 16,
+    "0.8": {
+     "tracts": 6,
+     "households": 14574,
+     "share_of_households": 0.014255880036974904,
+     "share_of_no_vehicle_households": 0.019978927698149216,
+     "no_vehicle_ratio": 1.4014517270298763,
+     "share_of_people_in_poverty": 0.02320562628248029,
+     "poverty_ratio": 1.67022975615901,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 34,
+     "households": 64038,
+     "share_of_households": 0.06264018428762172,
+     "share_of_no_vehicle_households": 0.0770928175257937,
+     "no_vehicle_ratio": 1.230724628328208,
+     "share_of_people_in_poverty": 0.0914329551967628,
+     "poverty_ratio": 1.4421939962382462,
+     "median_income_covered": 63017.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "10000": {
+    "stations": 36,
+    "0.8": {
+     "tracts": 14,
+     "households": 30013,
+     "share_of_households": 0.029357878931640442,
+     "share_of_no_vehicle_households": 0.036657853408345424,
+     "no_vehicle_ratio": 1.2486546965365892,
+     "share_of_people_in_poverty": 0.04929368315016429,
+     "poverty_ratio": 1.7314810885868346,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 68,
+     "households": 131007,
+     "share_of_households": 0.12814739097049344,
+     "share_of_no_vehicle_households": 0.14585611196151324,
+     "no_vehicle_ratio": 1.138190257771985,
+     "share_of_people_in_poverty": 0.16744690684235938,
+     "poverty_ratio": 1.3308288246088051,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "15000": {
+    "stations": 55,
+    "0.8": {
+     "tracts": 20,
+     "households": 42090,
+     "share_of_households": 0.04117126326034539,
+     "share_of_no_vehicle_households": 0.04631930501162952,
+     "no_vehicle_ratio": 1.1250396840808752,
+     "share_of_people_in_poverty": 0.06234687441523472,
+     "poverty_ratio": 1.5316973257786508,
+     "median_income_covered": 61448.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 107,
+     "households": 215153,
+     "share_of_households": 0.2104566596401305,
+     "share_of_no_vehicle_households": 0.2138441047253643,
+     "no_vehicle_ratio": 1.016095689682741,
+     "share_of_people_in_poverty": 0.25793516205865175,
+     "poverty_ratio": 1.2414214084657333,
+     "median_income_covered": 70275.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 68,
+    "0.8": {
+     "tracts": 29,
+     "households": 55243,
+     "share_of_households": 0.0540371607576921,
+     "share_of_no_vehicle_households": 0.06218316998986144,
+     "no_vehicle_ratio": 1.1507482835505893,
+     "share_of_people_in_poverty": 0.07384780183315895,
+     "poverty_ratio": 1.4247641091213228,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 138,
+     "households": 269442,
+     "share_of_households": 0.26356064422413833,
+     "share_of_no_vehicle_households": 0.2604019640975687,
+     "no_vehicle_ratio": 0.9880153573919656,
+     "share_of_people_in_poverty": 0.3074569708376357,
+     "poverty_ratio": 1.2001781800865274,
+     "median_income_covered": 70291.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 68,
+    "0.8": {
+     "tracts": 29,
+     "households": 55243,
+     "share_of_households": 0.0540371607576921,
+     "share_of_no_vehicle_households": 0.06218316998986144,
+     "no_vehicle_ratio": 1.1507482835505893,
+     "share_of_people_in_poverty": 0.07384780183315895,
+     "poverty_ratio": 1.4247641091213228,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 138,
+     "households": 269442,
+     "share_of_households": 0.26356064422413833,
+     "share_of_no_vehicle_households": 0.2604019640975687,
+     "no_vehicle_ratio": 0.9880153573919656,
+     "share_of_people_in_poverty": 0.3074569708376357,
+     "poverty_ratio": 1.2001781800865274,
+     "median_income_covered": 70291.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "low-oh20-connected-r3.0": {
+   "2500": {
+    "stations": 4,
+    "0.8": {
+     "tracts": 4,
+     "households": 5408,
+     "share_of_households": 0.005289954661723637,
+     "share_of_no_vehicle_households": 0.00958193348309246,
+     "no_vehicle_ratio": 1.8113451051715361,
+     "share_of_people_in_poverty": 0.004838691137603622,
+     "poverty_ratio": 1.2974344749319766,
+     "median_income_covered": 70557.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 19,
+     "households": 36089,
+     "share_of_households": 0.035301252549361006,
+     "share_of_no_vehicle_households": 0.05878377035166889,
+     "no_vehicle_ratio": 1.665203529803164,
+     "share_of_people_in_poverty": 0.0244808363814042,
+     "poverty_ratio": 0.9675860532754013,
+     "median_income_covered": 84467.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 26,
+    "0.8": {
+     "tracts": 9,
+     "households": 15619,
+     "share_of_households": 0.015278069870832375,
+     "share_of_no_vehicle_households": 0.025445798461324373,
+     "no_vehicle_ratio": 1.6655113294057768,
+     "share_of_people_in_poverty": 0.021750388069254657,
+     "poverty_ratio": 1.535447323787736,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 62,
+     "households": 120107,
+     "share_of_households": 0.11748531519150164,
+     "share_of_no_vehicle_households": 0.1466115341033338,
+     "no_vehicle_ratio": 1.2479136976766525,
+     "share_of_people_in_poverty": 0.1346572589420018,
+     "poverty_ratio": 1.2409398226004453,
+     "median_income_covered": 70275.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 42,
+    "0.8": {
+     "tracts": 16,
+     "households": 26095,
+     "share_of_households": 0.025525400683742292,
+     "share_of_no_vehicle_households": 0.03466990040355446,
+     "no_vehicle_ratio": 1.3582509764728787,
+     "share_of_people_in_poverty": 0.03599882422285285,
+     "poverty_ratio": 1.4778961962167156,
+     "median_income_covered": 61117.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 91,
+     "households": 170552,
+     "share_of_households": 0.16682920626225772,
+     "share_of_no_vehicle_households": 0.1858934854780033,
+     "no_vehicle_ratio": 1.1142742307709375,
+     "share_of_people_in_poverty": 0.20137759070953704,
+     "poverty_ratio": 1.273823588025631,
+     "median_income_covered": 69375.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "15000": {
+    "stations": 62,
+    "0.8": {
+     "tracts": 25,
+     "households": 44698,
+     "share_of_households": 0.0437223360705849,
+     "share_of_no_vehicle_households": 0.052243404965906605,
+     "no_vehicle_ratio": 1.1948905218962997,
+     "share_of_people_in_poverty": 0.061125395942383864,
+     "poverty_ratio": 1.4725765615120536,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 129,
+     "households": 247414,
+     "share_of_households": 0.24201346942967678,
+     "share_of_no_vehicle_households": 0.2652923284893545,
+     "no_vehicle_ratio": 1.0961882787538073,
+     "share_of_people_in_poverty": 0.28007834891598477,
+     "poverty_ratio": 1.2157060729642113,
+     "median_income_covered": 70557.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 70,
+    "0.8": {
+     "tracts": 30,
+     "households": 56545,
+     "share_of_households": 0.05531074081863222,
+     "share_of_no_vehicle_households": 0.0639524481641254,
+     "no_vehicle_ratio": 1.1562392261898995,
+     "share_of_people_in_poverty": 0.07448822599787332,
+     "poverty_ratio": 1.4178610621160883,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 147,
+     "households": 288573,
+     "share_of_households": 0.2822740544744037,
+     "share_of_no_vehicle_households": 0.30057849432439415,
+     "no_vehicle_ratio": 1.0648463419143268,
+     "share_of_people_in_poverty": 0.31952584202417683,
+     "poverty_ratio": 1.1888531002585534,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 70,
+    "0.8": {
+     "tracts": 30,
+     "households": 56545,
+     "share_of_households": 0.05531074081863222,
+     "share_of_no_vehicle_households": 0.0639524481641254,
+     "no_vehicle_ratio": 1.1562392261898995,
+     "share_of_people_in_poverty": 0.07448822599787332,
+     "poverty_ratio": 1.4178610621160883,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 147,
+     "households": 288573,
+     "share_of_households": 0.2822740544744037,
+     "share_of_no_vehicle_households": 0.30057849432439415,
+     "no_vehicle_ratio": 1.0648463419143268,
+     "share_of_people_in_poverty": 0.31952584202417683,
+     "poverty_ratio": 1.1888531002585534,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "low-oh20-minutes": {
+   "2500": {
+    "stations": 14,
+    "0.8": {
+     "tracts": 8,
+     "households": 14283,
+     "share_of_households": 0.013971231958838518,
+     "share_of_no_vehicle_households": 0.02498856927022245,
+     "no_vehicle_ratio": 1.7885730724278839,
+     "share_of_people_in_poverty": 0.02045094529654961,
+     "poverty_ratio": 1.7214459408302252,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 34,
+     "households": 67261,
+     "share_of_households": 0.06579283293309791,
+     "share_of_no_vehicle_households": 0.097051865693895,
+     "no_vehicle_ratio": 1.4751130384153412,
+     "share_of_people_in_poverty": 0.06429164735704357,
+     "poverty_ratio": 1.1979773733428634,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 25,
+    "0.8": {
+     "tracts": 9,
+     "households": 16175,
+     "share_of_households": 0.015821933552769937,
+     "share_of_no_vehicle_households": 0.02498856927022245,
+     "no_vehicle_ratio": 1.5793625467380197,
+     "share_of_people_in_poverty": 0.02241511701703722,
+     "poverty_ratio": 1.5729108336148308,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 55,
+     "households": 108874,
+     "share_of_households": 0.10649750810660119,
+     "share_of_no_vehicle_households": 0.13931574657575094,
+     "no_vehicle_ratio": 1.3081596842275367,
+     "share_of_people_in_poverty": 0.1193038684130673,
+     "poverty_ratio": 1.228174140602787,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 44,
+    "0.8": {
+     "tracts": 17,
+     "households": 28105,
+     "share_of_households": 0.02749152658427197,
+     "share_of_no_vehicle_households": 0.04073315706816691,
+     "no_vehicle_ratio": 1.4816622475766965,
+     "share_of_people_in_poverty": 0.037294523243540253,
+     "poverty_ratio": 1.4367925732746147,
+     "median_income_covered": 61194.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 93,
+     "households": 180676,
+     "share_of_households": 0.17673222049955248,
+     "share_of_no_vehicle_households": 0.22768025763870942,
+     "no_vehicle_ratio": 1.2882781475564946,
+     "share_of_people_in_poverty": 0.19297485748101717,
+     "poverty_ratio": 1.1748137075683387,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "15000": {
+    "stations": 60,
+    "0.8": {
+     "tracts": 23,
+     "households": 38178,
+     "share_of_households": 0.03734465404498614,
+     "share_of_no_vehicle_households": 0.04806870365584558,
+     "no_vehicle_ratio": 1.2871642510850692,
+     "share_of_people_in_poverty": 0.053475927022934557,
+     "poverty_ratio": 1.5190860046564232,
+     "median_income_covered": 61117.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 128,
+     "households": 243281,
+     "share_of_households": 0.23797068418246822,
+     "share_of_no_vehicle_households": 0.27312486332823094,
+     "no_vehicle_ratio": 1.1477248311762958,
+     "share_of_people_in_poverty": 0.27304660993834534,
+     "poverty_ratio": 1.2153009444326297,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 70,
+    "0.8": {
+     "tracts": 30,
+     "households": 56545,
+     "share_of_households": 0.05531074081863222,
+     "share_of_no_vehicle_households": 0.0639524481641254,
+     "no_vehicle_ratio": 1.1562392261898995,
+     "share_of_people_in_poverty": 0.07448822599787332,
+     "poverty_ratio": 1.4178610621160883,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 147,
+     "households": 288573,
+     "share_of_households": 0.2822740544744037,
+     "share_of_no_vehicle_households": 0.30057849432439415,
+     "no_vehicle_ratio": 1.0648463419143268,
+     "share_of_people_in_poverty": 0.31952584202417683,
+     "poverty_ratio": 1.1888531002585534,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 70,
+    "0.8": {
+     "tracts": 30,
+     "households": 56545,
+     "share_of_households": 0.05531074081863222,
+     "share_of_no_vehicle_households": 0.0639524481641254,
+     "no_vehicle_ratio": 1.1562392261898995,
+     "share_of_people_in_poverty": 0.07448822599787332,
+     "poverty_ratio": 1.4178610621160883,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 147,
+     "households": 288573,
+     "share_of_households": 0.2822740544744037,
+     "share_of_no_vehicle_households": 0.30057849432439415,
+     "no_vehicle_ratio": 1.0648463419143268,
+     "share_of_people_in_poverty": 0.31952584202417683,
+     "poverty_ratio": 1.1888531002585534,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "low-oh30-connected-r1.5": {
+   "2500": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 1,
+     "households": 2284,
+     "share_of_households": 0.0022341450531391987,
+     "share_of_no_vehicle_households": 0.001669880524024412,
+     "no_vehicle_ratio": 0.7474360367416887,
+     "share_of_people_in_poverty": 0.00303971660955337,
+     "poverty_ratio": 1.4590650218492038,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 7,
+     "households": 12723,
+     "share_of_households": 0.01244528349872593,
+     "share_of_no_vehicle_households": 0.012365067689799813,
+     "no_vehicle_ratio": 0.9935545213627051,
+     "share_of_people_in_poverty": 0.0170973999612352,
+     "poverty_ratio": 1.3092308481783737,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 1,
+     "households": 2284,
+     "share_of_households": 0.0022341450531391987,
+     "share_of_no_vehicle_households": 0.001669880524024412,
+     "no_vehicle_ratio": 0.7474360367416887,
+     "share_of_people_in_poverty": 0.00303971660955337,
+     "poverty_ratio": 1.4590650218492038,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 7,
+     "households": 12723,
+     "share_of_households": 0.01244528349872593,
+     "share_of_no_vehicle_households": 0.012365067689799813,
+     "no_vehicle_ratio": 0.9935545213627051,
+     "share_of_people_in_poverty": 0.0170973999612352,
+     "poverty_ratio": 1.3092308481783737,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 1,
+     "households": 2284,
+     "share_of_households": 0.0022341450531391987,
+     "share_of_no_vehicle_households": 0.001669880524024412,
+     "no_vehicle_ratio": 0.7474360367416887,
+     "share_of_people_in_poverty": 0.00303971660955337,
+     "poverty_ratio": 1.4590650218492038,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 7,
+     "households": 12723,
+     "share_of_households": 0.01244528349872593,
+     "share_of_no_vehicle_households": 0.012365067689799813,
+     "no_vehicle_ratio": 0.9935545213627051,
+     "share_of_people_in_poverty": 0.0170973999612352,
+     "poverty_ratio": 1.3092308481783737,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "15000": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 1,
+     "households": 2284,
+     "share_of_households": 0.0022341450531391987,
+     "share_of_no_vehicle_households": 0.001669880524024412,
+     "no_vehicle_ratio": 0.7474360367416887,
+     "share_of_people_in_poverty": 0.00303971660955337,
+     "poverty_ratio": 1.4590650218492038,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 7,
+     "households": 12723,
+     "share_of_households": 0.01244528349872593,
+     "share_of_no_vehicle_households": 0.012365067689799813,
+     "no_vehicle_ratio": 0.9935545213627051,
+     "share_of_people_in_poverty": 0.0170973999612352,
+     "poverty_ratio": 1.3092308481783737,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "20000": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 1,
+     "households": 2284,
+     "share_of_households": 0.0022341450531391987,
+     "share_of_no_vehicle_households": 0.001669880524024412,
+     "no_vehicle_ratio": 0.7474360367416887,
+     "share_of_people_in_poverty": 0.00303971660955337,
+     "poverty_ratio": 1.4590650218492038,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 7,
+     "households": 12723,
+     "share_of_households": 0.01244528349872593,
+     "share_of_no_vehicle_households": 0.012365067689799813,
+     "no_vehicle_ratio": 0.9935545213627051,
+     "share_of_people_in_poverty": 0.0170973999612352,
+     "poverty_ratio": 1.3092308481783737,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "30000": {
+    "stations": 6,
+    "0.8": {
+     "tracts": 1,
+     "households": 2284,
+     "share_of_households": 0.0022341450531391987,
+     "share_of_no_vehicle_households": 0.001669880524024412,
+     "no_vehicle_ratio": 0.7474360367416887,
+     "share_of_people_in_poverty": 0.00303971660955337,
+     "poverty_ratio": 1.4590650218492038,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 7,
+     "households": 12723,
+     "share_of_households": 0.01244528349872593,
+     "share_of_no_vehicle_households": 0.012365067689799813,
+     "no_vehicle_ratio": 0.9935545213627051,
+     "share_of_people_in_poverty": 0.0170973999612352,
+     "poverty_ratio": 1.3092308481783737,
+     "median_income_covered": 68750.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   }
+  },
+  "low-oh30-connected-r2.0": {
+   "2500": {
+    "stations": 0,
+    "0.8": {
+     "tracts": 0,
+     "households": 0,
+     "share_of_households": 0.0,
+     "share_of_no_vehicle_households": 0.0,
+     "no_vehicle_ratio": null,
+     "share_of_people_in_poverty": 0.0,
+     "poverty_ratio": null,
+     "median_income_covered": null,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 0,
+     "households": 0,
+     "share_of_households": 0.0,
+     "share_of_no_vehicle_households": 0.0,
+     "no_vehicle_ratio": null,
+     "share_of_people_in_poverty": 0.0,
+     "poverty_ratio": null,
+     "median_income_covered": null,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 19,
+    "0.8": {
+     "tracts": 6,
+     "households": 10441,
+     "share_of_households": 0.010213094789766364,
+     "share_of_no_vehicle_households": 0.012981333121285013,
+     "no_vehicle_ratio": 1.2710479427149206,
+     "share_of_people_in_poverty": 0.01574386762679536,
+     "poverty_ratio": 1.6257237077922386,
+     "median_income_covered": 63327.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 42,
+     "households": 83419,
+     "share_of_households": 0.081598137560341,
+     "share_of_no_vehicle_households": 0.09220126036220504,
+     "no_vehicle_ratio": 1.1299431962405164,
+     "share_of_people_in_poverty": 0.07981502529913495,
+     "poverty_ratio": 1.0630951134811653,
+     "median_income_covered": 72216.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 37,
+    "0.8": {
+     "tracts": 11,
+     "households": 22541,
+     "share_of_households": 0.022048977076537076,
+     "share_of_no_vehicle_households": 0.022165676003419277,
+     "no_vehicle_ratio": 1.0052927138740773,
+     "share_of_people_in_poverty": 0.027519543969178717,
+     "poverty_ratio": 1.3198228830062642,
+     "median_income_covered": 63469.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 70,
+     "households": 143964,
+     "share_of_households": 0.14082156673823626,
+     "share_of_no_vehicle_households": 0.13492237043516292,
+     "no_vehicle_ratio": 0.9581087155915616,
+     "share_of_people_in_poverty": 0.149798969320152,
+     "poverty_ratio": 1.1123609490199633,
+     "median_income_covered": 77448.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "15000": {
+    "stations": 37,
+    "0.8": {
+     "tracts": 11,
+     "households": 22541,
+     "share_of_households": 0.022048977076537076,
+     "share_of_no_vehicle_households": 0.022165676003419277,
+     "no_vehicle_ratio": 1.0052927138740773,
+     "share_of_people_in_poverty": 0.027519543969178717,
+     "poverty_ratio": 1.3198228830062642,
+     "median_income_covered": 63469.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 70,
+     "households": 143964,
+     "share_of_households": 0.14082156673823626,
+     "share_of_no_vehicle_households": 0.13492237043516292,
+     "no_vehicle_ratio": 0.9581087155915616,
+     "share_of_people_in_poverty": 0.149798969320152,
+     "poverty_ratio": 1.1123609490199633,
+     "median_income_covered": 77448.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 37,
+    "0.8": {
+     "tracts": 11,
+     "households": 22541,
+     "share_of_households": 0.022048977076537076,
+     "share_of_no_vehicle_households": 0.022165676003419277,
+     "no_vehicle_ratio": 1.0052927138740773,
+     "share_of_people_in_poverty": 0.027519543969178717,
+     "poverty_ratio": 1.3198228830062642,
+     "median_income_covered": 63469.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 70,
+     "households": 143964,
+     "share_of_households": 0.14082156673823626,
+     "share_of_no_vehicle_households": 0.13492237043516292,
+     "no_vehicle_ratio": 0.9581087155915616,
+     "share_of_people_in_poverty": 0.149798969320152,
+     "poverty_ratio": 1.1123609490199633,
+     "median_income_covered": 77448.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 37,
+    "0.8": {
+     "tracts": 11,
+     "households": 22541,
+     "share_of_households": 0.022048977076537076,
+     "share_of_no_vehicle_households": 0.022165676003419277,
+     "no_vehicle_ratio": 1.0052927138740773,
+     "share_of_people_in_poverty": 0.027519543969178717,
+     "poverty_ratio": 1.3198228830062642,
+     "median_income_covered": 63469.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 70,
+     "households": 143964,
+     "share_of_households": 0.14082156673823626,
+     "share_of_no_vehicle_households": 0.13492237043516292,
+     "no_vehicle_ratio": 0.9581087155915616,
+     "share_of_people_in_poverty": 0.149798969320152,
+     "poverty_ratio": 1.1123609490199633,
+     "median_income_covered": 77448.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "low-oh30-connected-r3.0": {
+   "2500": {
+    "stations": 8,
+    "0.8": {
+     "tracts": 3,
+     "households": 6398,
+     "share_of_households": 0.006258345030641241,
+     "share_of_no_vehicle_households": 0.013040971711428742,
+     "no_vehicle_ratio": 2.0837732096232067,
+     "share_of_people_in_poverty": 0.010237593944070372,
+     "poverty_ratio": 1.7715279831334545,
+     "median_income_covered": 53919.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 13,
+     "households": 26762,
+     "share_of_households": 0.026177841467649402,
+     "share_of_no_vehicle_households": 0.03526628630499175,
+     "no_vehicle_ratio": 1.3471808341636515,
+     "share_of_people_in_poverty": 0.033519945855263286,
+     "poverty_ratio": 1.3753973776078363,
+     "median_income_covered": 60807.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 22,
+    "0.8": {
+     "tracts": 5,
+     "households": 9629,
+     "share_of_households": 0.009418819052835965,
+     "share_of_no_vehicle_households": 0.015426515317177902,
+     "no_vehicle_ratio": 1.63783965172715,
+     "share_of_people_in_poverty": 0.013349957404042814,
+     "poverty_ratio": 1.361391179064475,
+     "median_income_covered": 53919.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 34,
+     "households": 69032,
+     "share_of_households": 0.06752517570416164,
+     "share_of_no_vehicle_households": 0.07776872154742262,
+     "no_vehicle_ratio": 1.151699654779716,
+     "share_of_people_in_poverty": 0.09527158585107359,
+     "poverty_ratio": 1.3809737180392019,
+     "median_income_covered": 66810.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 39,
+    "0.8": {
+     "tracts": 12,
+     "households": 23859,
+     "share_of_households": 0.02333820789091425,
+     "share_of_no_vehicle_households": 0.028288571258175455,
+     "no_vehicle_ratio": 1.21211411734782,
+     "share_of_people_in_poverty": 0.034826382364708586,
+     "poverty_ratio": 1.4627122668635406,
+     "median_income_covered": 59706.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 69,
+     "households": 136451,
+     "share_of_households": 0.13347255982745043,
+     "share_of_no_vehicle_households": 0.13062839194481443,
+     "no_vehicle_ratio": 0.9786909917191005,
+     "share_of_people_in_poverty": 0.16948985791878948,
+     "poverty_ratio": 1.2649696690724694,
+     "median_income_covered": 70275.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "15000": {
+    "stations": 59,
+    "0.8": {
+     "tracts": 25,
+     "households": 45801,
+     "share_of_households": 0.04480125988565168,
+     "share_of_no_vehicle_households": 0.05482774387213486,
+     "no_vehicle_ratio": 1.223799152346926,
+     "share_of_people_in_poverty": 0.06169744159465675,
+     "poverty_ratio": 1.4350551745236222,
+     "median_income_covered": 63327.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 120,
+     "households": 230994,
+     "share_of_households": 0.22595188371490196,
+     "share_of_no_vehicle_households": 0.25928871041488577,
+     "no_vehicle_ratio": 1.1475394944794841,
+     "share_of_people_in_poverty": 0.2581991623394791,
+     "poverty_ratio": 1.2092874802147782,
+     "median_income_covered": 70784.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 70,
+    "0.8": {
+     "tracts": 30,
+     "households": 56545,
+     "share_of_households": 0.05531074081863222,
+     "share_of_no_vehicle_households": 0.0639524481641254,
+     "no_vehicle_ratio": 1.1562392261898995,
+     "share_of_people_in_poverty": 0.07448822599787332,
+     "poverty_ratio": 1.4178610621160883,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 147,
+     "households": 288573,
+     "share_of_households": 0.2822740544744037,
+     "share_of_no_vehicle_households": 0.30057849432439415,
+     "no_vehicle_ratio": 1.0648463419143268,
+     "share_of_people_in_poverty": 0.31952584202417683,
+     "poverty_ratio": 1.1888531002585534,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 70,
+    "0.8": {
+     "tracts": 30,
+     "households": 56545,
+     "share_of_households": 0.05531074081863222,
+     "share_of_no_vehicle_households": 0.0639524481641254,
+     "no_vehicle_ratio": 1.1562392261898995,
+     "share_of_people_in_poverty": 0.07448822599787332,
+     "poverty_ratio": 1.4178610621160883,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 147,
+     "households": 288573,
+     "share_of_households": 0.2822740544744037,
+     "share_of_no_vehicle_households": 0.30057849432439415,
+     "no_vehicle_ratio": 1.0648463419143268,
+     "share_of_people_in_poverty": 0.31952584202417683,
+     "poverty_ratio": 1.1888531002585534,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  },
+  "low-oh30-minutes": {
+   "2500": {
+    "stations": 14,
+    "0.8": {
+     "tracts": 8,
+     "households": 14283,
+     "share_of_households": 0.013971231958838518,
+     "share_of_no_vehicle_households": 0.02498856927022245,
+     "no_vehicle_ratio": 1.7885730724278839,
+     "share_of_people_in_poverty": 0.02045094529654961,
+     "poverty_ratio": 1.7214459408302252,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 34,
+     "households": 67261,
+     "share_of_households": 0.06579283293309791,
+     "share_of_no_vehicle_households": 0.097051865693895,
+     "no_vehicle_ratio": 1.4751130384153412,
+     "share_of_people_in_poverty": 0.06429164735704357,
+     "poverty_ratio": 1.1979773733428634,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "5000": {
+    "stations": 25,
+    "0.8": {
+     "tracts": 9,
+     "households": 16175,
+     "share_of_households": 0.015821933552769937,
+     "share_of_no_vehicle_households": 0.02498856927022245,
+     "no_vehicle_ratio": 1.5793625467380197,
+     "share_of_people_in_poverty": 0.02241511701703722,
+     "poverty_ratio": 1.5729108336148308,
+     "median_income_covered": 60578.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 55,
+     "households": 108874,
+     "share_of_households": 0.10649750810660119,
+     "share_of_no_vehicle_households": 0.13931574657575094,
+     "no_vehicle_ratio": 1.3081596842275367,
+     "share_of_people_in_poverty": 0.1193038684130673,
+     "poverty_ratio": 1.228174140602787,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "10000": {
+    "stations": 44,
+    "0.8": {
+     "tracts": 17,
+     "households": 28105,
+     "share_of_households": 0.02749152658427197,
+     "share_of_no_vehicle_households": 0.04073315706816691,
+     "no_vehicle_ratio": 1.4816622475766965,
+     "share_of_people_in_poverty": 0.037294523243540253,
+     "poverty_ratio": 1.4367925732746147,
+     "median_income_covered": 61194.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 93,
+     "households": 180676,
+     "share_of_households": 0.17673222049955248,
+     "share_of_no_vehicle_households": 0.22768025763870942,
+     "no_vehicle_ratio": 1.2882781475564946,
+     "share_of_people_in_poverty": 0.19297485748101717,
+     "poverty_ratio": 1.1748137075683387,
+     "median_income_covered": 69512.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    }
+   },
+   "15000": {
+    "stations": 61,
+    "0.8": {
+     "tracts": 23,
+     "households": 38178,
+     "share_of_households": 0.03734465404498614,
+     "share_of_no_vehicle_households": 0.04806870365584558,
+     "no_vehicle_ratio": 1.2871642510850692,
+     "share_of_people_in_poverty": 0.053475927022934557,
+     "poverty_ratio": 1.5190860046564232,
+     "median_income_covered": 61117.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 131,
+     "households": 251242,
+     "share_of_households": 0.2457579121894915,
+     "share_of_no_vehicle_households": 0.27664354014671094,
+     "no_vehicle_ratio": 1.1256750095329793,
+     "share_of_people_in_poverty": 0.2828552919395593,
+     "poverty_ratio": 1.2135431486193649,
+     "median_income_covered": 70291.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "20000": {
+    "stations": 69,
+    "0.8": {
+     "tracts": 29,
+     "households": 54162,
+     "share_of_households": 0.052979756728601266,
+     "share_of_no_vehicle_households": 0.06321690555235274,
+     "no_vehicle_ratio": 1.1932275543693638,
+     "share_of_people_in_poverty": 0.07228504430203776,
+     "poverty_ratio": 1.4427139093134391,
+     "median_income_covered": 62196.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 146,
+     "households": 286190,
+     "share_of_households": 0.2799430703843727,
+     "share_of_no_vehicle_households": 0.2998429517126215,
+     "no_vehicle_ratio": 1.0710854578430016,
+     "share_of_people_in_poverty": 0.3173226603283413,
+     "poverty_ratio": 1.1914372121694599,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   },
+   "30000": {
+    "stations": 70,
+    "0.8": {
+     "tracts": 30,
+     "households": 56545,
+     "share_of_households": 0.05531074081863222,
+     "share_of_no_vehicle_households": 0.0639524481641254,
+     "no_vehicle_ratio": 1.1562392261898995,
+     "share_of_people_in_poverty": 0.07448822599787332,
+     "poverty_ratio": 1.4178610621160883,
+     "median_income_covered": 63036.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 0
+    },
+    "2.0": {
+     "tracts": 147,
+     "households": 288573,
+     "share_of_households": 0.2822740544744037,
+     "share_of_no_vehicle_households": 0.30057849432439415,
+     "no_vehicle_ratio": 1.0648463419143268,
+     "share_of_people_in_poverty": 0.31952584202417683,
+     "poverty_ratio": 1.1888531002585534,
+     "median_income_covered": 70737.0,
+     "median_income_region": 78676.0,
+     "small_base_tracts": 1
+    }
+   }
+  }
+ },
+ "notes": [
+  "Tracts are counted when their centroid is within the radius of a station (a center point).",
+  "no_vehicle_ratio and poverty_ratio above 1 mean the plan reaches a larger share of that group than of all households (or people).",
+  "Equity is reported separately and is never added to the commute scores.",
+  "Poverty uses total population as its base and ACS estimates carry margins of error; tracts flagged small_base are included."
+ ]
+}
