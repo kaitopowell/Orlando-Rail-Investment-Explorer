@@ -1,3 +1,5 @@
+import {useRailPlan} from "./components/useRailPlan";
+import type {RailSelection} from "./data/railPlan";
 import {useFlows} from "./components/useFlows";
 import {useCenterLabels} from "./components/useCenterLabels";
 import {useCandidates} from "./components/useCandidates";
@@ -18,6 +20,8 @@ export default function App() {
   const [busVisible, setBusVisible] = useState(false);
   const [equityVisible, setEquityVisible] = useState(false);
   const [open, setOpen] = useState(() => window.innerWidth > 600);
+  const railPlan = useRailPlan();
+  const selectRail = useCallback((s:RailSelection) => { railPlan.select(s); setOpen(true); }, [railPlan.select]);
   const [flowsVisible, setFlowsVisible] = useState(false);
   const candidates = useCandidates(flowsVisible);
   const labels = useCenterLabels(candidates.data, candidates.enabled || flowsVisible);
@@ -33,6 +37,7 @@ export default function App() {
   return (
     <main>
       <MapView
+        railPlan={railPlan} onRailSelect={selectRail}
         flows={flows}
         labels={labels}
         onFlowSelect={selectFlow}
@@ -50,6 +55,7 @@ export default function App() {
         onPopulationStatus={setPopulationStatus}
       />
       <Sidebar
+        railPlan={railPlan} onRailSelect={selectRail}
         flows={flows}
         labels={labels}
         onFlowsToggle={() => setFlowsVisible(!flowsVisible)}

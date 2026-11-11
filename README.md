@@ -43,7 +43,7 @@ Document and acquire authoritative regional datasets, validate licenses/coverage
 
 ## Browser smoke checks
 
-With the dev server running, run `npx playwright install chromium` once, then `npm run test:smoke`, `npm run test:candidates`, and `npm run test:flows`. To use an installed Chromium instead, run `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:smoke`.
+With the dev server running, run `npx playwright install chromium` once, then `npm run test:smoke`, `npm run test:candidates`, `npm run test:flows`, and `npm run test:rail-plan`. To use an installed Chromium instead, run `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:smoke`.
 
 The smoke check substitutes an empty test-only basemap style but loads the real generated Census geometry. It checks phone (390 px), laptop (1440 px), and ultrawide (2560 px) camera constraints, county toggle, hover, label fading, attribution, disabled analytical controls, sidebar keyboard access, and data/resource failures. It does **not** validate live geographic tiles. No fixture data appears in the application.
 
@@ -175,3 +175,38 @@ available in the controls. No animation or hover transitions are added.
 behavior. A modern browser supporting `DecompressionStream('gzip')` is required.
 See [the frontend data contract](data/TOP_COMMUTE_FLOWS_CONTRACT.md) for source
 schemas, denominators, display constants and limitations.
+
+### Proposed rail network
+
+Enable **Proposed rail network** under **Rail plan**. The default is $10B,
+low costs, 20-minute wait/access overhead, and minutes saved. Switch the objective
+and assumptions to select a supplied scenario; the two objectives are never added.
+The budget slider advances through build-step costs and the six published budgets,
+including zero and $30B. Preset buttons preserve exact published budget selection.
+Only fully affordable steps are drawn. Build order buttons focus and highlight
+that step; links and stations support hover/tap inspection and stations also have
+a keyboard selector. Reduced motion disables the camera flight.
+
+Phase colors use six budget bands; link-type colors are an alternative. The legend,
+build order and inspectors identify lines without relying only on color. Core
+highlighting emphasizes the supplied common $10B minutes-saved links. Normal-alpha
+lines have dark casings, white outlined stations, and collision-filtered labels;
+anchors are eligible at all zooms and other stations at zoom 11+. In crowded views,
+colliding labels may be suppressed; every built station remains in the selector.
+Existing basemap styling and other layer controls are unchanged.
+
+**Who does this serve?** reports the supplied 0.8 km and 2 km equity snapshots
+separately from commute scores. The data contains snapshots only at $2.5B, $5B,
+$10B, $15B, $20B and $30B. Other slider stops reuse a snapshot only if it represents
+exactly the same links; otherwise equity is explicitly unavailable, never
+interpolated. The all-candidate-centers benchmark is expandable at each radius.
+The top-level equity radius list currently omits 2 km, but both per-budget radius
+records exist and are used. Scenario IDs use `r2.0`/`r3.0` in the actual files.
+
+All source caveats and equity notes are displayed verbatim. Lines are straight
+connections, not surveyed routes; costs omit stations, vehicles and station access.
+Model outputs are not measured benefits or an optimal plan. The frontend loads
+`public/data/rail_plan.json` and `rail_equity.json` once and does not recompute the
+analysis or modify these files. Run `npm run test:rail-plan` with the dev server
+running for real-file reference/budget checks and laptop/phone browser controls,
+inspection, failures, cleanup and 2D/3D coexistence.

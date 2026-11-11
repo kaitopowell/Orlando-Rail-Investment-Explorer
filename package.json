@@ -20,7 +20,8 @@
     "test:lynx": "node --experimental-strip-types scripts/test-lynx.mjs && node scripts/lynx-smoke.mjs",
     "test:train-motion": "node --experimental-strip-types scripts/test-train-motion.mjs && node scripts/train-motion-smoke.mjs",
     "test:candidates": "node --experimental-strip-types scripts/test-candidates.mjs && node scripts/candidates-smoke.mjs",
-    "test:flows": "node --experimental-strip-types scripts/test-flows.mjs && node scripts/flows-smoke.mjs"
+    "test:flows": "node --experimental-strip-types scripts/test-flows.mjs && node scripts/flows-smoke.mjs",
+    "test:rail-plan": "node --experimental-strip-types scripts/test-rail-plan.mjs && node scripts/rail-plan-smoke.mjs"
   },
   "dependencies": {
     "@deck.gl/core": "^9.2.0",
