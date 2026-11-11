@@ -1,8 +1,9 @@
 """
 Run the greedy build order on the real network for a grid of scenarios.
 
-One run per (cost case, overhead, objective [, ratio]) with a large budget; because the
-greedy plan is a true prefix, every smaller budget is just the first N steps.
+Candidates are routes between anchor centers (top 12 by jobs or by population), not single
+links. One run per (cost case, overhead, objective [, ratio]) with a large budget; because
+the greedy plan is a true prefix, every smaller budget is just the first N steps.
 
 Run:  py -m analysis.rail.run_scenarios            (full grid, takes a while)
       py -m analysis.rail.run_scenarios --base     (one scenario, quick check)
@@ -16,7 +17,8 @@ from pathlib import Path
 
 from . import rail_params as P
 from .demand import load_pairs
-from .fastgreedy import greedy_fast
+from .routegreedy import greedy_routes
+from .routes import build_routes, pick_anchors
 from .links import (Projector, build_links, build_passenger_index, build_rail_graph, classify_all,
                     load_connections, load_shape_lines)
 from .score import Params
@@ -41,22 +43,28 @@ def build_network():
 
 def prefix_summary(steps, budget):
     kept = [s for s in steps if s.total_cost <= budget]
-    return {"budget_musd": budget, "links": len(kept),
+    return {"budget_musd": budget, "routes": len(kept),
+            "links": sum(len(s.new_link_ids) for s in kept),
             "spent_musd": round(kept[-1].total_cost, 1) if kept else 0.0,
             "score": round(kept[-1].total_score, 1) if kept else 0.0}
 
 
-def run_one(conns, infos, circ, pairs, cost, overhead, measure, ratio):
+def run_one(conns, infos, circ, pairs, anchors, cost, overhead, measure, ratio):
     links = build_links(conns, infos, circ, case=COST_CASES[cost])
+    routes = build_routes(links, anchors)
     params = Params(overhead_min=overhead, ratio=ratio)
     t0 = time.time()
-    steps = greedy_fast(links, MAX_BUDGET_MUSD, pairs, params, measure)
+    steps = greedy_routes(routes, MAX_BUDGET_MUSD, pairs, params, measure)
+    ends = {r[0]: (r[1], r[2]) for r in routes}
     return {
         "cost": cost, "overhead_min": overhead, "measure": measure,
         "ratio": ratio if measure == "newly_connected" else None,
+        "candidate_routes": len(routes),
         "seconds": round(time.time() - t0, 1),
-        "order": [{"link_id": s.link_id, "gain": round(s.gain, 1), "cost_musd": round(s.cost, 1),
-                   "total_cost_musd": round(s.total_cost, 1), "total_score": round(s.total_score, 1)} for s in steps],
+        "order": [{"route_id": s.route_id, "from": ends[s.route_id][0], "to": ends[s.route_id][1],
+                   "new_link_ids": list(s.new_link_ids), "gain": round(s.gain, 1),
+                   "cost_musd": round(s.cost, 1), "total_cost_musd": round(s.total_cost, 1),
+                   "total_score": round(s.total_score, 1)} for s in steps],
         "by_budget": [prefix_summary(steps, b) for b in BUDGETS_MUSD],
     }
 
@@ -64,7 +72,8 @@ def run_one(conns, infos, circ, pairs, cost, overhead, measure, ratio):
 def main(base_only=False):
     conns, infos, circ = build_network()
     pairs = load_pairs()
-    print(f"{len(conns)} links, {len(pairs)} demand pairs, new-alignment circuity {circ:.3f}")
+    anchors = pick_anchors(DATA / "candidate_centers.geojson")
+    print(f"{len(conns)} links, {len(pairs)} demand pairs, {len(anchors)} anchors, new-alignment circuity {circ:.3f}")
     runs = []
     if base_only:
         grid = [(BASE["cost"], BASE["overhead"], "time_saved", None), (BASE["cost"], BASE["overhead"], "newly_connected", BASE["ratio"])]
@@ -76,11 +85,11 @@ def main(base_only=False):
                 for r in RATIOS:
                     grid.append((cost, ov, "newly_connected", r))
     for cost, ov, measure, ratio in grid:
-        run = run_one(conns, infos, circ, pairs, cost, ov, measure, ratio if ratio else 2.0)
+        run = run_one(conns, infos, circ, pairs, anchors, cost, ov, measure, ratio if ratio else 2.0)
         runs.append(run)
         b10 = next(b for b in run["by_budget"] if b["budget_musd"] == 10_000)
         print(f"{cost:4s} overhead {ov:4.0f} {measure:15s} ratio {run['ratio']}: "
-              f"$10B -> {b10['links']} links, score {b10['score']:,.0f} ({run['seconds']}s)")
+              f"$10B -> {b10['routes']} routes / {b10['links']} links, score {b10['score']:,.0f} ({run['seconds']}s)")
     out = DATA / ("rail_scenarios_base.json" if base_only else "rail_scenarios.json")
     out.write_text(json.dumps({"runs": runs}, indent=1), encoding="utf-8")
     print("wrote", out)
