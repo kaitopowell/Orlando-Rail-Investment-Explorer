@@ -1,6 +1,6 @@
 import SunshineControls from "./SunshineControls";
 import type {SunshineState} from "./useSunshine";
-import RailPlanControls from "./RailPlanControls";
+import {RailPlanToggle} from "./RailPlanControls";
 import type {RailState} from "./useRailPlan";
 import type {RailSelection} from "../data/railPlan";
 import FlowControls from "./FlowControls";
@@ -13,7 +13,7 @@ import { populationSource } from "../data/population";
 import CountyAttribution from "./CountyAttribution";
 import { plannedLayers } from "../data/layers";
 export default function Sidebar({
-  sunshine, railPlan, onRailSelect,
+  sunshine, railPlan,
   candidates,
   flows, labels, onFlowsToggle,
   busVisible,
@@ -278,7 +278,7 @@ export default function Sidebar({
             Accessed 2026-10-13 · tract boundaries 2024.
           </p>
         </section>
-        <RailPlanControls state={railPlan} onSelect={onRailSelect}/>
+        <RailPlanToggle state={railPlan}/>
         <CandidateControls state={candidates} labels={labels}/>
         <FlowControls state={flows} candidates={candidates} labels={labels} onToggle={onFlowsToggle}/>
         <section className="study">

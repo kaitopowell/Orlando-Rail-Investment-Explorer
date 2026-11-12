@@ -32,7 +32,7 @@ const bad = structuredClone(raw);
 bad.features[0].properties.capital_low_musd = -1;
 assert.throws(() => parseSunshine(bad));
 assert.throws(() => parseSunshine({}));
-const data = parseRailData(read("rail_plan.json"), read("rail_equity.json"));
+const data = parseRailData(read("rail_network.json"), read("rail_equity_v2.json"));
 for (const scenario of data.plan.scenarios) {
   const network = networkAt(data.plan, scenario, 10000);
   const c = comparisonPlan({ data, network, scenario, budget: 10000 });

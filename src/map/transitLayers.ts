@@ -14,8 +14,17 @@ type RenderItem = Feature<
   { id: string; name: string }
 >;
 export type TransitLayerOptions = {
+  colorFor?: (id: string) => {
+    color: [number, number, number];
+    core: [number, number, number];
+  };
+  highlightFor?: (id: string) => boolean;
+  opacityFor?: (id: string) => number;
+  widthScale?: number;
+  rounded?: boolean;
+  linesOnly?: boolean;
   idPrefix: string;
-  colors: { color: [number, number, number]; core: [number, number, number] };
+  colors?: { color: [number, number, number]; core: [number, number, number] };
 };
 class Glow<T extends RenderItem> extends ScatterplotLayer<T> {
   static layerName = "TransitGlow";
@@ -43,6 +52,7 @@ export function transitLayers<T extends RenderItem = TransitItem>(
 ) {
   const prefix = options?.idPrefix ?? "transit";
   const palette = (f: { properties: T["properties"] }) =>
+    options?.colorFor?.(f.properties.id) ??
     options?.colors ??
     services[(f.properties as TransitItem["properties"]).service];
   const lines = items.filter((f) => f.geometry.type !== "Point");
@@ -58,33 +68,42 @@ export function transitLayers<T extends RenderItem = TransitItem>(
     const p = f.geometry.type === "Point" ? f.geometry.coordinates : [0, 0];
     return [p[0], p[1], 5];
   };
-  return [
-    ...TRANSIT_STYLE.rail.passes.map(
-      (pass) =>
-        new GeoJsonLayer<T["properties"]>({
-          id: `${prefix}-${pass.id}`,
-          data: { type: "FeatureCollection" as const, features: lines },
-          parameters: TRANSIT_ALPHA_BLEND,
-          getLineColor: (f) => [
-            ...(pass.id === "core" ? palette(f).core : palette(f).color),
-            pass.id === "core" && highlighted === f.properties.id
-              ? TRANSIT_STYLE.rail.highlightAlpha
-              : pass.alpha,
-          ],
-          getLineWidth: (f) =>
-            pass.width +
-            (highlighted === f.properties.id
+  const lineLayers = TRANSIT_STYLE.rail.passes.map(
+    (pass) =>
+      new GeoJsonLayer<T["properties"]>({
+        id: `${prefix}-${pass.id}`,
+        data: { type: "FeatureCollection" as const, features: lines },
+        parameters: TRANSIT_ALPHA_BLEND,
+        getLineColor: (f) => [
+          ...(pass.id === "core" ? palette(f).core : palette(f).color),
+          (pass.id === "core" &&
+          (highlighted === f.properties.id ||
+            options?.highlightFor?.(f.properties.id))
+            ? TRANSIT_STYLE.rail.highlightAlpha
+            : pass.alpha) * (options?.opacityFor?.(f.properties.id) ?? 1),
+        ],
+        getLineWidth: (f) =>
+          (pass.width +
+            (highlighted === f.properties.id ||
+            options?.highlightFor?.(f.properties.id)
               ? TRANSIT_STYLE.rail.highlightWidth
-              : 0),
-          lineWidthUnits: "pixels",
-          pickable: pass.id === "halo",
-          ...events,
-          updateTriggers: {
-            getLineColor: highlighted,
-            getLineWidth: highlighted,
-          },
-        }),
-    ),
+              : 0)) *
+          (options?.widthScale ?? 1),
+        ...(options?.rounded
+          ? { lineJointRounded: true, lineCapRounded: true }
+          : {}),
+        lineWidthUnits: "pixels",
+        pickable: pass.id === "halo",
+        ...events,
+        updateTriggers: {
+          getLineColor: [highlighted, options],
+          getLineWidth: [highlighted, options],
+        },
+      }),
+  );
+  if (options?.linesOnly) return lineLayers;
+  return [
+    ...lineLayers,
     new Glow<T>({
       id: `${prefix}-station-glow`,
       data: stations,

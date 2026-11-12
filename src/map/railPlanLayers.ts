@@ -1,123 +1,102 @@
-import { PathLayer, ScatterplotLayer, TextLayer } from "@deck.gl/layers";
-import type { Color } from "@deck.gl/core";
+import { ScatterplotLayer, TextLayer } from "@deck.gl/layers";
+import type { Feature, LineString } from "geojson";
 import type { Map as MapLibreMap } from "maplibre-gl";
-import type { RailCenter, RailLink, RailSelection } from "../data/railPlan";
+import type { RailSelection } from "../data/railPlan";
 import type { RailState } from "../components/useRailPlan";
-export const PHASES = [
-  { max: 2500, label: "$0–2.5B", color: [86, 180, 233] },
-  { max: 5000, label: "$2.5–5B", color: [230, 159, 0] },
-  { max: 10000, label: "$5–10B", color: [0, 158, 115] },
-  { max: 15000, label: "$10–15B", color: [204, 121, 167] },
-  { max: 20000, label: "$15–20B", color: [240, 228, 66] },
-  { max: 30000, label: "$20–30B", color: [213, 94, 0] },
-];
-export const LINK_TYPES = {
-  passenger_corridor: { label: "Passenger corridor", color: [86, 180, 233] },
-  freight_corridor: { label: "Freight corridor", color: [230, 159, 0] },
-  new_alignment: { label: "New alignment", color: [204, 121, 167] },
-};
-export const RAIL_STYLE = {
-  width: 5,
-  casing: 8,
-  stationRadius: 4,
-  anchorRadius: 6,
-  labelZoom: 11,
-  fontSize: 12,
-};
-const parameters = {
-  depthCompare: "always",
-  depthWriteEnabled: false,
-} as const;
+import {
+  displayStations,
+  stationName,
+  LINE_PALETTE,
+  rgb,
+  type DisplayStation,
+} from "../data/networkDisplay";
+import { schematicPath } from "./schematic";
+import { transitLayers } from "./transitLayers";
+export { LINE_PALETTE } from "../data/networkDisplay";
 export function railPlanLayers(
   state: RailState,
   hovered: RailSelection,
   onHover: (s: RailSelection) => void,
   onSelect: (s: RailSelection) => void,
   map: MapLibreMap,
+  added: Set<string>,
 ) {
   const { data, network, scenario } = state;
   if (!state.enabled || !data || !network || !scenario) return [];
-  const active = (kind: "link" | "station", id: string) =>
-    [hovered, state.selection].some(
-      (s) =>
-        (s?.kind === kind && s.id === id) ||
-        (kind === "link" &&
-          s?.kind === "step" &&
-          scenario.steps
-            .find((st) => st.route_id === s.id)
-            ?.new_link_ids.includes(id)),
-    );
-  const color = (l: RailLink): Color => {
-    const step = scenario.steps[network.built.get(l.id)!];
-    const rgb =
-      state.colorBy === "type"
-        ? LINK_TYPES[l.class].color
-        : PHASES.find((p) => step.total_cost_musd <= p.max)!.color;
-    return [
-      rgb[0],
-      rgb[1],
-      rgb[2],
-      state.core && !data.plan.core_link_ids.includes(l.id) ? 65 : 255,
-    ] as Color;
-  };
-  const paths = {
-    data: network.links,
-    getPath: (l: RailLink) => l.coords,
-    widthUnits: "pixels" as const,
-    capRounded: true,
-    jointRounded: true,
-    parameters,
-  };
-  const labels = stationLabels(network.stations, map);
+  const links = network.links.filter((l) => !state.core || data.core.has(l.id));
+  const selectedIds = new Set(
+    state.selection?.kind === "step"
+      ? scenario.steps[Number(state.selection.id)]?.new_link_ids
+      : state.selection?.kind === "link"
+        ? [state.selection.id]
+        : [],
+  );
+  const features: Feature<LineString, { id: string; name: string }>[] =
+    links.map((l) => ({
+      type: "Feature",
+      geometry: {
+        type: "LineString",
+        coordinates:
+          state.drawing === "schematic"
+            ? schematicPath(l.coords[0], l.coords[1], l.a, l.b)
+            : l.coords,
+      },
+      properties: { id: l.id, name: `${l.a_name} to ${l.b_name}` },
+    }));
+  const stations = displayStations(data.plan.nodes, links, scenario),
+    labels = placeStationLabels(stations, map);
+  const lines = transitLayers(
+    features,
+    hovered?.kind === "link" ? hovered.id : null,
+    1,
+    map.getZoom(),
+    (f) => onHover(f ? { kind: "link", id: f.properties.id } : null),
+    (f) => onSelect({ kind: "link", id: f.properties.id }),
+    {
+      idPrefix: "rail-plan",
+      linesOnly: true,
+      rounded: state.drawing === "schematic",
+      widthScale: state.drawing === "schematic" ? 1.5 : 1,
+      colorFor: (id) => {
+        const c = rgb(LINE_PALETTE[network.owner.get(id)!.color_index]);
+        return { color: c, core: c };
+      },
+      opacityFor: (id) =>
+        state.hoverLine && network.owner.get(id)?.id !== state.hoverLine
+          ? 0.16
+          : 1,
+      highlightFor: (id) => selectedIds.has(id) || added.has(id),
+    },
+  );
   return [
-    new PathLayer<RailLink>({
-      ...paths,
-      id: "rail-plan-casing",
-      getColor: [7, 14, 20, 255],
-      getWidth: (l: RailLink) =>
-        active("link", l.id) ? 11 : RAIL_STYLE.casing,
-      updateTriggers: { getWidth: [state.selection, hovered] },
-    }),
-    new PathLayer<RailLink>({
-      ...paths,
-      id: "rail-plan-links",
-      pickable: true,
-      getColor: color,
-      getWidth: (l: RailLink) =>
-        active("link", l.id)
-          ? 8
-          : state.core && data.plan.core_link_ids.includes(l.id)
-            ? 7
-            : RAIL_STYLE.width,
-      onHover: ({ object }) =>
-        onHover(object ? { kind: "link", id: object.id } : null),
-      onClick: ({ object }) => {
-        if (object) {
-          onSelect({ kind: "link", id: object.id });
-          return true;
-        }
-        return false;
-      },
-      updateTriggers: {
-        getColor: [state.core, state.colorBy, scenario.id],
-        getWidth: [state.selection, hovered, state.core],
-      },
-    }),
-    new ScatterplotLayer<RailCenter>({
+    ...lines,
+    new ScatterplotLayer<DisplayStation>({
       id: "rail-plan-stations",
-      data: network.stations,
+      data: stations,
       pickable: true,
-      parameters,
-      getPosition: (c) => [c.lon, c.lat],
+      billboard: true,
+      parameters: { depthCompare: "always", depthWriteEnabled: false },
+      getPosition: (n) => [n.lon, n.lat],
       radiusUnits: "pixels",
-      getRadius: (c) =>
-        c.anchor ? RAIL_STYLE.anchorRadius : RAIL_STYLE.stationRadius,
-      getFillColor: [241, 244, 245, 255],
+      getRadius: (n) =>
+        n.kind === "interchange"
+          ? 6
+          : n.kind === "terminus"
+            ? 4
+            : n.kind === "existing"
+              ? 2.5
+              : 2,
+      getFillColor: (n) =>
+        n.kind === "interchange"
+          ? [12, 20, 27, 255]
+          : n.kind === "existing"
+            ? [115, 125, 134, 220]
+            : [240, 244, 247, 255],
       stroked: true,
-      getLineColor: (c) =>
-        active("station", c.id) ? [86, 180, 233, 255] : [10, 19, 25, 255],
-      getLineWidth: 2,
+      getLineColor: (n) =>
+        n.kind === "interchange" ? [255, 255, 255, 255] : [12, 20, 27, 255],
       lineWidthUnits: "pixels",
+      getLineWidth: (n) => (n.kind === "interchange" ? 2 : 1),
       onHover: ({ object }) =>
         onHover(object ? { kind: "station", id: object.id } : null),
       onClick: ({ object }) => {
@@ -127,48 +106,45 @@ export function railPlanLayers(
         }
         return false;
       },
-      updateTriggers: { getLineColor: [state.selection, hovered] },
     }),
     new TextLayer({
       id: "rail-plan-labels",
       data: labels,
-      parameters,
-      getPosition: (d) => [d.lon, d.lat],
-      getText: (d) => d.name,
-      getPixelOffset: (d) => d.offset,
-      getSize: RAIL_STYLE.fontSize,
-      getColor: [240, 244, 246, 255],
+      getPosition: (n) => [n.lon, n.lat],
+      getText: (n) => stationName(n.name),
+      getPixelOffset: (n) => n.offset,
+      getSize: 12,
+      getColor: [230, 237, 242, 255],
       fontFamily: "Arial",
       fontWeight: 600,
-      billboard: true,
       background: true,
       getBackgroundColor: [9, 17, 23, 235],
-      backgroundPadding: [4, 2],
+      backgroundPadding: [3, 2],
+      billboard: true,
       getTextAnchor: "middle",
       getAlignmentBaseline: "center",
+      parameters: { depthCompare: "always", depthWriteEnabled: false },
     }),
   ];
 }
-function stationLabels(stations: RailCenter[], map: MapLibreMap) {
+function placeStationLabels(stations: DisplayStation[], map: MapLibreMap) {
   const ctx = document.createElement("canvas").getContext("2d")!;
-  ctx.font = `600 ${RAIL_STYLE.fontSize}px Arial`;
+  ctx.font = "600 12px Arial";
   const boxes: { x: number; y: number; w: number; h: number }[] = [],
-    labels: (RailCenter & { offset: [number, number] })[] = [];
-  for (const c of [...stations].sort(
-    (a, b) =>
-      Number(b.anchor) - Number(a.anchor) ||
-      b.jobs - a.jobs ||
-      a.id.localeCompare(b.id),
+    labels: (DisplayStation & { offset: [number, number] })[] = [];
+  const priority = { interchange: 3, terminus: 2, pass: 1, existing: 0 };
+  for (const n of [...stations].sort(
+    (a, b) => priority[b.kind] - priority[a.kind] || a.id.localeCompare(b.id),
   )) {
-    if (!c.anchor && map.getZoom() < RAIL_STYLE.labelZoom) continue;
-    const p = map.project([c.lon, c.lat]),
-      w = ctx.measureText(c.name).width + 10,
+    if (!n.degree || (n.kind === "pass" && map.getZoom() < 12)) continue;
+    const p = map.project([n.lon, n.lat]),
+      w = ctx.measureText(stationName(n.name)).width + 8,
       h = 20;
     for (const offset of [
       [0, -18],
       [0, 20],
-      [w / 2 + 12, 0],
-      [-w / 2 - 12, 0],
+      [w / 2 + 10, 0],
+      [-w / 2 - 10, 0],
     ] as [number, number][]) {
       const b = {
         x: p.x + offset[0] - w / 2,
@@ -191,7 +167,7 @@ function stationLabels(stations: RailCenter[], map: MapLibreMap) {
       )
         continue;
       boxes.push(b);
-      labels.push({ ...c, offset });
+      labels.push({ ...n, offset });
       break;
     }
   }

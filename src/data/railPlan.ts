@@ -1,32 +1,29 @@
 export type CostCase = "low" | "high";
 export type Measure = "minutes_saved" | "workers_connected";
-export type LinkClass =
-  | "passenger_corridor"
-  | "freight_corridor"
-  | "new_alignment";
-export type RailCenter = {
+export type RailNode = {
   id: string;
   name: string;
   lon: number;
   lat: number;
-  jobs: number;
-  population: number;
-  anchor: boolean;
+  existing_station: boolean;
 };
 export type RailLink = {
   id: string;
-  from: string;
-  to: string;
-  from_name: string;
-  to_name: string;
+  a: string;
+  b: string;
+  a_name: string;
+  b_name: string;
   coords: [number, number][];
-  class: LinkClass;
+  class: string;
   length_km: number;
+  minutes: number;
   cost_low_musd: number;
   cost_high_musd: number;
 };
 export type RailStep = {
   route_id: string;
+  from: string;
+  to: string;
   from_name: string;
   to_name: string;
   new_link_ids: string[];
@@ -35,6 +32,14 @@ export type RailStep = {
   total_cost_musd: number;
   total_score: number;
 };
+export type RailLine = {
+  id: string;
+  name: string;
+  color_index: number;
+  main: string[];
+  branches: string[][];
+  link_ids: string[];
+};
 export type RailScenario = {
   id: string;
   cost_case: CostCase;
@@ -42,6 +47,7 @@ export type RailScenario = {
   measure: Measure;
   ratio: number | null;
   steps: RailStep[];
+  lines: RailLine[];
   by_budget: {
     budget_musd: number;
     routes: number;
@@ -51,17 +57,18 @@ export type RailScenario = {
   }[];
 };
 export type RailPlan = {
-  centers: RailCenter[];
+  nodes: RailNode[];
   links: RailLink[];
+  existing_links: { id: string; a: string; b: string; minutes: number }[];
   scenarios: RailScenario[];
   budgets_musd: number[];
-  core_link_ids: string[];
   denominators: {
     workers_with_transit_option: number;
     workers_without_transit_option: number;
+    note: string;
   };
   caveats: string[];
-  cost_per_mile_musd: Record<LinkClass, [number, number]>;
+  documented_projects: { link_id: string; source: string; note: string }[];
 };
 export type EquityReach = {
   share_of_households: number;
@@ -78,18 +85,22 @@ export type EquitySnapshot = {
 };
 export type RailEquity = {
   region: { median_income: number };
-  benchmarks: { all_candidate_centers: EquitySnapshot };
+  benchmarks: { existing_stations: EquitySnapshot };
   scenarios: Record<string, Record<string, EquitySnapshot>>;
   notes: string[];
 };
-export type RailData = { plan: RailPlan; equity: RailEquity };
+export type RailData = {
+  plan: RailPlan;
+  equity: RailEquity;
+  core: Set<string>;
+};
 export type RailSelection = {
   kind: "link" | "station" | "step";
   id: string;
 } | null;
-export const MAX_BUDGET = 30000;
-export const DEFAULT_BUDGET = 10000;
-export const KM_PER_MILE = 1.609344;
+export const MAX_BUDGET = 30000,
+  DEFAULT_BUDGET = 10000,
+  KM_PER_MILE = 1.609344;
 export const scenarioId = (
   cost: CostCase,
   overhead: number,
@@ -102,30 +113,53 @@ export function networkAt(
   scenario: RailScenario,
   budget: number,
 ) {
-  const steps = scenario.steps.filter((s) => s.total_cost_musd <= budget);
-  const built = new Map<string, number>();
+  const steps = scenario.steps.filter((s) => s.total_cost_musd <= budget),
+    built = new Map<string, number>();
   steps.forEach((s, i) => s.new_link_ids.forEach((id) => built.set(id, i)));
-  const links = plan.links.filter((l) => built.has(l.id));
-  const touched = new Set(links.flatMap((l) => [l.from, l.to]));
+  const links = plan.links.filter((l) => built.has(l.id)),
+    touched = new Set(links.flatMap((l) => [l.a, l.b]));
+  const owner = new Map<string, RailLine>();
+  scenario.lines.forEach((line) =>
+    line.link_ids.forEach((id) => owner.set(id, line)),
+  );
   return {
     steps,
     built,
     links,
-    stations: plan.centers.filter((c) => touched.has(c.id)),
+    owner,
+    lines: scenario.lines.filter((line) =>
+      line.link_ids.some((id) => built.has(id)),
+    ),
+    stations: plan.nodes.filter((n) => touched.has(n.id)),
     spent: steps.at(-1)?.total_cost_musd ?? 0,
     score: steps.at(-1)?.total_score ?? 0,
     miles: links.reduce((n, l) => n + l.length_km, 0) / KM_PER_MILE,
   };
 }
-export const budgetStops = (plan: RailPlan, s: RailScenario) =>
+export function coreNetwork(plan: RailPlan) {
+  const sets = plan.scenarios
+    .filter((s) => s.measure === "minutes_saved")
+    .map(
+      (s) =>
+        new Set(
+          s.steps
+            .filter((st) => st.total_cost_musd <= 10000)
+            .flatMap((st) => st.new_link_ids),
+        ),
+    );
+  return new Set(
+    [...(sets[0] ?? [])].filter((id) => sets.every((s) => s.has(id))),
+  );
+}
+export const budgetStops = (p: RailPlan, s: RailScenario) =>
   [
     ...new Set(
       [
         0,
         MAX_BUDGET,
-        ...plan.budgets_musd,
-        ...s.steps.map((x) => x.total_cost_musd),
-      ].filter((x) => x <= MAX_BUDGET),
+        ...p.budgets_musd,
+        ...s.steps.map((st) => st.total_cost_musd),
+      ].filter((n) => n <= MAX_BUDGET),
     ),
   ].sort((a, b) => a - b);
 export function equityAt(data: RailData, s: RailScenario, budget: number) {
@@ -143,116 +177,139 @@ export function equityAt(data: RailData, s: RailScenario, budget: number) {
   return null;
 }
 export function parseRailData(plan: RailPlan, equity: RailEquity): RailData {
-  const fail = () => {
-    throw new Error("Rail plan or equity data is malformed or inconsistent.");
+  const fail = (why: string): never => {
+    throw new Error(`Invalid connected rail network: ${why}. No plan drawn.`);
   };
-  if (
-    !Array.isArray(plan?.centers) ||
-    !Array.isArray(plan.links) ||
-    !Array.isArray(plan.scenarios) ||
-    !Array.isArray(plan.caveats) ||
-    !Array.isArray(equity?.notes)
-  )
-    fail();
   const finite = (n: number) =>
     typeof n === "number" && Number.isFinite(n) && n >= 0;
-  const centers = new Set(plan.centers.map((c) => c.id)),
-    links = new Set(plan.links.map((l) => l.id));
-  if (centers.size !== plan.centers.length || links.size !== plan.links.length)
-    fail();
-  for (const c of plan.centers)
-    if (
-      !c.id ||
-      typeof c.name !== "string" ||
-      !Number.isFinite(c.lon) ||
-      !Number.isFinite(c.lat) ||
-      Math.abs(c.lon) > 180 ||
-      Math.abs(c.lat) > 90 ||
-      typeof c.anchor !== "boolean"
-    )
-      fail();
-  for (const l of plan.links)
-    if (
-      !centers.has(l.from) ||
-      !centers.has(l.to) ||
-      !["passenger_corridor", "freight_corridor", "new_alignment"].includes(
-        l.class,
-      ) ||
-      !finite(l.length_km) ||
-      !finite(l.cost_low_musd) ||
-      !finite(l.cost_high_musd) ||
-      l.coords?.length !== 2 ||
-      l.coords.some((p) => p.length !== 2 || !p.every(Number.isFinite))
-    )
-      fail();
   if (
-    !plan.core_link_ids.every((id) => links.has(id)) ||
+    !Array.isArray(plan?.nodes) ||
+    !Array.isArray(plan.links) ||
+    !Array.isArray(plan.scenarios) ||
+    !Array.isArray(equity?.notes)
+  )
+    fail("missing collections");
+  const nodes = new Map(plan.nodes.map((n) => [n.id, n])),
+    links = new Map(plan.links.map((l) => [l.id, l]));
+  if (nodes.size !== plan.nodes.length || links.size !== plan.links.length)
+    fail("duplicate node or link id");
+  for (const n of plan.nodes)
+    if (
+      typeof n.name !== "string" ||
+      !Number.isFinite(n.lon) ||
+      !Number.isFinite(n.lat) ||
+      Math.abs(n.lon) > 180 ||
+      Math.abs(n.lat) > 85 ||
+      typeof n.existing_station !== "boolean"
+    )
+      fail("invalid station");
+  for (const l of plan.links) {
+    if (
+      !nodes.has(l.a) ||
+      !nodes.has(l.b) ||
+      l.a === l.b ||
+      l.coords?.length !== 2 ||
+      ![l.length_km, l.minutes, l.cost_low_musd, l.cost_high_musd].every(finite)
+    )
+      fail("invalid link");
+    for (const [i, id] of [l.a, l.b].entries()) {
+      const n = nodes.get(id)!;
+      if (l.coords[i][0] !== n.lon || l.coords[i][1] !== n.lat)
+        fail("link endpoints differ from stations");
+    }
+  }
+  const ids = new Set<string>();
+  for (const s of plan.scenarios) {
+    if (
+      ids.has(s.id) ||
+      s.id !== scenarioId(s.cost_case, s.overhead_min, s.measure, s.ratio ?? 2)
+    )
+      fail("duplicate or invalid scenario");
+    ids.add(s.id);
+    const built = new Set<string>();
+    let cost = 0;
+    for (const st of s.steps) {
+      if (
+        ![st.cost_musd, st.total_cost_musd, st.gain, st.total_score].every(
+          finite,
+        ) ||
+        st.total_cost_musd < cost
+      )
+        fail("invalid build order");
+      cost = st.total_cost_musd;
+      for (const id of st.new_link_ids) {
+        if (!links.has(id) || built.has(id))
+          fail("unknown or repeatedly built link");
+        built.add(id);
+      }
+    }
+    const owners = new Set<string>(),
+      lineIds = new Set<string>();
+    if (!Array.isArray(s.lines)) fail("missing lines");
+    for (const line of s.lines) {
+      if (
+        lineIds.has(line.id) ||
+        typeof line.name !== "string" ||
+        !Number.isInteger(line.color_index) ||
+        line.color_index < 0 ||
+        line.color_index > 11
+      )
+        fail("invalid line");
+      lineIds.add(line.id);
+      for (const n of [...line.main, ...line.branches.flat()])
+        if (!nodes.has(n)) fail("unknown line station");
+      for (const id of line.link_ids) {
+        if (!built.has(id) || owners.has(id))
+          fail("link must belong to exactly one line");
+        owners.add(id);
+      }
+    }
+    if (owners.size !== built.size) fail("built link missing from lines");
+    for (const b of s.by_budget) {
+      const n = networkAt(plan, s, b.budget_musd);
+      if (
+        n.steps.length !== b.routes ||
+        n.links.length !== b.links ||
+        n.spent !== b.spent_musd ||
+        n.score !== b.score
+      )
+        fail("budget summary mismatch");
+    }
+    for (const [b, r] of Object.entries(equity.scenarios[s.id] ?? {})) {
+      if (r.stations !== networkAt(plan, s, Number(b)).stations.length)
+        fail("equity station mismatch");
+      for (const radius of ["0.8", "2.0"] as const)
+        if (
+          !r[radius] ||
+          ![
+            r[radius].share_of_households,
+            r[radius].share_of_no_vehicle_households,
+            r[radius].share_of_people_in_poverty,
+          ].every((n) => finite(n) && n <= 1)
+        )
+          fail("invalid equity");
+    }
+  }
+  if (
+    !equity.benchmarks?.existing_stations ||
+    !Array.isArray(plan.caveats) ||
     !plan.budgets_musd.every(finite) ||
     !finite(plan.denominators.workers_with_transit_option) ||
     !finite(plan.denominators.workers_without_transit_option)
   )
-    fail();
-  const scenarios = new Set<string>();
-  for (const s of plan.scenarios) {
-    if (
-      scenarios.has(s.id) ||
-      s.id !== scenarioId(s.cost_case, s.overhead_min, s.measure, s.ratio ?? 2)
-    )
-      fail();
-    scenarios.add(s.id);
-    let previous = 0;
-    const built = new Set<string>();
-    for (const step of s.steps) {
-      if (
-        ![
-          step.cost_musd,
-          step.total_cost_musd,
-          step.gain,
-          step.total_score,
-        ].every(finite) ||
-        step.total_cost_musd < previous ||
-        !step.new_link_ids.length
-      )
-        fail();
-      previous = step.total_cost_musd;
-      for (const id of step.new_link_ids) {
-        if (!links.has(id) || built.has(id)) fail();
-        built.add(id);
-      }
-    }
-    for (const [budget, snapshot] of Object.entries(
-      equity.scenarios[s.id] ?? {},
-    )) {
-      if (
-        snapshot.stations !== networkAt(plan, s, Number(budget)).stations.length
-      )
-        fail();
-      for (const radius of ["0.8", "2.0"] as const) {
-        const r = snapshot[radius];
-        if (
-          !r ||
-          ![
-            r.share_of_households,
-            r.share_of_no_vehicle_households,
-            r.share_of_people_in_poverty,
-          ].every((n) => finite(n) && n <= 1)
-        )
-          fail();
-      }
-    }
-  }
-  if (!finite(equity.region.median_income)) fail();
-  return { plan, equity };
+    fail("invalid metadata");
+  return { plan, equity, core: coreNetwork(plan) };
 }
 let cached: Promise<RailData> | undefined;
-// One shared request pair, including React StrictMode and repeated toggle cycles.
 export function loadRailData() {
   return (cached ??= Promise.all(
-    ["/data/rail_plan.json", "/data/rail_equity.json"].map(async (url) => {
-      const r = await fetch(url);
-      if (!r.ok) throw new Error(`Could not load ${url.split("/").at(-1)}.`);
-      return r.json();
-    }),
+    ["/data/rail_network.json", "/data/rail_equity_v2.json"].map(
+      async (url) => {
+        const r = await fetch(url);
+        if (!r.ok) throw new Error(`Could not load ${url.split("/").at(-1)}.`);
+        return r.json();
+      },
+    ),
   )
     .then(([p, e]) => parseRailData(p, e))
     .catch((e) => {

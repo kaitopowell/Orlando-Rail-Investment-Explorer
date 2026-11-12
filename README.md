@@ -176,62 +176,62 @@ behavior. A modern browser supporting `DecompressionStream('gzip')` is required.
 See [the frontend data contract](data/TOP_COMMUTE_FLOWS_CONTRACT.md) for source
 schemas, denominators, display constants and limitations.
 
-### Proposed rail network
+### Connected rail network
 
-Enable **Proposed rail network** under **Rail plan**. The default is $10B,
-low costs, 20-minute wait/access overhead, and minutes saved. Switch the objective
-and assumptions to select a supplied scenario; the two objectives are never added.
-The budget slider advances through build-step costs and the six published budgets,
-including zero and $30B. Preset buttons preserve exact published budget selection.
-Only fully affordable steps are drawn. Build order buttons focus and highlight
-that step; links and stations support hover/tap inspection and stations also have
-a keyboard selector. Reduced motion disables the camera flight.
+Enable **Proposed rail network** for a named-line transit map. The app reads
+`public/data/rail_network.json` and `rail_equity_v2.json`; the legacy `rail_plan.json`
+is retained but is no longer requested. Default: $10B, low cost, 20-minute wait/access
+overhead, minutes saved, **Schematic**. Budget stops include each completed build
+step and the published budgets. Budget and actual spend are shown separately.
 
-Phase colors use six budget bands; link-type colors are an alternative. The legend,
-build order and inspectors identify lines without relying only on color. Core
-highlighting emphasizes the supplied common $10B minutes-saved links. Normal-alpha
-lines have dark casings, white outlined stations, and collision-filtered labels;
-anchors are eligible at all zooms and other stations at zoom 11+. In crowded views,
-colliding labels may be suppressed; every built station remains in the selector.
-Existing basemap styling and other layer controls are unchanged.
+Line names and palette indices come from the scenario and stay fixed as the budget
+changes. The Lines list contains only lines with built links; hover or keyboard
+focus emphasizes a line. Core network only filters the drawing to built links in
+the intersection of all $10B minutes-saved scenarios. The summary still describes
+the full selected plan. Build-order buttons highlight/focus their new links; budget
+increases briefly emphasize additions, except with reduced motion enabled.
 
-**Who does this serve?** reports the supplied 0.8 km and 2 km equity snapshots
-separately from commute scores. The data contains snapshots only at $2.5B, $5B,
-$10B, $15B, $20B and $30B. Other slider stops reuse a snapshot only if it represents
-exactly the same links; otherwise equity is explicitly unavailable, never
-interpolated. The all-candidate-centers benchmark is expandable at each radius.
-The top-level equity radius list currently omits 2 km, but both per-budget radius
-records exist and are used. Scenario IDs use `r2.0`/`r3.0` in the actual files.
+Geographic links use the supplied straight geometry. Schematic links use an
+orthogonal/45-degree Web Mercator path with the straight run beside the smaller
+endpoint ID. Station coordinates never move, and geometry does not change scores,
+lengths, costs or travel times. Schematic mode uses the shared baseline rail
+renderer with slightly thicker rounded lines. Native basemap text is dimmed and
+its appearance delayed by two zoom levels; original settings return when changing
+to Geographic or disabling the plan.
 
-All source caveats and equity notes are displayed verbatim. Lines are straight
-connections, not surveyed routes; costs omit stations, vehicles and station access.
-Model outputs are not measured benefits or an optimal plan. The frontend loads
-`public/data/rail_plan.json` and `rail_equity.json` once and does not recompute the
-analysis or modify these files. Run `npm run test:rail-plan` with the dev server
-running for real-file reference/budget checks and laptop/phone browser controls,
-inspection, failures, cleanup and 2D/3D coexistence.
+Existing stations remain small grey reference markers when not touched by built
+links. Interchanges (multiple lines, or existing stations touched by construction)
+are white rings; termini are filled markers and pass-through stations are small
+dots. Priority labels omit parenthetical text; pass-through labels wait until zoom
+12. Colliding labels can be hidden; the Details selector retains station names.
+
+A separate compact map-side panel keeps budget, assumptions and results together.
+Lines, Build order and the single Details section are collapsed initially. Details
+contains both equity radii, the existing-stations benchmark, caveats and source
+notes. The summary uses 2 km equity snapshots only when the supplied snapshot
+matches the built network, without interpolation. Minutes saved are job-minutes;
+the worker denominator supports mean minutes per worker, not a percent reduction
+in travel time. Workers-connected reports a count and percentage. These scores and
+equity are never added together. No transfer penalties or surveyed routes are
+implied by the transit-map appearance.
+
+`npm run test:rail-plan` checks all 24 scenarios, reference totals, unique link/line
+ownership, monotonic budgets, exact schematic endpoints and octilinearity, core and
+station roles, controls, errors, compact layout and native-label restoration.
+Invalid link ownership produces a visible error and no proposed-network drawing.
 
 ### Sunshine Corridor comparison
 
-**Sunshine Corridor (FDOT proposal)** is off by default beside the baseline transit
-controls. It reuses the existing rail renderer, line passes, station markers and
-zoom-10 label threshold, with light red (`#FF6B6B`) as its only style difference.
-Click a segment or station, or use its keyboard selector, to inspect the published
-costs, TCAR/traced lengths and geometry basis. Station costs and lengths are not
-supplied and are explicitly marked unavailable.
+**Sunshine Corridor (FDOT proposal)** remains light red, off by default, using the
+same baseline rail rendering and its existing inspection popup. When enabled, its
+compact comparison is in the network panel: four rows for cost, route miles,
+minutes saved and workers connected. Full wording is in tooltips and Details.
+Unscored Sunshine measures and inactive SOL/R objectives show **n/a**; switching
+objectives selects a different network rather than adding the two scores.
 
-The Compare panel uses the currently selected SOL/R network without requiring
-that network's map toggle to be on. Its cost range covers the same built links
-under low/high cost estimates; the selected-case spend is shown separately.
-Only the selected objective's score is reported, since switching objectives
-selects a different network. Sunshine's commute and equity results are **not yet
-scored**. SOL/R equity uses the existing snapshot lookup, without interpolation.
-
-The Sunshine program total is $3.543–4.787B, including undrawn options 3A and 3D.
-The two drawn segments alone cost $2.970–4.140B and total 17.2 TCAR miles / 17.0
-traced miles. Mileage is explicitly for the drawn segments, not the full program.
-The geometry is schematic, not surveyed; FDOT costs include right of way and
-trainsets, unlike the SOL/R link estimates. The panel keeps all four comparison
-caveats visible. No model scoring, scenario choice, analysis or source data is
-changed. `npm run test:sunshine` checks real source values, comparison selection,
-shared styling, keyboard/pointer inspection, failures, cleanup and responsive fit.
+FDOT's program cost is $3.543–4.787B, including undrawn 3A and 3D. Drawn 3B+3C
+mileage is 17.2 TCAR miles (17.0 traced miles), not full-program mileage. Costs are
+not directly comparable with SOL/R's per-link estimates. Full source notes,
+schematic-geometry caveats and the Sunshine selector now live in Details.
+Station cost/length fields remain explicitly unavailable. `npm run test:sunshine`
+checks the unchanged overlay and the compact comparison with the new network.

@@ -21,9 +21,10 @@ export function useRailPlan(needed = false) {
     [ratio, setRatio] = useState(2),
     [budget, setBudget] = useState(DEFAULT_BUDGET);
   const [core, setCore] = useState(false),
-    [colorBy, setColorBy] = useState<"phase" | "type">("phase"),
+    [drawing, setDrawing] = useState<"schematic" | "geographic">("schematic"),
+    [hoverLine, setHoverLine] = useState<string | null>(null),
     [selection, select] = useState<RailSelection>(null),
-    [caveatsOpen, setCaveatsOpen] = useState(true);
+    [panelOpen, setPanelOpen] = useState(true);
   useEffect(() => {
     if ((!enabled && !needed) || data) return;
     let disposed = false;
@@ -57,7 +58,8 @@ export function useRailPlan(needed = false) {
   }, [stops]);
   useEffect(() => {
     select(null);
-  }, [id, budget, enabled]);
+    setHoverLine(null);
+  }, [id, budget, enabled, core]);
   return {
     enabled,
     setEnabled,
@@ -76,12 +78,14 @@ export function useRailPlan(needed = false) {
     setBudget,
     core,
     setCore,
-    colorBy,
-    setColorBy,
+    drawing,
+    setDrawing,
+    hoverLine,
+    setHoverLine,
     selection,
     select,
-    caveatsOpen,
-    setCaveatsOpen,
+    panelOpen,
+    setPanelOpen,
     scenario,
     network,
     stops,
