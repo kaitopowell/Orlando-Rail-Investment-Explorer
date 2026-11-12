@@ -45,10 +45,37 @@ def _add_link(D, n, u, v, w):
                 row[j] = c
 
 
-def greedy_routes(routes, budget, pairs, params, measure):
+def _attached(new_links, network_nodes):
+    """True if every new link can be reached from network_nodes through the new links themselves."""
+    reach = set(network_nodes)
+    todo = list(new_links)
+    grew = True
+    while todo and grew:
+        grew = False
+        rest = []
+        for l in todo:
+            if l.a in reach or l.b in reach:
+                reach.add(l.a)
+                reach.add(l.b)
+                grew = True
+            else:
+                rest.append(l)
+        todo = rest
+    return not todo
+
+
+def greedy_routes(routes, budget, pairs, params, measure, existing_links=(), seed_nodes=(), require_connected=False, tree_growth=False):
     """
     routes: list of (route_id, anchor_a, anchor_b, [Link, ...]) from routes.build_routes.
     measure: "time_saved" or "newly_connected". Returns a list of RouteStep.
+
+    existing_links: rail that is already built (free, may have cost 0). It is part of the rail graph
+        from the start, but scores are marginal: each step's gain is what the new links add on top.
+    seed_nodes: stations that count as "already on the network" (e.g. every existing station).
+    require_connected: a route may only be built if all its new links attach, through each other, to the
+        existing network or to what has already been built, so the plan grows outward from existing rail.
+    tree_growth: stricter: the new links may touch the existing network at only one station, so every build
+        is an extension or a branch and never closes a loop.
     """
     if measure not in ("time_saved", "newly_connected"):
         raise ValueError(measure)
@@ -61,6 +88,9 @@ def greedy_routes(routes, budget, pairs, params, measure):
     for _, _, _, links in routes:
         for l in links:
             node_set |= {l.a, l.b}
+    for l in existing_links:
+        node_set |= {l.a, l.b}
+    node_set |= set(seed_nodes)
     nodes = sorted(node_set)
     idx = {x: i for i, x in enumerate(nodes)}
     n = len(nodes)
@@ -82,6 +112,15 @@ def greedy_routes(routes, budget, pairs, params, measure):
     built_ids = set()
     ov = params.overhead_min
 
+    network = set(seed_nodes)
+    for l in existing_links:
+        _add_link(D, n, idx[l.a], idx[l.b], l.minutes)
+        network |= {l.a, l.b}
+    # what the existing rail already delivers; later gains are measured on top of this
+    for k, (i, j, p) in enumerate(relevant):
+        if D[i][j] < INF:
+            contrib[k] = _contribution(measure, p, D[i][j] + ov, params)
+
     remaining = sorted(routes, key=lambda r: r[0])
     steps, spent, score = [], 0.0, 0.0
 
@@ -90,6 +129,10 @@ def greedy_routes(routes, budget, pairs, params, measure):
         for route in remaining:
             new = [l for l in route[3] if l.id not in built_ids]
             if not new:
+                continue
+            if (require_connected or tree_growth) and not _attached(new, network):
+                continue
+            if tree_growth and len({x for l in new for x in (l.a, l.b)} & network) > 1:
                 continue
             cost = sum(l.cost for l in new)
             D2 = [row[:] for row in D]
@@ -112,6 +155,7 @@ def greedy_routes(routes, budget, pairs, params, measure):
         for l in best_new:
             _add_link(D, n, idx[l.a], idx[l.b], l.minutes)
             built_ids.add(l.id)
+            network |= {l.a, l.b}
         for k, (i, j, p) in enumerate(relevant):
             contrib[k] = _contribution(measure, p, D[i][j] + ov, params) if D[i][j] < INF else 0.0
         remaining.remove(best)
