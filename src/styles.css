@@ -883,3 +883,24 @@ main .demand-comparison > .population-panel {
 @media(max-width:600px) { .rail-hover { right:12px; top:auto; bottom:120px; max-width:260px; max-height:30vh; } }
 .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 .rail-plan-controls input:focus-visible { outline:2px solid #56b4e9; outline-offset:3px; }
+.sunshine-controls h3 { font-size:12px; }
+.sunshine-symbol, .sunshine-legend span { color:#ff6b6b; }
+.sunshine-table { overflow-x:auto; }
+.sunshine-table table { width:100%; border-collapse:collapse; table-layout:fixed; font-size:11px; }
+.sunshine-table th, .sunshine-table td { padding:7px 4px; border-bottom:1px solid #40515b; text-align:left; vertical-align:top; overflow-wrap:anywhere; }
+.sunshine-table th:first-child { width:24%; }
+.sunshine-caveats ul { padding-left:18px; }
+.sunshine-caveats li { margin-bottom:8px; }
+.sunshine-popup { position:absolute; z-index:6; right:24px; top:85px; max-width:340px; max-height:55vh; overflow:auto; padding:16px; border:1px solid #ff6b6b; background:#101c24f5; font-size:12px; line-height:1.6; }
+.sunshine-popup button { float:right; background:#18262e; color:#fff; border:1px solid #61717b; }
+.sunshine-details dl { display:grid; grid-template-columns:1fr 1fr; gap:7px; }
+.sunshine-details dd { margin:0; }
+@media(max-width:600px) { .sunshine-popup { right:12px; top:auto; bottom:110px; max-width:270px; max-height:42vh; } }
+@media(max-width:600px) {
+  .sidebar:has(.sunshine-controls .candidate-details) { z-index:4; }
+  .sunshine-table table, .sunshine-table thead, .sunshine-table tbody { display:block; }
+  .sunshine-table tr { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .sunshine-table th:first-child { width:auto; grid-column:1/-1; }
+  .sunshine-table thead th:first-child { display:none; }
+  .sunshine-table th, .sunshine-table td { overflow-wrap:normal; font-size:11px; }
+}

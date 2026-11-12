@@ -10,7 +10,7 @@ import {
   type RailData,
   type RailSelection,
 } from "../data/railPlan";
-export function useRailPlan() {
+export function useRailPlan(needed = false) {
   const [enabled, setEnabled] = useState(false),
     [data, setData] = useState<RailData | null>(null),
     [error, setError] = useState(""),
@@ -25,7 +25,7 @@ export function useRailPlan() {
     [selection, select] = useState<RailSelection>(null),
     [caveatsOpen, setCaveatsOpen] = useState(true);
   useEffect(() => {
-    if (!enabled || data) return;
+    if ((!enabled && !needed) || data) return;
     let disposed = false;
     setError("");
     loadRailData()
@@ -38,7 +38,7 @@ export function useRailPlan() {
     return () => {
       disposed = true;
     };
-  }, [enabled, data, attempt]);
+  }, [enabled, needed, data, attempt]);
   const id = scenarioId(cost, overhead, measure, ratio),
     scenario = data?.plan.scenarios.find((s) => s.id === id);
   const network = useMemo(

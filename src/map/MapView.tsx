@@ -1,3 +1,5 @@
+import SunshineOverlay from "./SunshineOverlay";
+import type {SunshineState} from "../components/useSunshine";
 import RailPlanOverlay from "./RailPlanOverlay";
 import type {RailState} from "../components/useRailPlan";
 import type {RailSelection} from "../data/railPlan";
@@ -28,7 +30,7 @@ import {
 } from "./studyArea";
 
 export default function MapView({
-  railPlan, onRailSelect,
+  sunshine, railPlan, onRailSelect,
   candidates,
   flows, labels, onFlowSelect,
   onCandidateSelect,
@@ -43,6 +45,7 @@ export default function MapView({
   transitVisible,
   employmentVisible,
 }: {
+  sunshine: SunshineState;
   railPlan: RailState; onRailSelect: (s:RailSelection)=>void;
   candidates: CandidateState;
   flows: FlowState; labels: LabelState; onFlowSelect: (id:string) => void;
@@ -64,6 +67,7 @@ export default function MapView({
     overlay: Pick<MapboxOverlay, "setProps">;
     equityOverlay: Pick<MapboxOverlay, "setProps">;
     employmentOverlay: Pick<MapboxOverlay, "setProps">;
+    sunshineOverlay: Pick<MapboxOverlay, "setProps">;
     railPlanOverlay: Pick<MapboxOverlay, "setProps">;
     flowOverlay: Pick<MapboxOverlay, "setProps">;
     candidateOverlay: Pick<MapboxOverlay, "setProps">;
@@ -200,6 +204,7 @@ export default function MapView({
             candidateOverlay,
             flowOverlay,
             railPlanOverlay,
+            sunshineOverlay,
             busOverlay,
             transitOverlay,
           ] = overlayChannels(overlay, labelLayerId);
@@ -212,6 +217,7 @@ export default function MapView({
             candidateOverlay,
             flowOverlay,
             railPlanOverlay,
+            sunshineOverlay,
             busOverlay,
             transitOverlay,
           });
@@ -266,6 +272,7 @@ export default function MapView({
             : "Map resources could not load. Check network access to CARTO and WebGL support, then reload."}
         </div>
       )}
+      {scene && <SunshineOverlay state={sunshine} map={scene.map} overlay={scene.sunshineOverlay}/>}
       {scene && <RailPlanOverlay state={railPlan} map={scene.map} overlay={scene.railPlanOverlay} onSelect={onRailSelect}/>}
       {scene && (
         <EquityOverlay
