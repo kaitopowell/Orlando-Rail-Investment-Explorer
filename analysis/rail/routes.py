@@ -56,14 +56,21 @@ def cheapest_path(links, src, dst):
     return path
 
 
-def build_routes(links, anchors):
+def build_routes(links, anchors, free_links=()):
     """
     Returns a list of (route_id, anchor_a, anchor_b, [Link, ...]), one per distinct set of links.
     Two anchor pairs that share the same chain are listed once, under the smaller pair.
+
+    free_links: rail that already exists. A chain may run along it at no cost, but the route lists only
+    the links that still have to be built.
     """
+    free_ids = {l.id for l in free_links}
+    graph_links = list(links) + list(free_links)
     seen = {}
     for a, b in combinations(sorted(anchors), 2):
-        path = cheapest_path(links, a, b)
+        path = cheapest_path(graph_links, a, b)
+        if path:
+            path = [l for l in path if l.id not in free_ids]
         if not path:
             continue
         key = frozenset(l.id for l in path)
