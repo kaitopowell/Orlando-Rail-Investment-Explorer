@@ -32,9 +32,9 @@ RATIOS = [1.5, 2.0, 3.0]              # assumption: rail counts if rail time <= 
 BASE = {"cost": "low", "overhead": 20.0, "ratio": 2.0}
 
 
-def build_network():
+def build_network(extra=()):
     proj = Projector(28.5)
-    conns = load_connections(DATA / "candidate_connections.geojson")
+    conns = load_connections(DATA / "candidate_connections.geojson") + list(extra)
     feats = json.loads((DATA / "rail_lines_orlando.geojson").read_text(encoding="utf-8"))["features"]
     graph = build_rail_graph(feats, proj, build_passenger_index(load_shape_lines(DATA / "passenger_rail_shapes.csv"), proj))
     infos, circ = classify_all(conns, graph, proj)
