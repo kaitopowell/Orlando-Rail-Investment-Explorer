@@ -1,0 +1,147 @@
+center_id,center,station,system,km,snapped
+center_8844a9000dfffff,Conway (south),Sand Lake Road,sunrail,2.93,True
+center_8844a90025fffff,East Orlando (Conway / Semoran),Sand Lake Road,sunrail,6.51,False
+center_8844a9005dfffff,Southeast Orlando (Sand Lake Rd / Semoran),Sand Lake Road,sunrail,0.81,True
+center_8844a90085fffff,Downtown Orlando,LYNX Central,sunrail,1.45,True
+center_8844a90103fffff,East Orlando (Semoran Blvd / Hoffner Ave),Orlando,brightline,6.44,False
+center_8844a90201fffff,Taft (Orange Ave),Meadow Woods,sunrail,3.26,False
+center_8844a90213fffff,Universal / I-Drive / Millenia area,Sand Lake Road,sunrail,7.71,False
+center_8844a90233fffff,South Orange Ave (Sand Lake Rd),Sand Lake Road,sunrail,1.09,True
+center_8844a90235fffff,Boggy Creek Rd (southeast Orlando),Sand Lake Road,sunrail,1.96,True
+center_8844a90241fffff,Southchase (north),Meadow Woods,sunrail,1.13,True
+center_8844a90251fffff,South Orlando (Taft),Meadow Woods,sunrail,4.55,False
+center_8844a90263fffff,Taft (east),Meadow Woods,sunrail,2.61,True
+center_8844a90317fffff,MCO (north),Orlando,brightline,3.02,False
+center_8844a90331fffff,Orlando International Airport (MCO),Orlando,brightline,2.64,True
+center_8844a9034dfffff,MCO south (Tradeport),Orlando,brightline,3.36,False
+center_8844a90351fffff,MCO south (Boggy Creek Rd),Orlando,brightline,2.93,True
+center_8844a90449fffff,Pine Hills (south),LYNX Central,sunrail,8.17,False
+center_8844a90465fffff,West Orlando (Colonial Dr),LYNX Central,sunrail,4.51,False
+center_8844a90485fffff,Clarcona (south),Maitland,sunrail,10.71,False
+center_8844a904b7fffff,Apopka (south),Maitland,sunrail,10.67,False
+center_8844a904bbfffff,Apopka (southwest),Maitland,sunrail,11.86,False
+center_8844a904c1fffff,Clarcona,AdventHealth,sunrail,11.87,False
+center_8844a904e9fffff,Pine Hills (north),AdventHealth,sunrail,10.09,False
+center_8844a90519fffff,West Colonial Dr (Mercy Dr),AdventHealth,sunrail,4.4,False
+center_8844a90583fffff,Fairview Shores (Lee Rd),Maitland,sunrail,6.24,False
+center_8844a9058dfffff,Lee Rd / Orange Blossom Trail,Maitland,sunrail,5.73,False
+center_8844a905a1fffff,Maitland / Altamonte Springs (I-4),Maitland,sunrail,3.39,False
+center_8844a90613fffff,Orlando West (Hiawassee Rd),LYNX Central,sunrail,12.38,False
+center_8844a90655fffff,Windermere (north),Orlando Health/Amtrak,sunrail,11.66,False
+center_8844a90691fffff,Ocoee (north),LYNX Central,sunrail,15.34,False
+center_8844a906c9fffff,Ocoee,LYNX Central,sunrail,14.93,False
+center_8844a90723fffff,Holden Heights,Orlando Health/Amtrak,sunrail,3.29,False
+center_8844a90823fffff,Avalon Park,Orlando,brightline,17.71,False
+center_8844a90885fffff,Alafaya Trail (Colonial / University Blvd),Winter Park,sunrail,15.12,False
+center_8844a90889fffff,Waterford Lakes,Winter Park,sunrail,14.23,False
+center_8844a9089dfffff,Waterford Lakes (west),Winter Park,sunrail,12.71,False
+center_8844a90989fffff,Avalon Park (northwest),Winter Park,sunrail,20.29,False
+center_8844a909d7fffff,Avalon Park (north),Winter Park,sunrail,18.51,False
+center_8844a90a87fffff,Dowden Rd (southeast Orlando),Orlando,brightline,12.93,False
+center_8844a90ac3fffff,Narcoossee Rd (southeast Orlando),Orlando,brightline,10.33,False
+center_8844a90c9dfffff,Casselberry,Altamonte Springs,sunrail,2.09,True
+center_8844a90ca9fffff,Winter Springs (south),Altamonte Springs,sunrail,4.75,False
+center_8844a90cc3fffff,Lake Howell (Casselberry),Altamonte Springs,sunrail,2.03,True
+center_8844a90cc5fffff,Casselberry (south),Maitland,sunrail,3.95,False
+center_8844a90cc9fffff,Winter Park (north),Maitland,sunrail,2.55,True
+center_8844a90ce1fffff,Casselberry (east),Altamonte Springs,sunrail,4.94,False
+center_8844a90d0dfffff,Union Park (University Blvd),Winter Park,sunrail,11.11,False
+center_8844a90d15fffff,Dean Rd (Winter Park east),Winter Park,sunrail,10.63,False
+center_8844a90d21fffff,UCF / Research Park,Winter Park,sunrail,14.17,False
+center_8844a90d4dfffff,Union Park,Winter Park,sunrail,11.01,False
+center_8844a90dc7fffff,"Oviedo (west, SR-426)",Altamonte Springs,sunrail,9.09,False
+center_8844a90dd1fffff,Oviedo / Winter Springs (Aloma Ave),Altamonte Springs,sunrail,7.4,False
+center_8844a90e11fffff,Colonialtown / Audubon Park,Winter Park,sunrail,1.97,True
+center_8844a90e83fffff,Maitland,Maitland,sunrail,1.2,True
+center_8844a90e89fffff,Winter Park,Winter Park,sunrail,0.9,True
+center_8844a90eadfffff,Winter Park (Aloma Ave),Winter Park,sunrail,2.59,True
+center_8844a90ed9fffff,Winter Park (Fairbanks Ave / I-4),Winter Park,sunrail,3.47,False
+center_8844a90f01fffff,East Orlando (East Colonial Dr),Winter Park,sunrail,9.41,False
+center_8844a91001fffff,Kissimmee,Kissimmee,sunrail,1.26,True
+center_8844a91021fffff,Buenaventura Lakes / East Kissimmee,Kissimmee,sunrail,4.41,False
+center_8844a9108dfffff,Southchase,Tupperware,sunrail,2.05,True
+center_8844a91099fffff,Hunter's Creek,Tupperware,sunrail,4.05,False
+center_8844a91149fffff,East Kissimmee (Boggy Creek Rd),Kissimmee,sunrail,6.24,False
+center_8844a91219fffff,Kissimmee (Pleasant Hill Rd),Kissimmee,sunrail,3.76,False
+center_8844a912b1fffff,Hunter's Creek (south),Tupperware,sunrail,4.58,False
+center_8844a912dbfffff,Kissimmee West (US-192),Poinciana,sunrail,6.38,False
+center_8844a9140dfffff,Dr. Phillips (south),Meadow Woods,sunrail,12.01,False
+center_8844a91433fffff,Dr. Phillips,Sand Lake Road,sunrail,12.33,False
+center_8844a91465fffff,Convention Center / SeaWorld,Meadow Woods,sunrail,9.66,False
+center_8844a914bdfffff,Windermere,Orlando Health/Amtrak,sunrail,13.24,False
+center_8844a914e7fffff,Dr. Phillips (north),Orlando Health/Amtrak,sunrail,13.18,False
+center_8844a91507fffff,Oak Ridge,Sand Lake Road,sunrail,6.79,False
+center_8844a9150bfffff,Universal Blvd / Sand Lake Rd,Meadow Woods,sunrail,7.83,False
+center_8844a91531fffff,Sand Lake Rd (Orange Blossom Trail),Sand Lake Road,sunrail,6.19,False
+center_8844a9159dfffff,Universal Orlando Resort,Orlando Health/Amtrak,sunrail,10.22,False
+center_8844a91605fffff,Walt Disney World (EPCOT / Disney Springs),Poinciana,sunrail,12.14,False
+center_8844a9163bfffff,Bonnet Creek / Lake Buena Vista,Tupperware,sunrail,15.22,False
+center_8844a9164bfffff,Walt Disney World (EPCOT south),Poinciana,sunrail,12.34,False
+center_8844a91651fffff,EPCOT,Poinciana,sunrail,14.16,False
+center_8844a91667fffff,Disney Springs (east),Tupperware,sunrail,11.91,False
+center_8844a91719fffff,Lake Buena Vista (Palm Pkwy),Tupperware,sunrail,11.28,False
+center_8844a918c5fffff,Lake Nona (Medical City),Orlando,brightline,6.21,False
+center_8844a91abdfffff,Lake Nona (VA Medical Center),Orlando,brightline,5.2,False
+center_8844a91ac7fffff,Lake Nona (south),Orlando,brightline,7.67,False
+center_8844a92b29fffff,West Sanford (SR-46),Sanford,sunrail,2.59,True
+center_8844a92b49fffff,Sanford (Seminole Towne Center),Lake Mary,sunrail,4.9,False
+center_8844a92b6bfffff,West Sanford (I-4),Sanford,sunrail,3.93,False
+center_8844a93109fffff,Apopka,Altamonte Springs,sunrail,15.13,False
+center_8844a93115fffff,Apopka (north),Altamonte Springs,sunrail,15.97,False
+center_8844a93437fffff,Eustis / Mount Dora (US-441),DeBary,sunrail,34.02,False
+center_8844a93685fffff,Tavares (south),Longwood,sunrail,39.31,False
+center_8844a936bdfffff,Tavares (downtown),Longwood,sunrail,39.68,False
+center_8844a93845fffff,Forest City (Wekiva Springs Rd),Altamonte Springs,sunrail,5.78,False
+center_8844a93917fffff,Lake Mary (I-4 / Lake Mary Blvd),Lake Mary,sunrail,4.77,False
+center_8844a93945fffff,Longwood,Longwood,sunrail,0.6,True
+center_8844a9394bfffff,Longwood (SR-434 / Rangeline Rd),Longwood,sunrail,2.09,True
+center_8844a93985fffff,Heathrow / Lake Mary,Lake Mary,sunrail,3.61,False
+center_8844a93a0bfffff,Apopka (Rock Springs),Altamonte Springs,sunrail,9.65,False
+center_8844a93a53fffff,Apopka (east),Altamonte Springs,sunrail,11.52,False
+center_8844a93a6bfffff,Forest City,Maitland,sunrail,7.92,False
+center_8844a93b3bfffff,Longwood (SR-434 / Wekiva Springs Rd),Altamonte Springs,sunrail,4.32,False
+center_8844a93b65fffff,Altamonte Springs,Altamonte Springs,sunrail,1.29,True
+center_8844a97205fffff,Oviedo (southeast),Winter Park,sunrail,17.57,False
+center_8844a97281fffff,Oviedo,Longwood,sunrail,14.69,False
+center_8844a972a1fffff,Oviedo (east),Longwood,sunrail,16.55,False
+center_8844a972cdfffff,Alafaya Trail (north of UCF),Winter Park,sunrail,14.46,False
+center_8844a972e3fffff,Oviedo (south),Longwood,sunrail,16.14,False
+center_8844a97435fffff,Orlando Sanford Airport,Sanford,sunrail,6.58,False
+center_8844a97453fffff,Lake Mary (east),Lake Mary,sunrail,3.47,False
+center_8844a97481fffff,Sanford (west of downtown),Sanford,sunrail,1.45,True
+center_8844a974a9fffff,Downtown Sanford,Sanford,sunrail,3.64,False
+center_8844a974c5fffff,Sanford (central),Sanford,sunrail,3.08,False
+center_8844a974c9fffff,Sanford (Mellonville Ave),Sanford,sunrail,3.26,False
+center_8844a974d1fffff,Sanford (SR-46 / Airport Blvd),Sanford,sunrail,1.04,True
+center_8844a975d9fffff,Sanford (east),Sanford,sunrail,5.13,False
+center_8844a9764bfffff,Winter Springs (east),Longwood,sunrail,4.02,False
+center_8844a97651fffff,Winter Springs,Longwood,sunrail,3.19,False
+center_8844a97693fffff,Sanford (Lake Mary Blvd),Lake Mary,sunrail,3.71,False
+center_8844a976e5fffff,Lake Mary (Rinehart Rd),Lake Mary,sunrail,2.76,True
+center_8844a98a05fffff,Poinciana (south),Poinciana,sunrail,15.84,False
+center_8844a98a37fffff,Poinciana (east),Poinciana,sunrail,12.82,False
+center_8844a98a85fffff,Poinciana (north),Poinciana,sunrail,10.1,False
+center_8844a98a89fffff,Poinciana (northwest),Poinciana,sunrail,10.13,False
+center_8844a98addfffff,Poinciana (west),Poinciana,sunrail,11.16,False
+center_8844a98c13fffff,Reunion (US-192 West),Poinciana,sunrail,8.45,False
+center_8844a98ca9fffff,Walt Disney World (Wide World of Sports),Poinciana,sunrail,9.48,False
+center_8844a98cd3fffff,"Walt Disney World (Animal Kingdom, south)",Poinciana,sunrail,13.04,False
+center_8844a98d4bfffff,Unnamed center,Poinciana,sunrail,0.99,True
+center_8844a98d9bfffff,"Walt Disney World (south, Osceola Pkwy)",Poinciana,sunrail,10.09,False
+center_8844a98da9fffff,Celebration (east),Poinciana,sunrail,7.19,False
+center_8844a9a187fffff,Clermont (US-27 / SR-50),LYNX Central,sunrail,33.59,False
+center_8844a9a19bfffff,Clermont,LYNX Central,sunrail,36.52,False
+center_8844a9a835fffff,Winter Garden,LYNX Central,sunrail,20.43,False
+center_8844a9a865fffff,Winter Garden (south),Orlando Health/Amtrak,sunrail,19.88,False
+center_8844a9a913fffff,Winter Garden (east),LYNX Central,sunrail,18.29,False
+center_8844a9ae17fffff,Minneola,LYNX Central,sunrail,38.6,False
+center_8844a9b965fffff,Walt Disney World (Hollywood Studios),Poinciana,sunrail,14.24,False
+center_8844a9ba39fffff,Four Corners (US-27),Poinciana,sunrail,22.06,False
+center_8844a9bb15fffff,Walt Disney World (far west),Poinciana,sunrail,17.51,False
+center_8844a9bb2bfffff,Walt Disney World (southwest),Poinciana,sunrail,15.27,False
+center_8844a9c453fffff,St. Cloud (far south),Kissimmee,sunrail,14.22,False
+center_8844a9c481fffff,St. Cloud,Kissimmee,sunrail,11.98,False
+center_8844a9c4d1fffff,"St. Cloud (north, Narcoossee Rd)",Kissimmee,sunrail,9.55,False
+center_8844a9c6a3fffff,St. Cloud (south),Kissimmee,sunrail,11.88,False
+center_8844f4ce4dfffff,Lady Lake / The Villages,DeBary,sunrail,61.42,False
+center_8844f4d88bfffff,Leesburg,Longwood,sunrail,53.11,False
