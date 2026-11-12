@@ -1,14 +1,16 @@
 import type { RailState } from "./useRailPlan";
+import type { SunshineState } from "./useSunshine";
 import {
   equityAt,
   type EquityReach,
   type RailSelection,
 } from "../data/railPlan";
-import { LINK_TYPES, PHASES } from "../map/railPlanLayers";
+import { LINE_PALETTE, stationName } from "../data/networkDisplay";
+import { CompactSunshineCompare, SunshineSources } from "./SunshineControls";
 export const railNumber = (n: number) =>
   n.toLocaleString("en-US", { maximumFractionDigits: 1 });
 export const railMoney = (n: number) => `$${railNumber(n)}M`;
-const percent = (n: number) => `${(n * 100).toFixed(1)}%`;
+const pct = (n: number) => `${(n * 100).toFixed(1)}%`;
 export function RailInspection({
   state,
   selection,
@@ -22,137 +24,162 @@ export function RailInspection({
     selection.kind === "link"
       ? l.id === selection.id
       : selection.kind === "station"
-        ? [l.from, l.to].includes(selection.id)
-        : state
-            .scenario!.steps.find((s) => s.route_id === selection.id)
-            ?.new_link_ids.includes(l.id),
+        ? [l.a, l.b].includes(selection.id)
+        : state.scenario!.steps[Number(selection.id)]?.new_link_ids.includes(
+            l.id,
+          ),
   );
-  const station = state.network.stations.find((c) => c.id === selection.id);
   return (
     <div className="rail-inspection">
       <h3>
-        {station?.name ??
-          (selection.kind === "step"
-            ? "Selected build step"
-            : "Link inspection")}
+        {state.data.plan.nodes.find((n) => n.id === selection.id)?.name ??
+          "Rail inspection"}
       </h3>
-      {station && (
-        <p>
-          {station.anchor ? "Anchor station" : "Station"} ·{" "}
-          {railNumber(station.jobs)} jobs · {railNumber(station.population)}{" "}
-          population. First served in step {Math.min(...links.map(l => state.network!.built.get(l.id)!)) + 1}.
-          Costs below are for links; station construction is excluded.
-        </p>
-      )}
       {links.map((l) => (
         <div key={l.id}>
           <strong>
-            {l.from_name} – {l.to_name}
+            {l.a_name} – {l.b_name}
           </strong>
           <p>
-            {LINK_TYPES[l.class].label} · {railNumber(l.length_km)} km ·{" "}
+            {state.network!.owner.get(l.id)?.name} ·{" "}
+            {l.class.replaceAll("_", " ")} · {railNumber(l.length_km)} km ·{" "}
             {railMoney(
               state.cost === "low" ? l.cost_low_musd : l.cost_high_musd,
             )}{" "}
-            ({state.cost} cost) · added in step{" "}
-            {state.network!.built.get(l.id)! + 1}
+            · added in step {state.network!.built.get(l.id)! + 1}
           </p>
         </div>
       ))}
     </div>
   );
 }
-function Reach({ value, region }: { value: EquityReach; region: number }) {
+function Reach({ v, region }: { v: EquityReach; region: number }) {
   return (
-    <>
-      <dl>
-        <dt>Households reached</dt>
-        <dd>{percent(value.share_of_households)}</dd>
-        <dt>No-vehicle households reached</dt>
-        <dd>{percent(value.share_of_no_vehicle_households)}</dd>
-        <dt>People in poverty reached</dt>
-        <dd>{percent(value.share_of_people_in_poverty)}</dd>
-        <dt>Median income of reached tracts / region</dt>
-        <dd>
-          {value.median_income_covered === null
-            ? "Unavailable"
-            : `$${railNumber(value.median_income_covered)}`}{" "}
-          / ${railNumber(region)}
-        </dd>
-      </dl>
-      <p>
-        {value.no_vehicle_ratio === null
-          ? "No-car ratio unavailable"
-          : `${value.no_vehicle_ratio.toFixed(2)}× its fair share of households with no car`}
-        .{" "}
-        {value.poverty_ratio === null
-          ? "Poverty ratio unavailable"
-          : `${value.poverty_ratio.toFixed(2)}× its fair share of people in poverty`}
-        .
-      </p>
-    </>
+    <p>
+      Households {pct(v.share_of_households)} · No-vehicle households{" "}
+      {pct(v.share_of_no_vehicle_households)} · People in poverty{" "}
+      {pct(v.share_of_people_in_poverty)}
+      <br />
+      Median income{" "}
+      {v.median_income_covered === null
+        ? "unavailable"
+        : `$${railNumber(v.median_income_covered)}`}{" "}
+      / region ${railNumber(region)}
+      <br />
+      No-vehicle ratio {v.no_vehicle_ratio?.toFixed(2) ?? "n/a"}× · Poverty
+      ratio {v.poverty_ratio?.toFixed(2) ?? "n/a"}×
+    </p>
   );
 }
-export default function RailPlanControls({
-  state,
-  onSelect,
-}: {
-  state: RailState;
-  onSelect: (s: RailSelection) => void;
-}) {
-  const { data, scenario, network } = state;
-  const equity =
-    data && scenario ? equityAt(data, scenario, state.budget) : null;
+export function RailPlanToggle({ state }: { state: RailState }) {
   return (
-    <section
-      className="candidate-controls rail-plan-controls"
-      aria-labelledby="rail-plan-heading"
-    >
-      <div className="section-heading">
-        <h2 id="rail-plan-heading">Rail plan</h2>
-      </div>
+    <section className="candidate-controls" aria-label="Rail plan">
       <label className="layer">
-        <span className="layer-symbol" aria-hidden="true">
-          ━
-        </span>
+        <span className="layer-symbol">━</span>
         <span className="layer-text">
           <strong>Proposed rail network</strong>
-          <small>Illustrative model · not surveyed routes</small>
+          <small>Named lines · connected network</small>
         </span>
         <input
           type="checkbox"
           aria-label="Proposed rail network"
           checked={state.enabled}
-          onChange={(e) => state.setEnabled(e.target.checked)}
+          onChange={(e) => {
+            state.setEnabled(e.target.checked);
+            state.setPanelOpen(true);
+          }}
         />
       </label>
-      {state.enabled && (
-        <div className="candidate-details">
+    </section>
+  );
+}
+export default function RailPlanControls({
+  state,
+  sunshine,
+  onSelect,
+}: {
+  state: RailState;
+  sunshine: SunshineState;
+  onSelect: (s: RailSelection) => void;
+}) {
+  if (!state.enabled && !sunshine.enabled) return null;
+  const { data, network, scenario } = state,
+    eq = data && scenario ? equityAt(data, scenario, state.budget) : null;
+  const lines =
+    network?.lines.filter(
+      (l) =>
+        !state.core ||
+        l.link_ids.some((id) => data?.core.has(id) && network.built.has(id)),
+    ) ?? [];
+  return (
+    <aside
+      className="network-panel candidate-details rail-plan-controls"
+      aria-label="Rail network controls"
+    >
+      <header>
+        <h2>Rail network</h2>
+        <button
+          onClick={() => state.setPanelOpen(!state.panelOpen)}
+          aria-label={
+            state.panelOpen ? "Collapse rail controls" : "Expand rail controls"
+          }
+        >
+          {state.panelOpen ? "−" : "+"}
+        </button>
+      </header>
+      {state.panelOpen && (
+        <>
           {state.error ? (
             <p role="alert">
-              Rail plan unavailable: {state.error}{" "}
+              {state.error}{" "}
               <button onClick={state.retry}>Retry rail plan</button>
             </p>
-          ) : !data ? (
-            <p role="status">Loading rail plan…</p>
+          ) : !data || !network || !scenario ? (
+            <p role="status">Loading connected network…</p>
           ) : (
             <>
-              <label>
-                Objective
-                <select
-                  aria-label="Rail objective"
-                  value={state.measure}
+              <label className="network-budget">
+                Budget {railMoney(state.budget)} · spent{" "}
+                {railMoney(network.spent)}
+                <input
+                  type="range"
+                  aria-label="Rail budget"
+                  aria-valuetext={`${railMoney(state.budget)}, spent ${railMoney(network.spent)}`}
+                  min={0}
+                  max={state.stops.length - 1}
+                  value={Math.max(0, state.stops.indexOf(state.budget))}
                   onChange={(e) =>
-                    state.setMeasure(e.target.value as typeof state.measure)
+                    state.setBudget(state.stops[Number(e.target.value)])
                   }
-                >
-                  <option value="minutes_saved">Minutes saved</option>
-                  <option value="workers_connected">
-                    Workers newly connected
-                  </option>
-                </select>
+                />
               </label>
-              <div className="rail-assumptions">
+              <div className="rail-budget-presets">
+                {data.plan.budgets_musd.map((b) => (
+                  <button
+                    key={b}
+                    aria-pressed={state.budget === b}
+                    onClick={() => state.setBudget(b)}
+                  >
+                    ${b / 1000}B
+                  </button>
+                ))}
+              </div>
+              <div className="network-selectors">
+                <label>
+                  Objective
+                  <select
+                    aria-label="Rail objective"
+                    value={state.measure}
+                    onChange={(e) =>
+                      state.setMeasure(e.target.value as typeof state.measure)
+                    }
+                  >
+                    <option value="minutes_saved">Minutes saved</option>
+                    <option value="workers_connected">
+                      Workers newly connected
+                    </option>
+                  </select>
+                </label>
                 <label>
                   Cost
                   <select
@@ -167,7 +194,7 @@ export default function RailPlanControls({
                   </select>
                 </label>
                 <label>
-                  Wait + access
+                  Wait/access
                   <select
                     aria-label="Rail overhead"
                     value={state.overhead}
@@ -180,272 +207,219 @@ export default function RailPlanControls({
                     ))}
                   </select>
                 </label>
-              </div>
-              {state.measure === "workers_connected" && (
+                {state.measure === "workers_connected" && (
+                  <label>
+                    Ratio
+                    <select
+                      aria-label="Rail competitiveness ratio"
+                      value={state.ratio}
+                      onChange={(e) => state.setRatio(Number(e.target.value))}
+                    >
+                      {[1.5, 2, 3].map((n) => (
+                        <option key={n}>{n}</option>
+                      ))}
+                    </select>
+                  </label>
+                )}
                 <label>
-                  Competitiveness ratio
+                  Drawing
                   <select
-                    aria-label="Rail competitiveness ratio"
-                    value={state.ratio}
-                    onChange={(e) => state.setRatio(Number(e.target.value))}
+                    aria-label="Rail drawing style"
+                    value={state.drawing}
+                    onChange={(e) =>
+                      state.setDrawing(e.target.value as typeof state.drawing)
+                    }
                   >
-                    {[1.5, 2, 3].map((n) => (
-                      <option key={n}>{n}</option>
-                    ))}
+                    <option value="schematic">Schematic</option>
+                    <option value="geographic">Geographic</option>
                   </select>
                 </label>
-              )}
-              {!scenario || !network ? (
-                <p role="alert">Selected scenario unavailable.</p>
-              ) : (
-                <>
-                  <label>
-                    Budget: <strong>{railMoney(state.budget)}</strong>
-                    <input
-                      className="rail-budget"
-                      type="range"
-                      aria-label="Rail budget"
-                      aria-valuetext={railMoney(state.budget)}
-                      min={0}
-                      max={state.stops.length - 1}
-                      step={1}
-                      value={Math.max(
-                        0,
-                        state.stops.findIndex((n) => n >= state.budget),
-                      )}
-                      onChange={(e) =>
-                        state.setBudget(state.stops[Number(e.target.value)])
-                      }
-                    />
-                  </label>
-                  <p>$0–$30B · stops at build costs and published budgets</p>
-                  <div className="rail-budget-presets">
-                    {data.plan.budgets_musd.map((b) => (
-                      <button
-                        key={b}
-                        aria-pressed={state.budget === b}
-                        onClick={() => state.setBudget(b)}
-                      >
-                        ${b / 1000}B
-                      </button>
-                    ))}
-                  </div>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={state.core}
-                      onChange={(e) => state.setCore(e.target.checked)}
-                    />{" "}
-                    Highlight core network
-                  </label>
-                  <p>These links appear in every minutes-saved plan at $10B.</p>
-                  <label>
-                    Color by
-                    <select
-                      aria-label="Rail color by"
-                      value={state.colorBy}
-                      onChange={(e) =>
-                        state.setColorBy(e.target.value as typeof state.colorBy)
-                      }
-                    >
-                      <option value="phase">Build phase</option>
-                      <option value="type">Link type</option>
-                    </select>
-                  </label>
-                  <ul className="rail-legend" aria-label="Rail legend">
-                    {(state.colorBy === "phase"
-                      ? PHASES
-                      : Object.values(LINK_TYPES)
-                    ).map((p) => (
-                      <li key={p.label}>
-                        <span
-                          style={{
-                            backgroundColor: `rgb(${p.color.join(",")})`,
-                          }}
-                        />
-                        {p.label}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="rail-summary" aria-live="polite">
-                    <h3>Network at this budget</h3>
-                    <p>
-                      {railMoney(network.spent)} spent · {network.links.length}{" "}
-                      links · {railNumber(network.miles)} miles ·{" "}
-                      {network.stations.length} stations
-                    </p>
-                    {state.measure === "minutes_saved" ? (
-                      <p>
-                        {railNumber(network.score)} job-minutes saved per
-                        weekday;{" "}
-                        {railNumber(
-                          network.score /
-                            data.plan.denominators.workers_with_transit_option,
-                        )}{" "}
-                        minutes on average per worker with a transit option
-                        today (
-                        {railNumber(
-                          data.plan.denominators.workers_with_transit_option,
-                        )}{" "}
-                        workers).
-                      </p>
-                    ) : (
-                      <p>
-                        {railNumber(network.score)} of{" "}
-                        {railNumber(
-                          data.plan.denominators.workers_without_transit_option,
-                        )}{" "}
-                        workers with no transit option today (
-                        {percent(
-                          network.score /
-                            data.plan.denominators
-                              .workers_without_transit_option,
-                        )}
-                        ) newly connected.
-                      </p>
+              </div>
+              <div className="rail-summary" aria-live="polite">
+                <p>
+                  Budget {railMoney(state.budget)} · spent{" "}
+                  {railMoney(network.spent)} · {network.steps.length} routes ·{" "}
+                  {network.links.length} links
+                </p>
+                {state.measure === "minutes_saved" ? (
+                  <p>
+                    {railNumber(network.score)} job-minutes saved per weekday ·{" "}
+                    {railNumber(
+                      network.score /
+                        data.plan.denominators.workers_with_transit_option,
+                    )}{" "}
+                    min per worker with transit today (
+                    {railNumber(
+                      data.plan.denominators.workers_with_transit_option,
                     )}
-                  </div>
-                  <details className="rail-build-order">
-                    <summary>
-                      Build order · {network.steps.length} steps
-                    </summary>
-                    <ol>
-                      {network.steps.map((s, i) => (
-                        <li key={s.route_id}>
-                          <button
-                            aria-pressed={
-                              state.selection?.kind === "step" &&
-                              state.selection.id === s.route_id
-                            }
-                            onClick={() =>
-                              onSelect({ kind: "step", id: s.route_id })
-                            }
-                          >
-                            <strong>
-                              {s.from_name} – {s.to_name}
-                            </strong>
-                            <small>
-                              {railMoney(s.cost_musd)} · running total{" "}
-                              {railMoney(s.total_cost_musd)}
-                            </small>
-                            <small>
-                              Gain: {railNumber(s.gain)}{" "}
-                              {state.measure === "minutes_saved"
-                                ? "job-minutes saved per weekday"
-                                : "workers newly connected"}
-                            </small>
-                            <span className="sr-only">Step {i + 1}</span>
-                          </button>
-                        </li>
-                      ))}
-                    </ol>
-                  </details>
-                  <label>
-                    Inspect station
-                    <select
-                      aria-label="Inspect rail station"
-                      value={
-                        state.selection?.kind === "station"
-                          ? state.selection.id
-                          : ""
-                      }
-                      onChange={(e) =>
-                        onSelect(
-                          e.target.value
-                            ? { kind: "station", id: e.target.value }
-                            : null,
-                        )
-                      }
-                    >
-                      <option value="">Choose a station</option>
-                      {network.stations.map((c) => (
-                        <option key={c.id} value={c.id}>
-                          {c.name}
+                    ).
+                  </p>
+                ) : (
+                  <p>
+                    {railNumber(network.score)} workers newly connected /{" "}
+                    {railNumber(
+                      data.plan.denominators.workers_without_transit_option,
+                    )}{" "}
+                    without transit today (
+                    {pct(
+                      network.score /
+                        data.plan.denominators.workers_without_transit_option,
+                    )}
+                    ).
+                  </p>
+                )}
+                <p>
+                  Within 2 km:{" "}
+                  {eq
+                    ? `${pct(eq.record["2.0"].share_of_households)} of households, ${pct(eq.record["2.0"].share_of_no_vehicle_households)} of no-vehicle households`
+                    : "no matching equity snapshot"}
+                </p>
+              </div>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={state.core}
+                  onChange={(e) => state.setCore(e.target.checked)}
+                />{" "}
+                Core network only
+              </label>
+              {state.core && (
+                <p className="network-note">
+                  Showing only built links common to every $10B minutes-saved
+                  scenario. Summary describes the full selected plan.
+                </p>
+              )}
+              {sunshine.enabled && (
+                <CompactSunshineCompare state={sunshine} rail={state} />
+              )}
+              <details className="network-lines" open={undefined}>
+                <summary>Lines · {lines.length}</summary>
+                <ul>
+                  {lines.map((l) => (
+                    <li key={l.id}>
+                      <button
+                        onMouseEnter={() => state.setHoverLine(l.id)}
+                        onMouseLeave={() => state.setHoverLine(null)}
+                        onFocus={() => state.setHoverLine(l.id)}
+                        onBlur={() => state.setHoverLine(null)}
+                      >
+                        <span
+                          style={{ background: LINE_PALETTE[l.color_index] }}
+                        />
+                        {l.id} · {l.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+              <details className="rail-build-order">
+                <summary>Build order · {network.steps.length} routes</summary>
+                <ol>
+                  {network.steps.map((s, index) => (
+                    <li key={index}>
+                      <button
+                        onClick={() =>
+                          onSelect({ kind: "step", id: String(index) })
+                        }
+                      >
+                        {s.from_name} to {s.to_name}
+                        <small>
+                          {railMoney(s.cost_musd)} · total{" "}
+                          {railMoney(s.total_cost_musd)} · gain{" "}
+                          {railNumber(s.gain)}{" "}
+                          {state.measure === "minutes_saved"
+                            ? "job-minutes"
+                            : "workers"}
+                        </small>
+                      </button>
+                    </li>
+                  ))}
+                </ol>
+              </details>
+              <details className="network-details">
+                <summary>Details</summary>
+                <label>
+                  Inspect station
+                  <select
+                    aria-label="Inspect rail station"
+                    value={
+                      state.selection?.kind === "station"
+                        ? state.selection.id
+                        : ""
+                    }
+                    onChange={(e) =>
+                      onSelect(
+                        e.target.value
+                          ? { kind: "station", id: e.target.value }
+                          : null,
+                      )
+                    }
+                  >
+                    <option value="">Choose a station</option>
+                    {data.plan.nodes
+                      .filter(
+                        (n) =>
+                          n.existing_station ||
+                          network.stations.some((s) => s.id === n.id),
+                      )
+                      .map((n) => (
+                        <option key={n.id} value={n.id}>
+                          {stationName(n.name)}
                         </option>
                       ))}
-                    </select>
-                  </label>
-                  {state.selection && (
-                    <>
-                      <button onClick={() => state.select(null)}>
-                        Close rail inspection
-                      </button>
-                      <RailInspection
-                        state={state}
-                        selection={state.selection}
+                  </select>
+                </label>
+                <h3>Equity, separate from commute scores</h3>
+                {eq && eq.budget !== state.budget && (
+                  <p>
+                    Published ${eq.budget / 1000}B snapshot: identical built
+                    links.
+                  </p>
+                )}
+                {(["0.8", "2.0"] as const).map((r) => (
+                  <div key={r}>
+                    <h4>Within {r} km</h4>
+                    {eq ? (
+                      <Reach
+                        v={eq.record[r]}
+                        region={data.equity.region.median_income}
                       />
-                    </>
-                  )}
-                  <details className="rail-equity">
-                    <summary>Who does this serve?</summary>
-                    <p>
-                      Equity is separate from the commute score. Ratios above 1
-                      mean proportionally more reach than the overall population
-                      base.
-                    </p>
-                    {equity && equity.budget !== state.budget && (
-                      <p>
-                        Published ${equity.budget / 1000}B snapshot: exactly the
-                        same built network.
-                      </p>
+                    ) : (
+                      <p>No matching snapshot; not interpolated.</p>
                     )}
-                    {!equity && (
-                      <p>
-                        Equity unavailable at this build step. Choose a
-                        published budget above; results are not interpolated.
-                      </p>
-                    )}
-                    {(["0.8", "2.0"] as const).map((r) => (
-                      <div key={r}>
-                        <h4>
-                          {r === "0.8"
-                            ? "Within 0.8 km (walking)"
-                            : "Within 2 km (typical access distance)"}
-                        </h4>
-                        {equity && (
-                          <Reach
-                            value={equity.record[r]}
-                            region={data.equity.region.median_income}
-                          />
-                        )}
-                        <details>
-                          <summary>Reference: all candidate centers</summary>
-                          <Reach
-                            value={
-                              data.equity.benchmarks.all_candidate_centers[r]
-                            }
-                            region={data.equity.region.median_income}
-                          />
-                        </details>
-                      </div>
-                    ))}
-                    <small>
-                      {data.equity.notes.map((n) => (
-                        <p key={n}>{n}</p>
-                      ))}
-                    </small>
-                  </details>
-                </>
-              )}
-              <details
-                open={state.caveatsOpen}
-                onToggle={(e) => state.setCaveatsOpen(e.currentTarget.open)}
-              >
-                <summary>Model caveats</summary>
+                    <h4>Existing stations benchmark</h4>
+                    <Reach
+                      v={data.equity.benchmarks.existing_stations[r]}
+                      region={data.equity.region.median_income}
+                    />
+                  </div>
+                ))}
+                <h3>Model caveats</h3>
                 <ul>
                   {data.plan.caveats.map((c) => (
                     <li key={c}>{c}</li>
                   ))}
                 </ul>
+                <p>{data.plan.denominators.note}</p>
+                {data.equity.notes.map((n) => (
+                  <p key={n}>{n}</p>
+                ))}
                 <p>
-                  Links are straight lines between centers and not surveyed
-                  routes.
+                  Drawing geometry does not change stations, costs, lengths or
+                  scores. Minutes cannot be expressed as a percent of a worker
+                  count; the mean uses all workers with a transit baseline.
                 </p>
+                {data.plan.documented_projects.map((p) => (
+                  <p key={p.link_id}>
+                    {p.source}: {p.note}
+                  </p>
+                ))}
+                {sunshine.enabled && <SunshineSources state={sunshine} />}
               </details>
             </>
           )}
-        </div>
+        </>
       )}
-    </section>
+    </aside>
   );
 }

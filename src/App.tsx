@@ -1,3 +1,4 @@
+import RailPlanControls from "./components/RailPlanControls";
 import {useSunshine} from "./components/useSunshine";
 import {useRailPlan} from "./components/useRailPlan";
 import type {RailSelection} from "./data/railPlan";
@@ -23,7 +24,9 @@ export default function App() {
   const [open, setOpen] = useState(() => window.innerWidth > 600);
   const sunshine = useSunshine();
   const railPlan = useRailPlan(sunshine.enabled);
-  const selectRail = useCallback((s:RailSelection) => { railPlan.select(s); setOpen(true); }, [railPlan.select]);
+  useEffect(()=>{if((railPlan.enabled||sunshine.enabled)&&window.innerWidth<=600)setOpen(false);},[railPlan.enabled,sunshine.enabled]);
+  useEffect(()=>{if(open&&window.innerWidth<=600)railPlan.setPanelOpen(false);},[open,railPlan.setPanelOpen]);
+  const selectRail = useCallback((s:RailSelection) => { railPlan.select(s); railPlan.setPanelOpen(true); if(window.innerWidth<=600)setOpen(false); }, [railPlan.select]);
   const [flowsVisible, setFlowsVisible] = useState(false);
   const candidates = useCandidates(flowsVisible);
   const labels = useCenterLabels(candidates.data, candidates.enabled || flowsVisible);
@@ -56,6 +59,7 @@ export default function App() {
         populationVisible={populationVisible}
         onPopulationStatus={setPopulationStatus}
       />
+      <RailPlanControls state={railPlan} sunshine={sunshine} onSelect={selectRail}/>
       <Sidebar sunshine={sunshine}
         railPlan={railPlan} onRailSelect={selectRail}
         flows={flows}

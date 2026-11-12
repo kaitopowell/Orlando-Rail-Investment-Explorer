@@ -904,3 +904,119 @@ main .demand-comparison > .population-panel {
   .sunshine-table thead th:first-child { display:none; }
   .sunshine-table th, .sunshine-table td { overflow-wrap:normal; font-size:11px; }
 }
+
+.network-panel {
+  position: absolute;
+  z-index: 5;
+  right: 20px;
+  top: 80px;
+  width: 360px;
+  max-height: calc(100dvh - 105px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 14px;
+  border: 1px solid #465c6b;
+  border-radius: 8px;
+  background: #101b23fa;
+  font-size: 12px;
+  line-height: 1.4;
+}
+.network-panel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.network-panel h2 {
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+.network-panel label {
+  margin-top: 7px;
+}
+.network-budget input {
+  display: block;
+  width: 100%;
+  accent-color: #00c9d8;
+}
+.network-selectors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px 9px;
+}
+.network-panel select {
+  min-height: 30px;
+  font-size: 12px;
+}
+.network-panel .rail-summary {
+  margin: 9px 0;
+}
+.network-panel .rail-summary p {
+  margin: 7px 0;
+}
+.network-panel .rail-budget-presets {
+  gap: 3px;
+}
+.network-panel .rail-budget-presets button {
+  padding: 4px 6px;
+}
+.network-lines ul {
+  list-style: none;
+  padding: 0;
+}
+.network-lines button {
+  width: 100%;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.network-lines span {
+  width: 22px;
+  height: 4px;
+  flex-shrink: 0;
+}
+.network-panel details {
+  border-top: 1px solid #354954;
+}
+.network-panel .compact-compare {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  margin: 8px 0;
+  font-size: 11px;
+}
+.compact-compare th,
+.compact-compare td {
+  padding: 6px 3px;
+  text-align: left;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid #354954;
+  vertical-align: top;
+}
+.network-note {
+  font-size: 11px;
+}
+.rail-hover {
+  right: 395px;
+  top: 90px;
+  z-index: 6;
+}
+@media (max-width: 600px) {
+  .network-panel {
+    right: 12px;
+    top: 90px;
+    width: calc(100vw - 24px);
+    max-height: calc(100dvh - 190px);
+  }
+  .rail-hover {
+    right: 12px;
+    top: auto;
+    bottom: 90px;
+    max-width: calc(100vw - 24px);
+    max-height: 36vh;
+    z-index: 7;
+  }
+  .sunshine-popup {
+    z-index: 8;
+  }
+}
