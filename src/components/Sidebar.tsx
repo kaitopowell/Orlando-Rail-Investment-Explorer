@@ -1,3 +1,5 @@
+import SunshineControls from "./SunshineControls";
+import type {SunshineState} from "./useSunshine";
 import RailPlanControls from "./RailPlanControls";
 import type {RailState} from "./useRailPlan";
 import type {RailSelection} from "../data/railPlan";
@@ -11,7 +13,7 @@ import { populationSource } from "../data/population";
 import CountyAttribution from "./CountyAttribution";
 import { plannedLayers } from "../data/layers";
 export default function Sidebar({
-  railPlan, onRailSelect,
+  sunshine, railPlan, onRailSelect,
   candidates,
   flows, labels, onFlowsToggle,
   busVisible,
@@ -34,6 +36,7 @@ export default function Sidebar({
   populationStatus,
   onPopulationToggle,
 }: {
+  sunshine: SunshineState;
   railPlan: RailState; onRailSelect: (s:RailSelection)=>void;
   candidates: CandidateState;
   flows: FlowState; labels: LabelState; onFlowsToggle: () => void;
@@ -222,6 +225,7 @@ export default function Sidebar({
               </label>
             </div>
           </section>
+          <SunshineControls state={sunshine} rail={railPlan}/>
           {populationVisible && populationStatus !== "off" && (
             <p className="data-note">
               <span aria-hidden="true">○</span>{" "}

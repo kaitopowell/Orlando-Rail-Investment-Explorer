@@ -1,3 +1,4 @@
+import {useSunshine} from "./components/useSunshine";
 import {useRailPlan} from "./components/useRailPlan";
 import type {RailSelection} from "./data/railPlan";
 import {useFlows} from "./components/useFlows";
@@ -20,7 +21,8 @@ export default function App() {
   const [busVisible, setBusVisible] = useState(false);
   const [equityVisible, setEquityVisible] = useState(false);
   const [open, setOpen] = useState(() => window.innerWidth > 600);
-  const railPlan = useRailPlan();
+  const sunshine = useSunshine();
+  const railPlan = useRailPlan(sunshine.enabled);
   const selectRail = useCallback((s:RailSelection) => { railPlan.select(s); setOpen(true); }, [railPlan.select]);
   const [flowsVisible, setFlowsVisible] = useState(false);
   const candidates = useCandidates(flowsVisible);
@@ -36,7 +38,7 @@ export default function App() {
     useState<PopulationStatus>("off");
   return (
     <main>
-      <MapView
+      <MapView sunshine={sunshine}
         railPlan={railPlan} onRailSelect={selectRail}
         flows={flows}
         labels={labels}
@@ -54,7 +56,7 @@ export default function App() {
         populationVisible={populationVisible}
         onPopulationStatus={setPopulationStatus}
       />
-      <Sidebar
+      <Sidebar sunshine={sunshine}
         railPlan={railPlan} onRailSelect={selectRail}
         flows={flows}
         labels={labels}

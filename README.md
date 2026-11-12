@@ -43,7 +43,7 @@ Document and acquire authoritative regional datasets, validate licenses/coverage
 
 ## Browser smoke checks
 
-With the dev server running, run `npx playwright install chromium` once, then `npm run test:smoke`, `npm run test:candidates`, `npm run test:flows`, and `npm run test:rail-plan`. To use an installed Chromium instead, run `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:smoke`.
+With the dev server running, run `npx playwright install chromium` once, then `npm run test:smoke`, `npm run test:candidates`, `npm run test:flows`, `npm run test:rail-plan`, and `npm run test:sunshine`. To use an installed Chromium instead, run `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:smoke`.
 
 The smoke check substitutes an empty test-only basemap style but loads the real generated Census geometry. It checks phone (390 px), laptop (1440 px), and ultrawide (2560 px) camera constraints, county toggle, hover, label fading, attribution, disabled analytical controls, sidebar keyboard access, and data/resource failures. It does **not** validate live geographic tiles. No fixture data appears in the application.
 
@@ -210,3 +210,28 @@ Model outputs are not measured benefits or an optimal plan. The frontend loads
 analysis or modify these files. Run `npm run test:rail-plan` with the dev server
 running for real-file reference/budget checks and laptop/phone browser controls,
 inspection, failures, cleanup and 2D/3D coexistence.
+
+### Sunshine Corridor comparison
+
+**Sunshine Corridor (FDOT proposal)** is off by default beside the baseline transit
+controls. It reuses the existing rail renderer, line passes, station markers and
+zoom-10 label threshold, with light red (`#FF6B6B`) as its only style difference.
+Click a segment or station, or use its keyboard selector, to inspect the published
+costs, TCAR/traced lengths and geometry basis. Station costs and lengths are not
+supplied and are explicitly marked unavailable.
+
+The Compare panel uses the currently selected SOL/R network without requiring
+that network's map toggle to be on. Its cost range covers the same built links
+under low/high cost estimates; the selected-case spend is shown separately.
+Only the selected objective's score is reported, since switching objectives
+selects a different network. Sunshine's commute and equity results are **not yet
+scored**. SOL/R equity uses the existing snapshot lookup, without interpolation.
+
+The Sunshine program total is $3.543–4.787B, including undrawn options 3A and 3D.
+The two drawn segments alone cost $2.970–4.140B and total 17.2 TCAR miles / 17.0
+traced miles. Mileage is explicitly for the drawn segments, not the full program.
+The geometry is schematic, not surveyed; FDOT costs include right of way and
+trainsets, unlike the SOL/R link estimates. The panel keeps all four comparison
+caveats visible. No model scoring, scenario choice, analysis or source data is
+changed. `npm run test:sunshine` checks real source values, comparison selection,
+shared styling, keyboard/pointer inspection, failures, cleanup and responsive fit.
