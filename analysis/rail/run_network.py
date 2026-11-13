@@ -21,13 +21,13 @@ from .score import Link, Params
 DATA = Path("data/processed")
 
 
-def prepare(cost="low", hubs=True):
+def prepare(cost="low", hubs=True, speed=None):
     """Everything the planner needs, on merged nodes. Returns a dict."""
     conns, infos, circ = build_network(hub_connections() if hubs else ())
     node_map = load_node_map(DATA / "center_station_map.csv")
     stations = [r["name"] for r in csv.DictReader(open(DATA / "rail_stations.csv"))]
     existing = load_sunrail_links(DATA / "sunrail_links.csv")
-    links = merge_links(build_links(conns, infos, circ, case=COST_CASES[cost]), node_map, existing)
+    links = merge_links(build_links(conns, infos, circ, case=COST_CASES[cost], speed_mph=speed), node_map, existing)
     if hubs:
         links.append(Link(SUNSHINE_3A["id"], SUNSHINE_3A["a"], SUNSHINE_3A["b"], SUNSHINE_3A["minutes"], SUNSHINE_3A["cost_musd"]))
     pairs = merge_pairs(load_pairs(), node_map)
@@ -61,19 +61,19 @@ def plan(ctx, overhead, measure, ratio, budget=MAX_BUDGET_MUSD, connected=True, 
 
 # ----------------------------------------------------------------- full grid ----
 
-def run_grid(out="data/processed/rail_scenarios_v2.json"):
+def run_grid(out="data/processed/rail_scenarios_v2.json", speed=None):
     """All 24 scenarios on the connected-growth planner (loops allowed). Slow: a few minutes."""
     import json
     from .run_scenarios import OVERHEADS_MIN, RATIOS, prefix_summary
     runs = []
     for cost in COST_CASES:
-        ctx = prepare(cost)
+        ctx = prepare(cost, speed=speed)
         ends = {r[0]: (r[1], r[2]) for r in ctx["routes"]}
         for ov in OVERHEADS_MIN:
             for measure, ratio in [("time_saved", None)] + [("newly_connected", r) for r in RATIOS]:
                 steps = plan(ctx, ov, measure, ratio or 2.0)
                 runs.append({
-                    "cost": cost, "overhead_min": ov, "measure": measure, "ratio": ratio,
+                    "cost": cost, "overhead_min": ov, "measure": measure, "ratio": ratio, "speed_mph": speed or 20.0,
                     "order": [{"route_id": s.route_id, "from": ends[s.route_id][0], "to": ends[s.route_id][1],
                                "new_link_ids": list(s.new_link_ids), "gain": round(s.gain, 1), "cost_musd": round(s.cost, 1),
                                "total_cost_musd": round(s.total_cost, 1), "total_score": round(s.total_score, 1)} for s in steps],
@@ -98,6 +98,8 @@ def score_link_set(ctx, link_ids, overhead, measure, ratio):
 
 if __name__ == "__main__" and "--grid" in sys.argv:
     run_grid()
+if __name__ == "__main__" and "--grid30" in sys.argv:
+    run_grid("data/processed/rail_scenarios_v2_s30.json", speed=30.0)
 elif __name__ == "__main__":
     ctx = prepare(BASE["cost"])
     print(f"{len(ctx['links'])} candidate links, {len(ctx['existing'])} existing links, {len(ctx['pairs'])} pairs, "
