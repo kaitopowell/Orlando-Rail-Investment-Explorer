@@ -22,9 +22,11 @@ from .export_plan import load_names, scenario_id
 from .lines import group_lines
 from .network import STATION_PREFIX
 from .run_network import prepare
+from .usefulness import all_pairs_minutes, usefulness
 
 DATA = Path("data/processed")
 OUT = Path("public/data/rail_network.json")
+SLOW, FAST = 20.0, 30.0       # new-link train speeds (mph) in the export; 20 is the default
 PALETTE_SIZE = 12          # the map keeps one color per index; lines beyond this reuse colors
 
 
@@ -33,7 +35,12 @@ def short(name):
     return re.sub(r"\s*\(.*?\)", "", name).strip()
 
 
-def build_network_export(ctxs, runs, centers, stations, names, denominators):
+def sid(run):
+    """Scenario id; 30 mph runs get an -s30 suffix so the 20 mph ids stay as they were."""
+    return scenario_id(run) + ("-s30" if run.get("speed_mph", SLOW) == FAST else "")
+
+
+def build_network_export(ctxs, runs, centers, stations, names, denominators, use=None, commute_pairs=None, ctx_fast=None):
     """
     ctxs: {"low": ctx, "high": ctx} from run_network.prepare. runs: rail_scenarios_v2 runs.
     centers: list of {id, name, lon, lat}. stations: list of {name, system, lat, lon}.
@@ -51,6 +58,7 @@ def build_network_export(ctxs, runs, centers, stations, names, denominators):
     low = {l.id: l for l in ctxs["low"]["links"]}
     high = {l.id: l for l in ctxs["high"]["links"]}
     meta = ctxs["low"]["meta"]
+    fast = {l.id: l for l in ctx_fast["links"]} if ctx_fast else {}
 
     used_links = {lid for run in runs for s in run["order"] for lid in s["new_link_ids"]}
     nodes_used = {n for lid in used_links for n in (low[lid].a, low[lid].b)}
@@ -62,6 +70,7 @@ def build_network_export(ctxs, runs, centers, stations, names, denominators):
         links.append({"id": lid, "a": l.a, "b": l.b, "a_name": label(l.a), "b_name": label(l.b),
                       "coords": [[round(x1, 6), round(y1, 6)], [round(x2, 6), round(y2, 6)]],
                       "class": m["class"], "length_km": m["length_km"], "minutes": round(l.minutes, 2),
+                      "minutes_s30": round(fast[lid].minutes, 2) if lid in fast else None,
                       "cost_low_musd": round(l.cost, 1) if lid in low else None,
                       "cost_high_musd": round(high[lid].cost, 1)})
     link_by_pair = {frozenset((l["a"], l["b"])): l["id"] for l in links}
@@ -73,7 +82,7 @@ def build_network_export(ctxs, runs, centers, stations, names, denominators):
                       "existing_station": n in existing_nodes})
 
     out_scenarios = []
-    for run in sorted(runs, key=lambda r: scenario_id(r)):
+    for run in sorted(runs, key=sid):
         steps = [{"route_id": s["route_id"], "from": s["from"], "to": s["to"], "from_name": label(s["from"]),
                   "to_name": label(s["to"]), "new_link_ids": s["new_link_ids"], "gain": s["gain"],
                   "cost_musd": s["cost_musd"], "total_cost_musd": s["total_cost_musd"],
@@ -94,9 +103,10 @@ def build_network_export(ctxs, runs, centers, stations, names, denominators):
                           "color_index": i % PALETTE_SIZE, "main": g["main"], "branches": g["branches"],
                           "link_ids": lids})
         out_scenarios.append({
-            "id": scenario_id(run), "cost_case": run["cost"], "overhead_min": run["overhead_min"],
+            "id": sid(run), "speed_mph": run.get("speed_mph", SLOW), "cost_case": run["cost"], "overhead_min": run["overhead_min"],
             "measure": "minutes_saved" if run["measure"] == "time_saved" else "workers_connected",
-            "ratio": run["ratio"], "steps": steps, "by_budget": run["by_budget"], "lines": lines})
+            "ratio": run["ratio"], "steps": steps, "by_budget": run["by_budget"], "lines": lines,
+            **({"usefulness": use[sid(run)]} if use else {})})
 
     return {
         "version": 2,
@@ -108,6 +118,7 @@ def build_network_export(ctxs, runs, centers, stations, names, denominators):
         "existing_links": [{"id": l.id, "a": l.a, "b": l.b, "minutes": l.minutes} for l in ctxs["low"]["existing"]],
         "links": links,
         "scenarios": out_scenarios,
+        **({"commute_pairs": commute_pairs} if commute_pairs else {}),
         "documented_projects": [{"link_id": "sunshine_3a:Meadow Woods|Orlando",
                                  "source": "FDOT Sunshine Corridor TCAR Final Report (2024), Table 14; 2018 SunRail Extension to OIA PD&E Study",
                                  "note": "5.5-mile extension on the existing OUC spur track to the MCO terminal, $400M including right of way and trainsets; the junction near Meadow Woods is inferred from the report's travel times"}],
@@ -159,12 +170,49 @@ def validate(net):
         for b in s["by_budget"]:
             kept = [st for st in s["steps"] if st["total_cost_musd"] <= b["budget_musd"]]
             assert b["routes"] == len(kept), f"{s['id']}: by_budget route count"
+            if "usefulness" in s:
+                u = s["usefulness"][str(b["budget_musd"])]
+                if s["measure"] == "minutes_saved":
+                    assert abs(u["job_minutes_saved"] - b["score"]) <= 0.5 + 1e-6 * b["score"], f"{s['id']}: usefulness does not match the model score"
+                sv = u["commuters_saving"]
+                assert sv["10"] >= sv["20"] >= sv["30"] >= 0 and u["commuters_any"] >= sv["10"], f"{s['id']}: saving buckets"
     return True
+
+
+def usefulness_for_all(ctxs, runs, ctxs_fast=None):
+    """{scenario id: {str(budget): usefulness dict}} on the same pairs and links the model used."""
+    out = {}
+    for run in runs:
+        ctx = (ctxs_fast or ctxs)[run["cost"]] if run.get("speed_mph", SLOW) == FAST else ctxs[run["cost"]]
+        by_id = {l.id: l for l in ctx["links"]}
+        per = {}
+        for b in run["by_budget"]:
+            ids = [i for st in run["order"] if st["total_cost_musd"] <= b["budget_musd"] for i in st["new_link_ids"]]
+            per[str(b["budget_musd"])] = usefulness(ctx["pairs"], ctx["existing"], [by_id[i] for i in ids], run["overhead_min"])
+        out[sid(run)] = per
+    return out
+
+
+def commute_pair_table(ctx, node_ids):
+    """Baseline commute pairs whose two ends are both network nodes, as compact arrays for the map:
+    [home_index, work_index, workers, transit_min or null, drive_min or null] over the node list order."""
+    index = {n: i for i, n in enumerate(node_ids)}
+    rows = []
+    for p in ctx["pairs"]:
+        if p.home in index and p.work in index:
+            rows.append([index[p.home], index[p.work], p.jobs,
+                         None if p.transit_min is None else round(p.transit_min, 1),
+                         None if p.car_min is None else round(p.car_min, 1)])
+    return {"columns": ["home", "work", "workers", "transit_min", "drive_min"], "rows": rows}
 
 
 def main(names_path="data/center_labels.csv"):
     runs = json.loads((DATA / "rail_scenarios_v2.json").read_text(encoding="utf-8"))["runs"]
+    runs_fast = json.loads((DATA / "rail_scenarios_v2_s30.json").read_text(encoding="utf-8"))["runs"]
+    base_runs = runs
+    runs = runs + runs_fast
     ctxs = {c: prepare(c) for c in ("low", "high")}
+    ctxs_fast = {c: prepare(c, speed=FAST) for c in ("low", "high")}
     plan = json.loads(Path("public/data/rail_plan.json").read_text(encoding="utf-8"))
     stations = list(csv.DictReader(open(DATA / "rail_stations.csv", encoding="utf-8")))
     pairs = ctxs["low"]["pairs"]
@@ -173,7 +221,23 @@ def main(names_path="data/center_labels.csv"):
         "workers_without_transit_option": sum(p.jobs for p in pairs if p.transit_min is None),
         "note": "center-to-center commutes only; trips inside one center or one station area are excluded",
     }
-    net = build_network_export(ctxs, runs, plan["centers"], stations, load_names(names_path), denominators)
+    use = usefulness_for_all(ctxs, runs, ctxs_fast)
+    net = build_network_export(ctxs, runs, plan["centers"], stations, load_names(names_path), denominators, use=use, ctx_fast=ctxs_fast["low"])
+    net["commute_pairs"] = commute_pair_table(ctxs["low"], [n["id"] for n in net["nodes"]])
+    # reference values so the map's own shortest-path code can be tested against the model
+    base = [r for r in base_runs if r["cost"] == "low" and r["overhead_min"] == 20.0 and r["measure"] == "time_saved"][0]
+    by_id = {l.id: l for l in ctxs["low"]["links"]}
+    checks = []
+    for budget in (2500, 10000, 30000):
+        ids = [i for st in base["order"] if st["total_cost_musd"] <= budget for i in st["new_link_ids"]]
+        dist = all_pairs_minutes(list(ctxs["low"]["existing"]) + [by_id[i] for i in ids], [n["id"] for n in net["nodes"]])
+        samples = [r for r in net["commute_pairs"]["rows"] if r[3] is not None][::max(1, len(net["commute_pairs"]["rows"]) // 12)][:12]
+        ids_by_idx = [n["id"] for n in net["nodes"]]
+        for r in samples:
+            d = dist.get(ids_by_idx[r[0]], {}).get(ids_by_idx[r[1]])
+            checks.append({"scenario": "low-oh20-minutes", "budget_musd": budget, "home": ids_by_idx[r[0]], "work": ids_by_idx[r[1]],
+                           "ride_min": None if d is None else round(d, 2)})
+    net["reference_checks"] = checks
     validate(net)
     OUT.write_text(json.dumps(net, separators=(",", ":")), encoding="utf-8")
     print(f"wrote {OUT}: {len(net['nodes'])} nodes, {len(net['links'])} links, {len(net['scenarios'])} scenarios, "
