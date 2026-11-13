@@ -39,6 +39,7 @@ export default function MapView({
   sidebarOpen,
   countiesVisible,
   populationVisible,
+  suppressPopulation3D,
   onPopulationStatus,
   trainMotion,
   trainPaused,
@@ -59,6 +60,7 @@ export default function MapView({
   sidebarOpen: boolean;
   countiesVisible: boolean;
   populationVisible: boolean;
+  suppressPopulation3D: boolean;
   onPopulationStatus: (status: PopulationStatus) => void;
 }) {
   const [scene, setScene] = useState<{
@@ -287,6 +289,7 @@ export default function MapView({
           map={scene.map}
           overlay={scene.overlay}
           enabled={populationVisible}
+          suppress3D={suppressPopulation3D}
           beforeId={scene.labelLayerId}
           onStatus={onPopulationStatus}
         />

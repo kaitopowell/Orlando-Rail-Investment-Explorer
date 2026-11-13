@@ -102,8 +102,9 @@ try {
     assert.equal(order.at(-1).id,'transit-station-labels');
     for(const l of order)assert.equal(l.before,'test-labels');
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+    await page.locator('[data-panel="bus"] > h2 button').click();
     await page.getByLabel('Bus frequent threshold').selectOption('30');
-    const cards = await page.evaluate(() => [".equity-panel", ".employment-panel", ".transit-stack"].map(selector => {
+    const cards = await page.evaluate(() => [".equity-panel", ".employment-panel", ".bus-panel", ".transit-panel:not(.bus-panel)"].map(selector => {
       const r = document.querySelector(selector).getBoundingClientRect();
       return {left:r.left,right:r.right,top:r.top,bottom:r.bottom};
     }));

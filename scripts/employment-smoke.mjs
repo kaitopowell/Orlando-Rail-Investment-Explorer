@@ -95,6 +95,7 @@ try {
     });
     assert.match(picked, /^\d{15}$/);
     await page.getByRole("button", {name: "Orlando", exact: true}).click();
+    if (await page.locator('[data-panel="employment"] > h2 button').getAttribute('aria-expanded') === 'false') await page.locator('[data-panel="employment"] > h2 button').click();
     await page.getByRole("button", {name: "Toggle employment 3D view"}).click();
     await page.getByRole("button", {name: "Inspect employment block", exact: true}).waitFor();
     assert.match(await page.getByLabel("Employment clipping legend").innerText(), new RegExp(`${blocks.clipped} needles clipped`));
@@ -196,6 +197,7 @@ try {
       })
       .check();
     await page.getByLabel("Inspect transit", { exact: true }).waitFor();
+    if (await page.locator('[data-panel="employment"] > h2 button').getAttribute('aria-expanded') === 'false') await page.locator('[data-panel="employment"] > h2 button').click();
     await page
       .getByRole("button", { name: "Toggle employment 3D view" })
       .click();
@@ -244,14 +246,15 @@ try {
       .getByRole("button", { name: "Close employment details" })
       .click();
     await page.getByRole("button", { name: "Orlando", exact: true }).click();
+    if (await page.locator('[data-panel="employment"] > h2 button').getAttribute('aria-expanded') === 'false') await page.locator('[data-panel="employment"] > h2 button').click();
     await page
       .getByRole("button", { name: "Toggle employment 3D view" })
       .click();
     await page.waitForTimeout(400);
 
     if (width < 600) {
-      const a = await page.locator(".employment-panel").boundingBox(),
-        b = await page.locator(".transit-panel").boundingBox();
+      const a = await page.locator(".right-panels").boundingBox(),
+        b = await page.locator(".view-controls").boundingBox();
       assert.ok(a.y + a.height < b.y);
     }
     await expand();

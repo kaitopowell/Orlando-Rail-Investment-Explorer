@@ -1,3 +1,4 @@
+import { RightPanel } from "../components/RightPanels";
 import { useEffect, useRef, useState } from "react";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import type { MapboxOverlay } from "@deck.gl/mapbox";
@@ -121,12 +122,11 @@ export default function RailPlanOverlay({
     );
   }, [state.selection, state.enabled, map]);
   return state.enabled && (state.selection || hovered) ? (
-    <aside
+    <RightPanel id="rail-inspection" title="Rail inspection" autoOpen
       className="rail-hover"
-      style={{ pointerEvents: state.selection ? "auto" : "none" }}
     >
       <button onClick={() => state.select(null)}>Close rail inspection</button>
       <RailInspection state={state} selection={state.selection ?? hovered} />
-    </aside>
+    </RightPanel>
   ) : null;
 }

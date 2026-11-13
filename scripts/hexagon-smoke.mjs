@@ -219,6 +219,7 @@ try {
       await page.locator(".population-legend").innerText(),
       /stretched display value/,
     );
+    if (await page.locator('[data-panel="population"] > h2 button').getAttribute('aria-expanded') === 'false') await page.locator('[data-panel="population"] > h2 button').click();
     await page
       .getByRole("button", { name: "Toggle population 3D view" })
       .click();
@@ -265,13 +266,14 @@ try {
       info.p.h3,
     );
     await page.getByRole("button", { name: "Orlando", exact: true }).click();
+    if (await page.locator('[data-panel="population"] > h2 button').getAttribute('aria-expanded') === 'false') await page.locator('[data-panel="population"] > h2 button').click();
     await page
       .getByRole("button", { name: "Toggle population 3D view" })
       .click();
     await page.waitForTimeout(400);
     if (width < 600) {
-      const hex = await page.locator(".hexagon-panel").boundingBox();
-      const transit = await page.locator(".transit-panel").boundingBox();
+      const hex = await page.locator(".right-panels").boundingBox();
+      const transit = await page.locator(".view-controls").boundingBox();
       assert.ok(hex.y + hex.height < transit.y);
     }
     await page
@@ -306,10 +308,11 @@ try {
       },pitch>0);
       assert.ok(await page.evaluate(()=>window.deck._deck.props.layers.flat(Infinity).every(l=>l.props.beforeId==='place_city')));
     }
-    const stack=await page.locator('.demand-comparison').boundingBox();
+    const stack=await page.locator('.right-panels').boundingBox();
     assert.ok(stack.x>=0 && stack.x+stack.width<=width && stack.y>=0 && stack.y+stack.height<=height);
     await page.getByLabel('Employment opacity').scrollIntoViewIfNeeded();
     await page.getByLabel('Employment opacity').fill('0.5');
+    await page.locator('[data-panel="population"] > h2 button').click();
     await page.getByLabel('Column width').scrollIntoViewIfNeeded();
     await page.getByLabel('Column width').fill('0.5');
     assert.deepEqual(errors, []);

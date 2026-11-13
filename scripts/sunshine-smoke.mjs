@@ -73,13 +73,14 @@ try {
     await p
       .getByRole("checkbox", { name: "Existing transit", exact: true })
       .check();
+    if (await p.locator('[data-panel="transit"] > h2 button').getAttribute("aria-expanded") === "false") await p.locator('[data-panel="transit"] > h2 button').click();
     await p.getByLabel("Inspect transit", { exact: true }).waitFor();
     await panel();
     await p.locator(".network-details summary").click();
     await p
       .getByLabel("Inspect Sunshine Corridor", { exact: true })
       .selectOption("sunshine_3b");
-    const popup = p.getByRole("complementary", {
+    const popup = p.getByRole("region", {
       name: "Sunshine Corridor details",
     });
     await popup.waitFor();

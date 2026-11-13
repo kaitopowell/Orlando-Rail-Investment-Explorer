@@ -160,7 +160,7 @@ try {
     )
       await page.getByRole("button", { name: "Collapse sidebar" }).click();
     const boxes = await Promise.all(
-      [".equity-panel", ".demand-comparison", ".transit-panel"].map((s) =>
+      [".right-panels", ".view-controls"].map((s) =>
         page.locator(s).boundingBox(),
       ),
     );
@@ -171,8 +171,8 @@ try {
           b.y >= 0 &&
           b.y + b.height <= height,
       );
-    if (width < 600) assert.ok(boxes[0].y + boxes[0].height <= boxes[1].y);
-    if (width < 600) assert.ok(boxes[1].y + boxes[1].height < boxes[2].y);
+    const panels = await page.locator('.right-panel').evaluateAll(es => es.map(e => {const r=e.getBoundingClientRect();return {y:r.y,bottom:r.bottom};}).sort((a,b)=>a.y-b.y));
+    for(let i=1;i<panels.length;i++) assert.ok(panels[i-1].bottom<=panels[i].y);
     // Invoke actual layer event callbacks and verify React inspector/highlight updates.
     await page.evaluate(() => {
       const l = window.deck._deck.props.layers.flat(Infinity)[0];

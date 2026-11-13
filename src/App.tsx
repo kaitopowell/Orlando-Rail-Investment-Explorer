@@ -1,3 +1,4 @@
+import { RightPanels } from "./components/RightPanels";
 import RailPlanControls from "./components/RailPlanControls";
 import {useSunshine} from "./components/useSunshine";
 import {useRailPlan} from "./components/useRailPlan";
@@ -23,7 +24,14 @@ export default function App() {
   const [equityVisible, setEquityVisible] = useState(false);
   const [open, setOpen] = useState(() => window.innerWidth > 600);
   const sunshine = useSunshine();
-  const railPlan = useRailPlan(sunshine.enabled);
+  const railState = useRailPlan(sunshine.enabled);
+  const [activePanel, setActivePanel] = useState<string | null>("rail");
+  const [showPopulation, setShowPopulation] = useState(false);
+  const setRailPanelOpen = useCallback((open: boolean | ((previous: boolean) => boolean)) => {
+    setActivePanel(previous => (typeof open === "function" ? open(previous === "rail") : open) ? "rail" : null);
+  }, []);
+  const railPlan = {...railState, panelOpen: activePanel === "rail", setPanelOpen: setRailPanelOpen};
+  useEffect(() => { if (railState.enabled || sunshine.enabled) setActivePanel("rail"); }, [railState.enabled, sunshine.enabled]);
   useEffect(()=>{if((railPlan.enabled||sunshine.enabled)&&window.innerWidth<=600)setOpen(false);},[railPlan.enabled,sunshine.enabled]);
   useEffect(()=>{if(open&&window.innerWidth<=600)railPlan.setPanelOpen(false);},[open,railPlan.setPanelOpen]);
   const selectRail = useCallback((s:RailSelection) => { railPlan.select(s); railPlan.setPanelOpen(true); if(window.innerWidth<=600)setOpen(false); }, [railPlan.select]);
@@ -40,7 +48,7 @@ export default function App() {
   const [populationStatus, setPopulationStatus] =
     useState<PopulationStatus>("off");
   return (
-    <main>
+    <main><RightPanels active={activePanel} setActive={setActivePanel} railAvailable={railPlan.enabled || sunshine.enabled}>
       <MapView sunshine={sunshine}
         railPlan={railPlan} onRailSelect={selectRail}
         flows={flows}
@@ -57,9 +65,10 @@ export default function App() {
         sidebarOpen={open}
         countiesVisible={countiesVisible}
         populationVisible={populationVisible}
+        suppressPopulation3D={(railPlan.enabled || sunshine.enabled) && railPlan.panelOpen && !showPopulation}
         onPopulationStatus={setPopulationStatus}
       />
-      <RailPlanControls state={railPlan} sunshine={sunshine} onSelect={selectRail}/>
+      <RailPlanControls showPopulation={showPopulation} onShowPopulation={(value) => { setShowPopulation(value); if(value) setPopulationVisible(true); }} state={railPlan} sunshine={sunshine} onSelect={selectRail}/>
       <Sidebar sunshine={sunshine}
         railPlan={railPlan} onRailSelect={selectRail}
         flows={flows}
@@ -71,15 +80,18 @@ export default function App() {
         busVisible={busVisible}
         onBusToggle={() => {
           setBusVisible(!busVisible);
+          if (!busVisible) setActivePanel("bus");
         }}
         equityVisible={equityVisible}
         onEquityToggle={() => {
           setEquityVisible(!equityVisible);
+          if (!equityVisible) setActivePanel("equity");
           if (!equityVisible && window.innerWidth <= 600) setOpen(false);
         }}
         employmentVisible={employmentVisible}
         onEmploymentToggle={() => {
           setEmploymentVisible(!employmentVisible);
+          if (!employmentVisible) setActivePanel("employment");
           if (!employmentVisible) {
             if (window.innerWidth <= 600) setOpen(false);
           }
@@ -89,12 +101,14 @@ export default function App() {
         transitVisible={transitVisible}
         onTransitToggle={() => {
           setTransitVisible(!transitVisible);
+          if (!transitVisible) setActivePanel("transit");
           if (!transitVisible && window.innerWidth <= 600) setOpen(false);
         }}
         populationVisible={populationVisible}
         populationStatus={populationStatus}
         onPopulationToggle={() => {
           setPopulationVisible(!populationVisible);
+          if (!populationVisible) setActivePanel("population");
           if (!populationVisible && window.innerWidth <= 600) setOpen(false);
         }}
         open={open}
@@ -110,6 +124,6 @@ export default function App() {
           Imagining connection.
         </p>
       </div>
-    </main>
+    </RightPanels></main>
   );
 }

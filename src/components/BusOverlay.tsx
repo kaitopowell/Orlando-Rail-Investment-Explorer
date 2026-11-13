@@ -1,3 +1,4 @@
+import { RightPanel, usePanelSelection } from "./RightPanels";
 import {useEffect, useMemo, useState} from "react";
 import type {Map} from "maplibre-gl";
 import {busColors, TRANSIT_STYLE} from "../map/transitStyle";
@@ -17,6 +18,7 @@ export default function BusOverlay({map, overlay, enabled}: {map: Map; overlay: 
   const [threshold,setThreshold] = useState<Threshold>(30), [includeLymmo,setIncludeLymmo] = useState(false);
   const [showInfrequent,setShowInfrequent] = useState(false), [opacity,setOpacity] = useState<number>(TRANSIT_STYLE.bus.defaultOpacity);
   const [hovered,setHovered] = useState<LynxStop | null>(null), [selected,setSelected] = useState<LynxStop | null>(null);
+  const selectOnMap = usePanelSelection("bus", setSelected);
   useEffect(() => {
     if (!enabled || data) return;
     const controller = new AbortController(); setError(false);
@@ -31,13 +33,13 @@ export default function BusOverlay({map, overlay, enabled}: {map: Map; overlay: 
   useEffect(() => {setHovered(null);setSelected(null);}, [enabled,threshold,includeLymmo,showInfrequent]);
   useEffect(() => {
     overlay.setProps({layers: enabled && selection ? lynxLayers(selection.stops,threshold,includeLymmo,opacity,zoom,
-      hovered?.properties.stop_id ?? selected?.properties.stop_id ?? null,setHovered,setSelected) : []});
+      hovered?.properties.stop_id ?? selected?.properties.stop_id ?? null,setHovered,selectOnMap) : []});
     return () => overlay.setProps({layers:[]});
   }, [overlay,enabled,selection,threshold,includeLymmo,opacity,zoom,hovered,selected]);
   if (!enabled) return null;
   const p = (selected ?? hovered)?.properties;
   const tiers: [BusTier,string][] = [[15,"≤15 min"],[20,">15–20 min"],[30,">20–30 min"],["infrequent",`Served, >${threshold} min`]];
-  return <section className="transit-panel bus-panel" aria-label="Bus baseline layer">
+  return <RightPanel id="bus" title="Bus baseline (LYNX)" reveal={selected} className="transit-panel bus-panel" aria-label="Bus baseline layer">
     <h2>Bus baseline (LYNX)</h2>
     <label>Frequent threshold<select aria-label="Bus frequent threshold" value={threshold} onChange={e => setThreshold(Number(e.target.value) as Threshold)}>
       {[15,20,30].map(t => <option key={t} value={t}>{t} minutes</option>)}</select></label>
@@ -68,5 +70,5 @@ export default function BusOverlay({map, overlay, enabled}: {map: Map; overlay: 
       <p>{busNote}</p>
     </div>}
     <p>{busNote}</p>
-  </section>;
+  </RightPanel>;
 }

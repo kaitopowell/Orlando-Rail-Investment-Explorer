@@ -1,3 +1,4 @@
+import { RightPanel, usePanelSelection } from "./RightPanels";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Map } from "maplibre-gl";
 import type { MapboxOverlay } from "@deck.gl/mapbox";
@@ -15,6 +16,7 @@ export default function EmploymentBlocks({map, overlay, sourceControl}: {
   const [hovered, setHovered] = useState<JobBlock | null>(null), [selected, setSelected] = useState<JobBlock | null>(null);
   const [query, setQuery] = useState("");
   const stats = useMemo(() => data ? blockStats(data) : null, [data]);
+  const selectOnMap = usePanelSelection("employment", setSelected);
   useEffect(() => {
     const controller = new AbortController();
     setError(false);
@@ -26,11 +28,11 @@ export default function EmploymentBlocks({map, overlay, sourceControl}: {
   }, [retry]);
   useEffect(() => {
     overlay.setProps({effects: [], layers: data && stats ? employmentBlockLayers(data, stats, scale, exag, clip, opacity,
-      hovered?.properties.w_geocode ?? selected?.properties.w_geocode ?? null, setHovered, setSelected) : []});
+      hovered?.properties.w_geocode ?? selected?.properties.w_geocode ?? null, setHovered, selectOnMap) : []});
     return () => overlay.setProps({layers: [], effects: []});
   }, [overlay, data, stats, scale, exag, clip, opacity, hovered, selected]);
   const inspected = hovered ?? selected;
-  return <section className="population-panel employment-panel employment-blocks-panel" aria-label="Employment layer">
+  return <RightPanel reveal={selected} id="employment" title="Employment" className="population-panel employment-panel employment-blocks-panel" aria-label="Employment layer">
     <header><h2>Employment · 2023</h2><button aria-label="Toggle employment 3D view"
       onClick={() => map.easeTo({pitch: 0, duration: 0})}>2D / 3D</button></header>
     {sourceControl}
@@ -67,5 +69,5 @@ export default function EmploymentBlocks({map, overlay, sourceControl}: {
       <p>{blockSource}</p>
     </div>}
     <p className="population-source">{blockSource}</p>
-  </section>;
+  </RightPanel>;
 }

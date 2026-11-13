@@ -1,3 +1,4 @@
+import { RightPanel, usePanelSelection } from "./RightPanels";
 import { useEffect, useMemo, useState } from "react";
 import type { Map } from "maplibre-gl";
 import type { MapboxOverlay } from "@deck.gl/mapbox";
@@ -31,6 +32,7 @@ export default function EquityOverlay({
   const [measure, setMeasure] = useState<EquityMeasure>("pct_zero_vehicle"),
     [selected, setSelected] = useState<EquityTract | null>(null),
     [hovered, setHovered] = useState<EquityTract | null>(null);
+  const selectOnMap = usePanelSelection("equity", setSelected);
   useEffect(() => {
     if (!enabled) {
       setSelected(null);
@@ -68,7 +70,7 @@ export default function EquityOverlay({
               breaks,
               hovered?.properties.GEOID ?? selected?.properties.GEOID ?? null,
               setHovered,
-              setSelected,
+              selectOnMap,
             )
           : [],
     });
@@ -79,7 +81,7 @@ export default function EquityOverlay({
   const unit = (v: number | null, income = false) =>
     v === null ? format(v) : income ? `$${format(v)}` : `${format(v)}%`;
   return (
-    <section
+    <RightPanel reveal={selected} id="equity" title="Equity"
       className="population-panel equity-panel"
       aria-label="Equity layer"
     >
@@ -221,6 +223,6 @@ export default function EquityOverlay({
           Shares are estimates with sampling error.
         </p>
       </details>
-    </section>
+    </RightPanel>
   );
 }

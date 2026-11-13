@@ -1,3 +1,4 @@
+import { usePanelSelection } from "./RightPanels";
 import { POPULATION_DISPLAY, populationValues, populationDisplaySettings } from "../map/populationDisplay";
 import { useEffect, useMemo, useState } from "react";
 import { pillarDefaults } from "../data/kontur3d";
@@ -14,6 +15,7 @@ import type { PopulationStatus } from "./PopulationOverlay";
 let cached: HexData | null = null;
 export default function HexPopulation({
   overlay,
+  suppress3D = false,
   is3D,
   zoom,
   beforeId,
@@ -21,6 +23,7 @@ export default function HexPopulation({
 }: {
   overlay: Pick<MapboxOverlay, "setProps">;
   is3D: boolean;
+  suppress3D?: boolean;
   zoom: number;
   beforeId?: string;
   onStatus: (status: PopulationStatus) => void;
@@ -41,6 +44,7 @@ export default function HexPopulation({
     [data],
   );
   const settings = useMemo(() => populationDisplaySettings(values, emphasis), [values, emphasis]);
+  const selectOnMap = usePanelSelection("population", setSelected);
   useEffect(() => {
     if (data) {
       onStatus("ready");
@@ -71,10 +75,10 @@ export default function HexPopulation({
     return () => abort.abort();
   }, [data, retry, onStatus]);
   useEffect(() => {
-    overlay.setProps({ effects: [], layers: data ? hexPopulationLayers(data, is3D, zoom, settings,
-      scale, exaggeration, coverage, beforeId, setHovered, setSelected) : [] });
+    overlay.setProps({ effects: [], layers: data && !(is3D && suppress3D) ? hexPopulationLayers(data, is3D, zoom, settings,
+      scale, exaggeration, coverage, beforeId, setHovered, selectOnMap) : [] });
     return () => overlay.setProps({ layers: [], effects: [] });
-  }, [overlay, data, is3D, zoom, settings, scale, exaggeration, coverage, beforeId]);
+  }, [suppress3D, overlay, data, is3D, zoom, settings, scale, exaggeration, coverage, beforeId]);
   const display = (value: number | null) =>
     value === null
       ? "Unavailable"

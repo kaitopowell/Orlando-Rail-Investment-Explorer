@@ -1,3 +1,4 @@
+import { RightPanel } from "../components/RightPanels";
 import { useEffect, useState } from "react";
 import type { Map as MapLibreMap } from "maplibre-gl";
 import type { MapboxOverlay } from "@deck.gl/mapbox";
@@ -55,7 +56,7 @@ export default function SunshineOverlay({
     if (!state.enabled) setHovered(null);
   }, [state.enabled]);
   return state.enabled && state.selected ? (
-    <aside className="sunshine-popup" aria-label="Sunshine Corridor details">
+    <RightPanel id="sunshine-inspection" title="Sunshine Corridor details" autoOpen className="sunshine-popup" aria-label="Sunshine Corridor details">
       <button
         aria-label="Close Sunshine Corridor details"
         onClick={() => state.select(null)}
@@ -63,6 +64,6 @@ export default function SunshineOverlay({
         ×
       </button>
       <SunshineDetails item={state.selected} />
-    </aside>
+    </RightPanel>
   ) : null;
 }

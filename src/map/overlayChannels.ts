@@ -24,6 +24,7 @@ export function overlayChannels(overlay: MapboxOverlay, labelLayerId?: string) {
       const pillars = layers.some(
         (layer) => layer.id === "population-hexagon-pillars" || layer.id === "employment-block-needles",
       );
+      const railPlanActive = layers.some(layer => layer.id.startsWith("rail-plan-"));
       const transitActive = layers.some(layer => layer.id === "lynx-stops" || layer.id.startsWith("transit-"));
       overlay.setProps({
         // Equity stays below Population even when pillars move below map labels.
@@ -33,7 +34,7 @@ export function overlayChannels(overlay: MapboxOverlay, labelLayerId?: string) {
           layer.id === "rail-plan-labels" ? layer.clone({ beforeId: undefined }) :
           // Transit and demand share a slot below labels and county outlines,
           // preserving demand < bus < rail order even across overlay updates.
-          (layer.id.startsWith("candidate-") || layer.id.startsWith("flow-") || layer.id.startsWith("rail-plan-") || layer.id.startsWith("sunshine-") || transitActive || layers.some(l => l.id.startsWith("population-hexagon")))
+          (layer.id.startsWith("candidate-") || layer.id.startsWith("flow-") || layer.id.startsWith("rail-plan-") || layer.id.startsWith("sunshine-") || transitActive || railPlanActive || layers.some(l => l.id.startsWith("population-hexagon")))
             ? layer.clone({ beforeId: labelLayerId })
             : layer.id === "equity-tracts" || layer.id === "employment-block-needles"
               ? layer.clone({ beforeId: pillars ? labelLayerId : undefined })

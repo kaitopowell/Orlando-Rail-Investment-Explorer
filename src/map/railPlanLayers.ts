@@ -5,7 +5,7 @@ import type { RailSelection } from "../data/railPlan";
 import type { RailState } from "../components/useRailPlan";
 import {
   displayStations,
-  stationName,
+  stationLabels,
   LINE_PALETTE,
   rgb,
   type DisplayStation,
@@ -55,6 +55,7 @@ export function railPlanLayers(
     {
       idPrefix: "rail-plan",
       linesOnly: true,
+      coreAlpha: 255,
       rounded: state.drawing === "schematic",
       widthScale: state.drawing === "schematic" ? 1.5 : 1,
       colorFor: (id) => {
@@ -111,7 +112,7 @@ export function railPlanLayers(
       id: "rail-plan-labels",
       data: labels,
       getPosition: (n) => [n.lon, n.lat],
-      getText: (n) => stationName(n.name),
+      getText: (n) => n.label,
       getPixelOffset: (n) => n.offset,
       getSize: 12,
       getColor: [230, 237, 242, 255],
@@ -130,15 +131,27 @@ export function railPlanLayers(
 function placeStationLabels(stations: DisplayStation[], map: MapLibreMap) {
   const ctx = document.createElement("canvas").getContext("2d")!;
   ctx.font = "600 12px Arial";
+  const eligible = stations.filter((n) => {
+    if (!n.degree || (n.kind === "pass" && map.getZoom() < 12)) return false;
+    const p = map.project([n.lon, n.lat]);
+    return (
+      p.x >= 0 &&
+      p.y >= 0 &&
+      p.x <= map.getCanvas().clientWidth &&
+      p.y <= map.getCanvas().clientHeight
+    );
+  });
+  const names = stationLabels(eligible);
   const boxes: { x: number; y: number; w: number; h: number }[] = [],
-    labels: (DisplayStation & { offset: [number, number] })[] = [];
+    labels: (DisplayStation & { label: string; offset: [number, number] })[] =
+      [];
   const priority = { interchange: 3, terminus: 2, pass: 1, existing: 0 };
-  for (const n of [...stations].sort(
+  for (const n of [...eligible].sort(
     (a, b) => priority[b.kind] - priority[a.kind] || a.id.localeCompare(b.id),
   )) {
     if (!n.degree || (n.kind === "pass" && map.getZoom() < 12)) continue;
     const p = map.project([n.lon, n.lat]),
-      w = ctx.measureText(stationName(n.name)).width + 8,
+      w = ctx.measureText(names.get(n.id)!).width + 8,
       h = 20;
     for (const offset of [
       [0, -18],
@@ -167,7 +180,7 @@ function placeStationLabels(stations: DisplayStation[], map: MapLibreMap) {
       )
         continue;
       boxes.push(b);
-      labels.push({ ...n, offset });
+      labels.push({ ...n, label: names.get(n.id)!, offset });
       break;
     }
   }
