@@ -84,9 +84,11 @@ This changes the display, never the modeled population values.
 In 3D, tapered needles share Employment's tip-fading shader, with 0.8-pixel
 base radii at width 0.35. Height is 4,000 display metres × exaggeration × display
 value, with an 8 m × exaggeration floor for positive values; default exaggeration
-is 1×. In 2D, small soft circles use the same display value for radius and color.
-Only the top 10% receive a faint halo. A very-dark-teal → neon cyan-green ramp
+is 1×. Only the top 10% receive a faint halo. The 3D very-dark-teal → neon cyan-green ramp
 and bounded alpha blending prevent Population overlaps from clipping to white.
+
+Population's flat view uses a quiet blue-grey to violet-grey percentile-stretched ramp (lighter means more modeled people per hexagon), without glow. Its density opacity runs from 5% to 35%, multiplied by 60% while the proposed rail plan is visible. In Population → Population display settings, **Population opacity** overrides that multiplier; **Use automatic opacity** restores rail-aware dimming. The 3D palette and Employment styling are unchanged.
+In 2D, small soft circles use the same display value for radius and color.
 Basemap labels stay above the data. Controls and inspectors remain usable with
 Employment enabled. All 7,896 source hexagons remain inspectable, including faint
 low values; the H3 IDs, centers and data are unchanged. These are modeled estimates,

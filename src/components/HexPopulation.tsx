@@ -1,5 +1,5 @@
 import { usePanelSelection } from "./RightPanels";
-import { POPULATION_DISPLAY, populationValues, populationDisplaySettings } from "../map/populationDisplay";
+import { POPULATION_2D, population2DRampCss, POPULATION_DISPLAY, populationValues, populationDisplaySettings } from "../map/populationDisplay";
 import { useEffect, useMemo, useState } from "react";
 import { pillarDefaults } from "../data/kontur3d";
 import { hexPopulationLayers } from "../map/hexPopulationLayers";
@@ -16,6 +16,7 @@ let cached: HexData | null = null;
 export default function HexPopulation({
   overlay,
   suppress3D = false,
+  railVisible = false,
   is3D,
   zoom,
   beforeId,
@@ -24,6 +25,7 @@ export default function HexPopulation({
   overlay: Pick<MapboxOverlay, "setProps">;
   is3D: boolean;
   suppress3D?: boolean;
+  railVisible?: boolean;
   zoom: number;
   beforeId?: string;
   onStatus: (status: PopulationStatus) => void;
@@ -38,6 +40,8 @@ export default function HexPopulation({
     [hovered, setHovered] = useState<Hex | null>(null),
     [query, setQuery] = useState("");
   const [emphasis, setEmphasis] = useState<number>(POPULATION_DISPLAY.emphasisDefault);
+  const [opacityOverride, setOpacityOverride] = useState<number | null>(null);
+  const opacity2D = opacityOverride ?? (railVisible ? POPULATION_2D.autoRailOpacity : POPULATION_2D.normalOpacity);
   const values = useMemo(
     () =>
       data ? populationValues(data) : [],
@@ -76,9 +80,9 @@ export default function HexPopulation({
   }, [data, retry, onStatus]);
   useEffect(() => {
     overlay.setProps({ effects: [], layers: data && !(is3D && suppress3D) ? hexPopulationLayers(data, is3D, zoom, settings,
-      scale, exaggeration, coverage, beforeId, setHovered, selectOnMap) : [] });
+      scale, exaggeration, coverage, beforeId, setHovered, selectOnMap, opacity2D) : [] });
     return () => overlay.setProps({ layers: [], effects: [] });
-  }, [suppress3D, overlay, data, is3D, zoom, settings, scale, exaggeration, coverage, beforeId]);
+  }, [opacity2D, suppress3D, overlay, data, is3D, zoom, settings, scale, exaggeration, coverage, beforeId]);
   const display = (value: number | null) =>
     value === null
       ? "Unavailable"
@@ -89,7 +93,7 @@ export default function HexPopulation({
         <div
           aria-hidden="true"
           style={{
-            background: hexRampCss,
+            background: is3D ? hexRampCss : population2DRampCss,
             height: 6,
             borderRadius: 3,
             marginBottom: 8,
@@ -99,7 +103,14 @@ export default function HexPopulation({
         <br />
         Modeled estimate, Kontur Population · people per hexagon.
         <br />
-        Color: very dark teal → neon cyan-green. Height, color and opacity use the same stretched display value. Basemap labels draw above the data.
+        {is3D ? "Color: very dark teal → neon cyan-green. Height, color and opacity use the same stretched display value." : "Color: dark blue-grey → muted violet-grey; lighter circles mean more people per hexagon on the percentile-stretched scale. Opacity ranges from 5% to 35% before the opacity control."} Basemap labels draw above the data.
+        {!is3D && <details><summary>Population display settings</summary>
+          <label>Population opacity: {Math.round(opacity2D * 100)}% {opacityOverride === null ? "(automatic)" : "(manual)"}
+            <input aria-label="Population opacity" type="range" min="0" max="100" step="1" value={Math.round(opacity2D * 100)} onChange={e => setOpacityOverride(Number(e.target.value) / 100)} />
+          </label>
+          <button onClick={() => setOpacityOverride(null)}>Use automatic opacity</button>
+          <p>Automatic: 60% with the rail plan visible, 100% otherwise. This multiplies the density opacity, without changing population values.</p>
+        </details>}
         {is3D ? " Thin needles fade from a bright base to a transparent tip." : " Small soft circles: radius uses the stretched display value and adapts to zoom."}
         <label>
           Display emphasis: {emphasis}%
@@ -110,7 +121,7 @@ export default function HexPopulation({
           Display setting only; does not change the data. Floor: {Math.round(settings.floorPercentile*100)}th percentile
           ({display(settings.floor)} people); ceiling: 95th percentile ({display(settings.ceiling)} people).
           Power: {settings.gamma.toFixed(1)}. Below-floor values nearly vanish; above-ceiling values share the brightest display value.
-          Glow is limited to the top 10%. Inspect any H3 ID for its original value.
+          {is3D ? "Glow is limited to the top 10%." : "No glow in 2D."} Inspect any H3 ID for its original value.
         </p>
         <label>
           Height scale

@@ -102,6 +102,14 @@ export function transitLayers<T extends RenderItem = TransitItem>(
         },
       }),
   );
+  lineLayers.unshift(new GeoJsonLayer<T["properties"]>({
+    id: `${prefix}-casing`, data: {type: "FeatureCollection", features: lines},
+    parameters: TRANSIT_ALPHA_BLEND,
+    getLineColor: f => [8, 16, 23, 255 * (options?.opacityFor?.(f.properties.id) ?? 1)],
+    getLineWidth: f => (3.5 + (highlighted === f.properties.id || options?.highlightFor?.(f.properties.id) ? TRANSIT_STYLE.rail.highlightWidth : 0)) * (options?.widthScale ?? 1),
+    lineWidthUnits: "pixels", lineJointRounded: true, lineCapRounded: true,
+    pickable: false, updateTriggers: {getLineColor: [options], getLineWidth: [highlighted, options]},
+  }));
   if (options?.linesOnly) return lineLayers;
   return [
     ...lineLayers,
@@ -150,7 +158,7 @@ export function transitLayers<T extends RenderItem = TransitItem>(
       getAlignmentBaseline: "bottom",
       fontFamily: "sans-serif",
       fontSettings: { sdf: true },
-      outlineWidth: 3,
+      outlineWidth: 2,
       outlineColor: [5, 12, 17, 255],
       pickable: false,
     }),

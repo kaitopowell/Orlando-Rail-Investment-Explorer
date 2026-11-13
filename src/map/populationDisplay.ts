@@ -46,3 +46,17 @@ export function populationDisplayColor(t: number, alpha: number): [number,number
   const rgb=ramp[i].map((v,c)=>Math.round(v+(ramp[i+1][c]-v)*(x-i)));
   return [rgb[0],rgb[1],rgb[2],Math.round(2+(alpha-2)*Math.pow(t,1.2))];
 }
+
+// Flat-view background only; the needle palette and Employment are unchanged.
+export const POPULATION_2D = {
+  autoRailOpacity: .6, normalOpacity: 1,
+  alphaLow: .05, alphaHigh: .35,
+  ramp: [[25, 29, 40], [45, 48, 63], [66, 68, 87], [91, 91, 111], [118, 115, 137]],
+} as const;
+export const population2DRampCss = `linear-gradient(to right, ${POPULATION_2D.ramp.map(c => `rgb(${c.join(",")})`).join(",")})`;
+export function population2DColor(t: number): [number, number, number, number] {
+  const ramp = POPULATION_2D.ramp, x = Math.max(0, Math.min(1, t)) * (ramp.length - 1);
+  const i = Math.min(ramp.length - 2, Math.floor(x));
+  const rgb = ramp[i].map((v, c) => Math.round(v + (ramp[i + 1][c] - v) * (x - i)));
+  return [rgb[0], rgb[1], rgb[2], Math.round(255 * (POPULATION_2D.alphaLow + (POPULATION_2D.alphaHigh - POPULATION_2D.alphaLow) * t))];
+}
