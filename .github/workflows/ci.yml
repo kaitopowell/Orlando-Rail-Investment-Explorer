@@ -25,5 +25,7 @@ jobs:
       - run: npm ci
 
       # same checks Codex runs before it opens a PR
+      - run: npm run lint
+      - run: npm run test:usefulness
       - run: npm run check
       - run: npm run build

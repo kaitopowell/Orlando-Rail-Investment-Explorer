@@ -67,14 +67,9 @@ try {
           .some((l) => l.id.startsWith("population-hexagon")),
     );
     assert.equal(await p.getByLabel("Inspect H3 ID").isVisible(), false);
-    assert.match(
-      await p.locator(".rail-summary").innerText(),
-      /Average 22.3 min saved across the 267,793 commuters who have a transit option today \(commute pairs we model only\)/,
-    );
-    assert.match(
-      await p.locator(".rail-summary p[title]").getAttribute("title"),
-      /not the saving of a typical commuter/,
-    );
+    assert.match(await p.locator(".rail-summary").innerText(), /142,000 commuters save 20\+ min/);
+    assert.match(await p.locator(".rail-summary").innerText(), /Not a traffic forecast/);
+    await p.locator(".network-details > summary").click();
     await p.getByLabel("Show population", { exact: true }).check();
     await p.waitForFunction(() =>
       window.deck._deck.props.layers

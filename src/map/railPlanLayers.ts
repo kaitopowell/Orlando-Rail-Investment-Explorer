@@ -1,3 +1,4 @@
+import { commuteLayers } from "./commuteLayers";
 import { ScatterplotLayer, TextLayer } from "@deck.gl/layers";
 import type { Feature, LineString } from "geojson";
 import type { Map as MapLibreMap } from "maplibre-gl";
@@ -71,6 +72,7 @@ export function railPlanLayers(
   );
   return [
     ...lines,
+    ...commuteLayers(state),
     new ScatterplotLayer<DisplayStation>({
       id: "rail-plan-stations",
       data: stations,

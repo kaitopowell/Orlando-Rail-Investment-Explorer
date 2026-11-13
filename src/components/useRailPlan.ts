@@ -1,3 +1,4 @@
+import { shortestRailPath } from "../data/railUsefulness";
 import { useEffect, useMemo, useState } from "react";
 import {
   budgetStops,
@@ -20,6 +21,8 @@ export function useRailPlan(needed = false) {
     [measure, setMeasure] = useState<Measure>("minutes_saved"),
     [ratio, setRatio] = useState(2),
     [budget, setBudget] = useState(DEFAULT_BUDGET);
+  const [speed, setSpeed] = useState<20 | 30>(20);
+  const [commute, setCommute] = useState({ from: "", to: "" });
   const [core, setCore] = useState(false),
     [drawing, setDrawing] = useState<"schematic" | "geographic">("schematic"),
     [hoverLine, setHoverLine] = useState<string | null>(null),
@@ -40,11 +43,24 @@ export function useRailPlan(needed = false) {
       disposed = true;
     };
   }, [enabled, needed, data, attempt]);
-  const id = scenarioId(cost, overhead, measure, ratio),
+  const id = scenarioId(cost, overhead, measure, ratio, speed),
     scenario = data?.plan.scenarios.find((s) => s.id === id);
   const network = useMemo(
     () => (data && scenario ? networkAt(data.plan, scenario, budget) : null),
     [data, scenario, budget],
+  );
+  const route = useMemo(
+    () =>
+      data && scenario
+        ? shortestRailPath(
+            data.plan,
+            scenario,
+            budget,
+            commute.from,
+            commute.to,
+          )
+        : null,
+    [data, scenario, budget, commute],
   );
   const stops = useMemo(
     () =>
@@ -61,6 +77,11 @@ export function useRailPlan(needed = false) {
     setHoverLine(null);
   }, [id, budget, enabled, core]);
   return {
+    speed,
+    setSpeed,
+    commute,
+    setCommute,
+    route,
     enabled,
     setEnabled,
     data,
