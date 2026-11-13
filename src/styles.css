@@ -1020,3 +1020,64 @@ main .demand-comparison > .population-panel {
     z-index: 8;
   }
 }
+
+/* All right-hand controls share a single opaque, independently scrolling accordion. */
+.right-panels {
+  position: absolute;
+  z-index: 6;
+  top: 80px;
+  right: 20px;
+  bottom: 180px;
+  width: min(360px, calc(100vw - 40px));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  pointer-events: none;
+}
+.right-panels:empty { display: none; }
+.right-panels > .right-panel {
+  position: static;
+  flex: none;
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  background: #101c24;
+  border: 1px solid #50616c;
+  border-radius: 8px;
+  pointer-events: auto;
+}
+.right-panel-heading { margin: 0; font-size: 14px; }
+.right-panel-heading > button {
+  float: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 12px;
+  border: 0;
+  border-radius: 8px;
+  color: #d4e1e6;
+  background: #101c24;
+  text-align: left;
+  cursor: pointer;
+}
+.right-panel-heading > button:focus-visible { outline: 2px solid #7de1dc; outline-offset: -3px; }
+.right-panel-body { padding: 0 12px 12px; }
+.right-panel-body[hidden] { display: none; }
+.right-panel-body > header h2 { font-size: 12px; }
+.right-panels .rail-population { display: flex; align-items: center; gap: 8px; margin: 4px 0 10px; }
+.right-panels .rail-population input { width: auto; }
+@media (max-width: 600px) {
+  .right-panels { top: 90px; right: 12px; width: calc(100vw - 24px); bottom: 170px; }
+}
+/* The old grouping wrappers now contain portals, not positioned panel boxes. */
+.demand-comparison, .transit-stack { display: contents; }

@@ -1,3 +1,4 @@
+import { RightPanel, usePanelSelection } from "./RightPanels";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { Map } from "maplibre-gl";
 import type { MapboxOverlay } from "@deck.gl/mapbox";
@@ -67,6 +68,7 @@ function TractEmploymentOverlay({
       }),
     [],
   );
+  const selectOnMap = usePanelSelection("employment", setSelected);
   useEffect(() => {
     const update = () =>
       setCamera({ pitch: map.getPitch(), zoom: map.getZoom() });
@@ -114,7 +116,7 @@ function TractEmploymentOverlay({
               exag,
               hovered?.properties.GEOID ?? selected?.properties.GEOID ?? null,
               setHovered,
-              setSelected,
+              selectOnMap,
             )
           : [],
     });
@@ -137,7 +139,7 @@ function TractEmploymentOverlay({
       ? "Unavailable"
       : v.toLocaleString("en-US", { maximumFractionDigits: 1 });
   return (
-    <section
+    <RightPanel reveal={selected} id="employment" title="Employment"
       className="population-panel employment-panel"
       aria-label="Employment layer"
     >
@@ -281,6 +283,6 @@ function TractEmploymentOverlay({
         <br />
         Accessed 2026-10-15.
       </p>
-    </section>
+    </RightPanel>
   );
 }

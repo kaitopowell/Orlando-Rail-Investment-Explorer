@@ -14,6 +14,7 @@ type RenderItem = Feature<
   { id: string; name: string }
 >;
 export type TransitLayerOptions = {
+  coreAlpha?: number;
   colorFor?: (id: string) => {
     color: [number, number, number];
     core: [number, number, number];
@@ -76,7 +77,7 @@ export function transitLayers<T extends RenderItem = TransitItem>(
         parameters: TRANSIT_ALPHA_BLEND,
         getLineColor: (f) => [
           ...(pass.id === "core" ? palette(f).core : palette(f).color),
-          (pass.id === "core" &&
+          (pass.id === "core" && options?.coreAlpha !== undefined ? options.coreAlpha : pass.id === "core" &&
           (highlighted === f.properties.id ||
             options?.highlightFor?.(f.properties.id))
             ? TRANSIT_STYLE.rail.highlightAlpha

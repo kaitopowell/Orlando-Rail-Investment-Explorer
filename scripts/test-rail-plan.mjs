@@ -10,6 +10,7 @@ import { schematicPath, project } from "../src/map/schematic.ts";
 import {
   displayStations,
   stationName,
+  stationLabels,
   LINE_PALETTE,
 } from "../src/data/networkDisplay.ts";
 const read = (n) => JSON.parse(readFileSync(`public/data/${n}`));
@@ -121,3 +122,17 @@ for (const mutate of [
 console.log(
   "PASS connected network: 24 scenarios, published totals, unique ownership, visible failure on duplicates/missing owners, monotonic budgets/stable names and colors, core intersection, station roles, Mercator octilinearity/exact endpoints/reversal/straight-end rule",
 );
+
+const names = stationLabels([
+  {id:"west", name:"Oviedo (west)"}, {id:"east", name:"Oviedo (southeast)"},
+  {id:"single", name:"Orlando (central)"},
+  {id:"sand", name:"Sand Lake Rd"}, {id:"sand", name:"Sand Lake Road"},
+  {id:"other-sand", name:"Sand Lake Rd"},
+]);
+assert.equal(names.get("west"), "Oviedo (west)");
+assert.equal(names.get("east"), "Oviedo (southeast)");
+assert.equal(names.get("single"), "Orlando");
+assert.equal(names.size, 5);
+assert.equal(names.get("sand"), "Sand Lake Road");
+assert.equal(names.get("other-sand"), "Sand Lake Rd");
+console.log("PASS ambiguous station labels: preserve qualifiers, deduplicate only identical IDs, retain separate Sand Lake nodes");

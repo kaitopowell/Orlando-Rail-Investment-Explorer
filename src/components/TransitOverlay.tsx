@@ -1,3 +1,4 @@
+import { RightPanel, usePanelSelection } from "./RightPanels";
 import { useEffect, useMemo, useState } from "react";
 import type { Map } from "maplibre-gl";
 import type { MapboxOverlay } from "@deck.gl/mapbox";
@@ -25,6 +26,7 @@ export default function TransitOverlay({
   const [hovered, setHovered] = useState<TransitItem | null>(null);
   const [zoom, setZoom] = useState(map.getZoom());
   const [pulse, setPulse] = useState(1);
+  const selectOnMap = usePanelSelection("transit", setSelected);
   useEffect(() => {
     if (!enabled) {
       setSelected(null);
@@ -73,12 +75,12 @@ export default function TransitOverlay({
   const trainPaths = useMemo(() => prepareTrainPaths(items), [items]);
   const baseLayers = useMemo(() => enabled && !error ? transitLayers(
     items, hovered?.properties.id ?? selected?.properties.id ?? null,
-    pulse, zoom, setHovered, setSelected,
+    pulse, zoom, setHovered, selectOnMap,
   ) : [], [enabled, error, items, hovered, selected, pulse, zoom]);
   useTrainMotion(overlay, baseLayers, trainPaths, enabled && !error && motionEnabled, motionPaused);
   if (!enabled) return null;
   return (
-    <section className="transit-panel" aria-label="Existing transit layer">
+    <RightPanel id="transit" title="Existing transit" reveal={selected} className="transit-panel" aria-label="Existing transit layer">
       <h2>Existing transit</h2>
       <div className="transit-legend">
         <span style={{ color: "#ff8a1f" }}>● SunRail</span>
@@ -136,6 +138,6 @@ export default function TransitOverlay({
           )}
         </>
       )}
-    </section>
+    </RightPanel>
   );
 }

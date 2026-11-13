@@ -184,6 +184,21 @@ is retained but is no longer requested. Default: $10B, low cost, 20-minute wait/
 overhead, minutes saved, **Schematic**. Budget stops include each completed build
 step and the published budgets. Budget and actual spend are shown separately.
 
+Right-side layer controls and inspection panels share one opaque, independently
+scrolling accordion, clear of the basemap badge and bottom map controls. Opening
+one section closes the others; Rail network opens by default when enabled. Layer
+settings remain intact when their section closes. With Rail network open,
+Population's 3D columns are hidden by default; **Show population** restores them.
+Closing Rail network restores the population display; its 2D rendering is unchanged.
+
+The minutes-saved summary is an average across all modeled commuters with a transit
+option today, including those with no saving, not the saving of a typical commuter.
+Hover the score line for its explanation. Station names retain parentheses when
+stripping them would make visible names ambiguous. Distinct station IDs remain
+separate, including Sand Lake Rd/Road; collision priority still suppresses labels.
+Proposed line cores are fully opaque except when another line is emphasized in
+Lines. Closing Lines or Rail network clears that emphasis.
+
 Line names and palette indices come from the scenario and stay fixed as the budget
 changes. The Lines list contains only lines with built links; hover or keyboard
 focus emphasizes a line. Core network only filters the drawing to built links in

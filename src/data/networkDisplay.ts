@@ -60,3 +60,24 @@ export function displayStations(
       };
     });
 }
+
+// Only identical node IDs denote the same station. Do not merge distinct nodes
+// simply because their names (including Rd/Road spellings) happen to match.
+export function stationLabels(
+  nodes: Pick<RailNode, "id" | "name">[],
+): Map<string, string> {
+  const unique = [...new Map(nodes.map((n) => [n.id, n])).values()];
+  const key = (name: string) =>
+    stationName(name)
+      .toLowerCase()
+      .replace(/\brd\.?\b/g, "road");
+  const counts = new Map<string, number>();
+  for (const n of unique)
+    counts.set(key(n.name), (counts.get(key(n.name)) ?? 0) + 1);
+  return new Map(
+    unique.map((n) => [
+      n.id,
+      counts.get(key(n.name))! > 1 ? n.name : stationName(n.name),
+    ]),
+  );
+}

@@ -189,7 +189,7 @@ try {
       );
       // Move panel away from the map center only via its normal close-free location;
       // click a visible polygon point to the left of the panel on a phone.
-      const clickPoint = width < 600 ? { x: 70, y: height / 2 } : point;
+      const clickPoint = width < 600 ? { x: 6, y: height / 2 } : point;
       if (width < 600)
         await page.evaluate(
           ({ point, clickPoint }) =>

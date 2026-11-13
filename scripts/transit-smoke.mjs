@@ -97,6 +97,7 @@ try {
       blend: "one-minus-src-alpha",
       before: "county-outlines",
     });
+    if (await page.locator('[data-panel="transit"] > h2 button').getAttribute("aria-expanded") === "false") await page.locator('[data-panel="transit"] > h2 button').click();
     await page.getByRole("button", { name: "Close transit details" }).click();
     // Actual station pick/click above Population, with UI kept away from the target.
     await page.evaluate(() =>
@@ -135,6 +136,8 @@ try {
       }),
     );
     await page.waitForTimeout(300);
+    // The accordion now spans the phone width; collapse it before map picking.
+    for (const header of await page.locator('.right-panel-heading button[aria-expanded="true"]').all()) await header.click();
     const target = { x: width < 600 ? 65 : 720, y: 450 };
     await page.evaluate((target) => {
       const p = window.map.project([-81.307619, 28.411698]);
@@ -147,6 +150,7 @@ try {
       await page.getByLabel("Transit details", { exact: true }).innerText(),
       /Orlando/,
     );
+    if (await page.locator('[data-panel="transit"] > h2 button').getAttribute("aria-expanded") === "false") await page.locator('[data-panel="transit"] > h2 button').click();
     await page.getByRole("button", { name: "Close transit details" }).click();
     await page
       .getByRole("button", { name: "Four counties", exact: true })
@@ -157,7 +161,7 @@ try {
     if (!process.env.SOL_R_REUSE_SCREENSHOTS || !existsSync(screenshot))
       await page.screenshot({ path: screenshot });
     if (width < 600) {
-      const panel = await page.locator(".transit-panel").boundingBox();
+      const panel = await page.locator(".right-panels").boundingBox();
       const controls = await page.locator(".view-controls").boundingBox();
       assert.ok(panel.y + panel.height < controls.y);
     }

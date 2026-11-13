@@ -1,3 +1,4 @@
+import { RightPanel, usePanelSelection } from "./RightPanels";
 import { useEffect, useMemo, useState } from "react";
 import HexPopulation from "./HexPopulation";
 import type { Map } from "maplibre-gl";
@@ -28,12 +29,14 @@ export default function PopulationOverlay({
   map,
   overlay,
   enabled,
+  suppress3D = false,
   beforeId,
   onStatus,
 }: {
   map: Map;
   overlay: Pick<MapboxOverlay, "setProps">;
   enabled: boolean;
+  suppress3D?: boolean;
   beforeId?: string;
   onStatus: (status: PopulationStatus) => void;
 }) {
@@ -44,6 +47,7 @@ export default function PopulationOverlay({
   const [selected, setSelected] = useState<Tract | null>(null);
   const [retry, setRetry] = useState(0);
   const [is3D, setIs3D] = useState(() => map.getPitch() > 0);
+  const selectOnMap = usePanelSelection("population", setSelected);
   useEffect(() => {
     const update = () => setIs3D(map.getPitch() > 0);
     map.on("pitch", update);
@@ -136,13 +140,13 @@ export default function PopulationOverlay({
     overlay.setProps({
       effects: is3D ? [lighting] : [],
       layers:
-        enabled && data
+        enabled && data && !(is3D && suppress3D)
           ? populationLayers(
               data,
               columns,
               hovered?.properties.GEOID ?? selected?.properties.GEOID ?? null,
               setHovered,
-              setSelected,
+              selectOnMap,
               zoom,
               is3D,
             )
@@ -150,6 +154,7 @@ export default function PopulationOverlay({
     });
     return () => overlay.setProps({ layers: [], effects: [] });
   }, [
+    suppress3D,
     enabled,
     data,
     columns,
@@ -170,7 +175,7 @@ export default function PopulationOverlay({
   }, []);
   if (!enabled) return null;
   return (
-    <section
+    <RightPanel reveal={selected} id="population" title="Population"
       className={`population-panel ${source === "hexagons" ? "hexagon-panel" : ""}`}
       aria-label="Population layer"
     >
@@ -203,6 +208,7 @@ export default function PopulationOverlay({
       </label>
       {source === "hexagons" ? (
         <HexPopulation
+          suppress3D={suppress3D}
           overlay={overlay}
           is3D={is3D}
           zoom={zoom}
@@ -325,6 +331,6 @@ export default function PopulationOverlay({
           </p>
         </>
       )}
-    </section>
+    </RightPanel>
   );
 }
