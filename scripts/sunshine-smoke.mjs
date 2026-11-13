@@ -64,6 +64,8 @@ try {
     const table = p.getByRole("table", {
       name: "Sunshine and SOL/R comparison",
     });
+    await p.locator(".network-details > summary").click();
+    if (await p.locator(".network-details").getAttribute("open") === null) await p.locator(".network-details > summary").click();
     await table.waitFor();
     assert.equal(await table.locator("tbody tr").count(), 4);
     assert.match(await table.innerText(), /3.543–4.787/);
@@ -76,7 +78,6 @@ try {
     if (await p.locator('[data-panel="transit"] > h2 button').getAttribute("aria-expanded") === "false") await p.locator('[data-panel="transit"] > h2 button').click();
     await p.getByLabel("Inspect transit", { exact: true }).waitFor();
     await panel();
-    await p.locator(".network-details summary").click();
     await p
       .getByLabel("Inspect Sunshine Corridor", { exact: true })
       .selectOption("sunshine_3b");
@@ -161,6 +162,7 @@ try {
     );
     await expand();
     await toggle.check();
+    if (await p.locator(".network-details").getAttribute("open") === null) await p.locator(".network-details > summary").click();
     await table.waitFor();
     assert.equal(requests.length, 1);
     assert.equal(
@@ -192,6 +194,7 @@ try {
     .waitFor();
   await p.unroute("**/data/sunshine_corridor.geojson");
   await p.getByRole("button", { name: "Retry Sunshine Corridor" }).click();
+  if (await p.locator(".network-details").getAttribute("open") === null) await p.locator(".network-details > summary").click();
   await p.getByRole("table").waitFor();
   await p.close();
   console.log("PASS Sunshine missing file and retry");

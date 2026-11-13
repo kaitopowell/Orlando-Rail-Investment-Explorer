@@ -1081,3 +1081,15 @@ main .demand-comparison > .population-panel {
 }
 /* The old grouping wrappers now contain portals, not positioned panel boxes. */
 .demand-comparison, .transit-stack { display: contents; }
+.usefulness-headlines h3 { font-size: 14px; margin: 10px 0 6px; }
+.usefulness-headlines strong { color: #e4eff2; }
+.commute-bars { list-style: none; padding: 0; }
+.commute-bars li { margin: 8px 0; }
+.commute-bars meter { display: block; width: 100%; height: 12px; accent-color: #63b9cf; }
+.improved-commutes { padding-left: 20px; }
+.improved-commutes button { width: 100%; text-align: left; white-space: normal; margin: 4px 0; padding: 8px; line-height: 1.5; }
+.improved-commutes button[aria-pressed="true"] { border-color: #dcecf2; }
+.commute-selectors { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.commute-selectors label { min-width: 0; }
+.commute-result { border-left: 2px solid #9fc6d4; padding-left: 10px; }
+@media(max-width:600px) { .commute-selectors { grid-template-columns: 1fr; } }

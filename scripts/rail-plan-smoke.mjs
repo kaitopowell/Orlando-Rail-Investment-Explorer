@@ -74,7 +74,7 @@ try {
       .check();
     await p.locator(".rail-summary").waitFor();
     assert.match(await p.locator(".rail-summary").innerText(), /39 links/);
-    assert.match(await p.locator(".rail-summary").innerText(), /5,968,066.1/);
+    assert.match(await p.locator(".rail-summary").innerText(), /142,000 commuters save 20\+ min/);
     assert.equal((await ids(p)).length, 39);
     assert.equal(
       await p.getByLabel("Rail drawing style").inputValue(),
@@ -95,6 +95,7 @@ try {
         true,
       );
     }
+    await p.locator(".network-details > summary").click();
     await p.locator(".network-lines summary").click();
     assert.equal(await p.locator(".network-lines button").count(), 10);
     await p.locator(".network-lines button").first().focus();
@@ -128,7 +129,12 @@ try {
     await p.locator(".rail-build-order summary").click();
     await p.getByRole("button", { name: "$10B", exact: true }).click();
     await p.getByLabel("Core network only", { exact: true }).check();
-    assert.equal((await ids(p)).length, 18);
+    const core = await p.evaluate(async () => {
+      const plan = await (await fetch('/data/rail_network.json')).json();
+      const sets = plan.scenarios.filter(s => s.measure === 'minutes_saved').map(s => new Set(s.steps.filter(st=>st.total_cost_musd<=10000).flatMap(st=>st.new_link_ids)));
+      return [...sets[0]].filter(id=>sets.every(s=>s.has(id))).length;
+    });
+    assert.equal((await ids(p)).length, core);
     await p.getByLabel("Core network only", { exact: true }).uncheck();
     await p.getByLabel("Rail drawing style").selectOption("geographic");
     assert.equal(
@@ -149,7 +155,7 @@ try {
       0.35,
     );
     await p.getByLabel("Rail objective").selectOption("workers_connected");
-    assert.match(await p.locator(".rail-summary").innerText(), /495,756/);
+    assert.match(await p.locator(".rail-summary").innerText(), /commuters save 20\+ min/);
     await p.getByLabel("Rail competitiveness ratio").selectOption("3");
     await p.getByLabel("Rail cost").selectOption("high");
     await p.getByLabel("Rail overhead").selectOption("30");
@@ -161,7 +167,6 @@ try {
     await p.keyboard.press("Enter");
     await p.locator(".rail-inspection").waitFor();
     await p.getByRole("button", { name: "Close rail inspection" }).click();
-    await p.locator(".network-details summary").click();
     assert.match(
       await p.locator(".network-details").innerText(),
       /Existing stations benchmark/,
@@ -221,7 +226,7 @@ try {
     assert.deepEqual(errors, []);
     await p.close();
     console.log(
-      `PASS connected rail ${name}: 39 links/10 built lines, stable growing budget, 18-link core only, schematic/geographic restoration, line focus, selectors/build order, compact comparison, 380px fit and new-file-only requests`,
+      `PASS connected rail ${name}: 39 links/10 built lines, stable growing budget, computed core only, schematic/geographic restoration, line focus, selectors/build order, compact comparison, 380px fit and new-file-only requests`,
     );
   }
   const p = await browser.newPage();

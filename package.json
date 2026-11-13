@@ -21,8 +21,10 @@
     "test:train-motion": "node --experimental-strip-types scripts/test-train-motion.mjs && node scripts/train-motion-smoke.mjs",
     "test:candidates": "node --experimental-strip-types scripts/test-candidates.mjs && node scripts/candidates-smoke.mjs",
     "test:flows": "node --experimental-strip-types scripts/test-flows.mjs && node scripts/flows-smoke.mjs",
-    "test:rail-plan": "node --experimental-strip-types scripts/test-rail-plan.mjs && node scripts/rail-plan-smoke.mjs && node scripts/panels-smoke.mjs",
-    "test:sunshine": "node --experimental-strip-types scripts/test-sunshine.mjs && node scripts/sunshine-smoke.mjs"
+    "test:rail-plan": "node --experimental-strip-types scripts/test-rail-plan.mjs && node scripts/rail-plan-smoke.mjs && node scripts/panels-smoke.mjs && node --experimental-strip-types scripts/usefulness-smoke.mjs",
+    "test:sunshine": "node --experimental-strip-types scripts/test-sunshine.mjs && node scripts/sunshine-smoke.mjs",
+    "lint": "eslint src",
+    "test:usefulness": "vitest run src/data/railUsefulness.test.ts"
   },
   "dependencies": {
     "@deck.gl/core": "^9.2.0",
@@ -34,11 +36,15 @@
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "eslint": "^10.14.0",
     "playwright": "^1.64.0",
     "typescript": "~5.9.3",
-    "vite": "^7.0.0"
+    "typescript-eslint": "^8.72.2",
+    "vite": "^7.0.0",
+    "vitest": "^5.1.0"
   }
 }

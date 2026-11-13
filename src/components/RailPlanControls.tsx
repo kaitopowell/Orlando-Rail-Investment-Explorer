@@ -1,3 +1,4 @@
+import { UsefulnessSummary, UsefulnessDetails } from "./RailUsefulness";
 import { useEffect } from "react";
 import { RightPanel } from "./RightPanels";
 import type { RailState } from "./useRailPlan";
@@ -127,14 +128,6 @@ export default function RailPlanControls({
       className="network-panel candidate-details rail-plan-controls"
       aria-label="Rail network controls"
     >
-      <label className="rail-population">
-        <input
-          type="checkbox"
-          checked={showPopulation}
-          onChange={(e) => onShowPopulation(e.target.checked)}
-        />{" "}
-        Show population
-      </label>
       {state.error ? (
         <p role="alert">
           {state.error} <button onClick={state.retry}>Retry rail plan</button>
@@ -211,139 +204,139 @@ export default function RailPlanControls({
                 ))}
               </select>
             </label>
-            {state.measure === "workers_connected" && (
-              <label>
-                Ratio
-                <select
-                  aria-label="Rail competitiveness ratio"
-                  value={state.ratio}
-                  onChange={(e) => state.setRatio(Number(e.target.value))}
-                >
-                  {[1.5, 2, 3].map((n) => (
-                    <option key={n}>{n}</option>
-                  ))}
-                </select>
-              </label>
-            )}
             <label>
-              Drawing
+              Train speed
               <select
-                aria-label="Rail drawing style"
-                value={state.drawing}
+                aria-label="Train speed"
+                value={state.speed}
                 onChange={(e) =>
-                  state.setDrawing(e.target.value as typeof state.drawing)
+                  state.setSpeed(Number(e.target.value) as 20 | 30)
                 }
               >
-                <option value="schematic">Schematic</option>
-                <option value="geographic">Geographic</option>
+                <option value={20}>20 mph (default)</option>
+                <option value={30}>30 mph</option>
               </select>
             </label>
           </div>
+          <p className="network-note">
+            20 mph is our assumption for new lines; 30 is the top of the range
+            we tested.
+          </p>
           <div className="rail-summary" aria-live="polite">
             <p>
               Budget {railMoney(state.budget)} · spent{" "}
               {railMoney(network.spent)} · {network.steps.length} routes ·{" "}
               {network.links.length} links
             </p>
-            {state.measure === "minutes_saved" ? (
-              <p title="Total modeled job-minutes saved divided by all modeled commuters with a transit option today, including those with no saving. This is not the saving of a typical commuter.">
-                {railNumber(network.score)} job-minutes saved per weekday ·
-                Average{" "}
-                {railNumber(
-                  network.score /
-                    data.plan.denominators.workers_with_transit_option,
-                )}{" "}
-                min saved across the{" "}
-                {railNumber(data.plan.denominators.workers_with_transit_option)}{" "}
-                commuters who have a transit option today (commute pairs we
-                model only).
-              </p>
-            ) : (
-              <p>
-                {railNumber(network.score)} workers newly connected /{" "}
-                {railNumber(
-                  data.plan.denominators.workers_without_transit_option,
-                )}{" "}
-                without transit today (
-                {pct(
-                  network.score /
-                    data.plan.denominators.workers_without_transit_option,
-                )}
-                ).
-              </p>
-            )}
-            <p>
-              Within 2 km:{" "}
-              {eq
-                ? `${pct(eq.record["2.0"].share_of_households)} of households, ${pct(eq.record["2.0"].share_of_no_vehicle_households)} of no-vehicle households`
-                : "no matching equity snapshot"}
-            </p>
+            <UsefulnessSummary state={state} />
           </div>
-          <label>
-            <input
-              type="checkbox"
-              checked={state.core}
-              onChange={(e) => state.setCore(e.target.checked)}
-            />{" "}
-            Core network only
-          </label>
-          {state.core && (
-            <p className="network-note">
-              Showing only built links common to every $10B minutes-saved
-              scenario. Summary describes the full selected plan.
-            </p>
-          )}
-          {sunshine.enabled && (
-            <CompactSunshineCompare state={sunshine} rail={state} />
-          )}
-          <details
-            className="network-lines"
-            onToggle={(e) => {
-              if (!e.currentTarget.open) state.setHoverLine(null);
-            }}
-          >
-            <summary>Lines · {lines.length}</summary>
-            <ul>
-              {lines.map((l) => (
-                <li key={l.id}>
-                  <button
-                    onMouseEnter={() => state.setHoverLine(l.id)}
-                    onMouseLeave={() => state.setHoverLine(null)}
-                    onFocus={() => state.setHoverLine(l.id)}
-                    onBlur={() => state.setHoverLine(null)}
-                  >
-                    <span style={{ background: LINE_PALETTE[l.color_index] }} />
-                    {l.id} · {l.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </details>
-          <details className="rail-build-order">
-            <summary>Build order · {network.steps.length} routes</summary>
-            <ol>
-              {network.steps.map((s, index) => (
-                <li key={index}>
-                  <button
-                    onClick={() =>
-                      onSelect({ kind: "step", id: String(index) })
-                    }
-                  >
-                    {s.from_name} to {s.to_name}
-                    <small>
-                      {railMoney(s.cost_musd)} · total{" "}
-                      {railMoney(s.total_cost_musd)} · gain {railNumber(s.gain)}{" "}
-                      {state.measure === "minutes_saved"
-                        ? "job-minutes"
-                        : "workers"}
-                    </small>
-                  </button>
-                </li>
-              ))}
-            </ol>
-          </details>
+          {sunshine.enabled && sunshine.error && <CompactSunshineCompare state={sunshine} rail={state} />}
           <details className="network-details">
             <summary>Details</summary>
+            <label className="rail-population">
+              <input
+                type="checkbox"
+                checked={showPopulation}
+                onChange={(e) => onShowPopulation(e.target.checked)}
+              />{" "}
+              Show population
+            </label>
+            <div className="network-selectors">
+              <label>
+                Drawing
+                <select
+                  aria-label="Rail drawing style"
+                  value={state.drawing}
+                  onChange={(e) =>
+                    state.setDrawing(e.target.value as typeof state.drawing)
+                  }
+                >
+                  <option value="schematic">Schematic</option>
+                  <option value="geographic">Geographic</option>
+                </select>
+              </label>
+              {state.measure === "workers_connected" && (
+                <label>
+                  Ratio
+                  <select
+                    aria-label="Rail competitiveness ratio"
+                    value={state.ratio}
+                    onChange={(e) => state.setRatio(Number(e.target.value))}
+                  >
+                    {[1.5, 2, 3].map((n) => (
+                      <option key={n}>{n}</option>
+                    ))}
+                  </select>
+                </label>
+              )}
+            </div>
+            <UsefulnessDetails state={state} />
+            <label>
+              <input
+                type="checkbox"
+                checked={state.core}
+                onChange={(e) => state.setCore(e.target.checked)}
+              />{" "}
+              Core network only
+            </label>
+            {state.core && (
+              <p className="network-note">
+                Showing only built links common to every $10B minutes-saved
+                scenario. Summary describes the full selected plan.
+              </p>
+            )}
+            {sunshine.enabled && !sunshine.error && (
+              <CompactSunshineCompare state={sunshine} rail={state} />
+            )}
+            <details
+              className="network-lines"
+              onToggle={(e) => {
+                if (!e.currentTarget.open) state.setHoverLine(null);
+              }}
+            >
+              <summary>Lines · {lines.length}</summary>
+              <ul>
+                {lines.map((l) => (
+                  <li key={l.id}>
+                    <button
+                      onMouseEnter={() => state.setHoverLine(l.id)}
+                      onMouseLeave={() => state.setHoverLine(null)}
+                      onFocus={() => state.setHoverLine(l.id)}
+                      onBlur={() => state.setHoverLine(null)}
+                    >
+                      <span
+                        style={{ background: LINE_PALETTE[l.color_index] }}
+                      />
+                      {l.id} · {l.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </details>
+            <details className="rail-build-order">
+              <summary>Build order · {network.steps.length} routes</summary>
+              <ol>
+                {network.steps.map((s, index) => (
+                  <li key={index}>
+                    <button
+                      onClick={() =>
+                        onSelect({ kind: "step", id: String(index) })
+                      }
+                    >
+                      {s.from_name} to {s.to_name}
+                      <small>
+                        {railMoney(s.cost_musd)} · total{" "}
+                        {railMoney(s.total_cost_musd)} · gain{" "}
+                        {railNumber(s.gain)}{" "}
+                        {state.measure === "minutes_saved"
+                          ? "job-minutes"
+                          : "workers"}
+                      </small>
+                    </button>
+                  </li>
+                ))}
+              </ol>
+            </details>
             <label>
               Inspect station
               <select
@@ -409,8 +402,8 @@ export default function RailPlanControls({
             ))}
             <p>
               Drawing geometry does not change stations, costs, lengths or
-              scores. Minutes cannot be expressed as a percent of a worker
-              count; the mean uses all workers with a transit baseline.
+              scores. Usefulness counts come from the published scenario
+              snapshots; routing uses only the supplied link travel times.
             </p>
             {data.plan.documented_projects.map((p) => (
               <p key={p.link_id}>

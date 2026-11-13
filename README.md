@@ -191,9 +191,32 @@ settings remain intact when their section closes. With Rail network open,
 Population's 3D columns are hidden by default; **Show population** restores them.
 Closing Rail network restores the population display; its 2D rendering is unchanged.
 
-The minutes-saved summary is an average across all modeled commuters with a transit
-option today, including those with no saving, not the saving of a typical commuter.
-Hover the score line for its explanation. Station names retain parentheses when
+The **How useful is this plan?** headlines use the supplied `usefulness` snapshots:
+commuters saving 20+ minutes and rail trips within 2× free-flow driving time. This is
+not a traffic forecast. Details contains cumulative 10+/20+/30+ bars, the 1.5× driving
+comparison, top improved pairs (five initially, all eight on request), and a commute
+picker. Large counts round to the nearest hundred; percentages use exact counts.
+The transit base is 267,793. The supplied all-commuters base is 763,549, used as a
+named fallback until an explicit `workers_with_drive_time` denominator is supplied.
+The smaller lookup table is not used to derive that denominator.
+
+Select **Train speed** beside wait/access: 20 mph is the default assumption; 30 mph
+is the top tested speed. The latter selects a `-s30` scenario and `minutes_s30` for
+new links. Existing rail travel times stay fixed. Browser Dijkstra uses existing
+links plus fully built links, then adds wait/access overhead once per trip. Choosing
+a top pair or From/To draws the rail path and highlights both ends in either drawing
+style. No path is shown for disconnected pairs. Baseline times are worker-weighted
+means of repeated lookup rows; missing transit rows are excluded from the transit
+mean and their coverage is stated. An absent lookup does not prove no real-world
+route exists. Same-node trips have zero rail ride plus the selected overhead.
+
+The lookup currently has 8,938 rows totaling 415,048 workers; it is an extract, not
+the 763,549-worker percentage base. Top-pair values are shown as supplied, not
+recomputed. Summaries at unpublished slider stops are reused only for exactly the
+same built links; otherwise they are explicitly unavailable. The equity file has
+only the 24 original scenarios, so unavailable 30 mph equity is not invented.
+
+Station names retain parentheses when
 stripping them would make visible names ambiguous. Distinct station IDs remain
 separate, including Sand Lake Rd/Road; collision priority still suppresses labels.
 Proposed line cores are fully opaque except when another line is emphasized in
@@ -217,20 +240,18 @@ to Geographic or disabling the plan.
 Existing stations remain small grey reference markers when not touched by built
 links. Interchanges (multiple lines, or existing stations touched by construction)
 are white rings; termini are filled markers and pass-through stations are small
-dots. Priority labels omit parenthetical text; pass-through labels wait until zoom
+dots. Priority labels omit parenthetical text only when names remain unambiguous; pass-through labels wait until zoom
 12. Colliding labels can be hidden; the Details selector retains station names.
 
-A separate compact map-side panel keeps budget, assumptions and results together.
-Lines, Build order and the single Details section are collapsed initially. Details
-contains both equity radii, the existing-stations benchmark, caveats and source
-notes. The summary uses 2 km equity snapshots only when the supplied snapshot
-matches the built network, without interpolation. Minutes saved are job-minutes;
-the worker denominator supports mean minutes per worker, not a percent reduction
-in travel time. Workers-connected reports a count and percentage. These scores and
-equity are never added together. No transfer penalties or surveyed routes are
-implied by the transit-map appearance.
+The shared accordion keeps budget, assumptions and usefulness headlines together.
+Drawing style, the population override and the connected-objective ratio live in
+Details. One collapsed Details section contains bars, improved commutes, the picker, Lines,
+Build order, both equity radii, the existing-stations benchmark, caveats and source
+notes. Equity snapshots are used only for matching built networks, without
+interpolation. Equity and commute measures are never added together. No transfer
+penalties or surveyed routes are implied by the transit-map appearance.
 
-`npm run test:rail-plan` checks all 24 scenarios, reference totals, unique link/line
+`npm run test:rail-plan` checks all 48 scenarios, reference totals, unique link/line
 ownership, monotonic budgets, exact schematic endpoints and octilinearity, core and
 station roles, controls, errors, compact layout and native-label restoration.
 Invalid link ownership produces a visible error and no proposed-network drawing.
@@ -250,3 +271,10 @@ not directly comparable with SOL/R's per-link estimates. Full source notes,
 schematic-geometry caveats and the Sunshine selector now live in Details.
 Station cost/length fields remain explicitly unavailable. `npm run test:sunshine`
 checks the unchanged overlay and the compact comparison with the new network.
+
+Frontend usefulness validation: `npm run test:usefulness` runs Vitest against all
+12 supplied routing references (ride time tolerance 0.05 minutes), plus speed,
+formatting, disconnected, baseline-weighting and snapshot fixtures. CI runs this
+suite, `npm run lint`, TypeScript and the build. ESLint covers the new usefulness
+modules and the rail modules changed for this feature. `npm run test:rail-plan`
+also exercises the usefulness panel in Chromium on laptop and phone.

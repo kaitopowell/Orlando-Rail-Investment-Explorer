@@ -44,8 +44,9 @@ for (const scenario of data.plan.scenarios) {
     c.high,
     network.links.reduce((n, l) => n + l.cost_high_musd, 0),
   );
-  assert.equal(c.equity.record, data.equity.scenarios[scenario.id]["10000"]);
+  if (data.equity.scenarios[scenario.id]) assert.equal(c.equity.record, data.equity.scenarios[scenario.id]["10000"]);
+  else assert.equal(c.equity, null);
 }
 console.log(
-  "PASS Sunshine: two segments/three stations, immutable source, actual costs/miles, absent station measures, validation and selected-network comparison across 24 scenarios",
+  "PASS Sunshine: two segments/three stations, immutable source, actual costs/miles, absent station measures, validation and selected-network comparison across 48 scenarios",
 );

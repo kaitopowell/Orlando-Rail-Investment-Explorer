@@ -17,6 +17,7 @@ export type RailLink = {
   class: string;
   length_km: number;
   minutes: number;
+  minutes_s30: number;
   cost_low_musd: number;
   cost_high_musd: number;
 };
@@ -40,7 +41,25 @@ export type RailLine = {
   branches: string[][];
   link_ids: string[];
 };
+export type UsefulPair = {
+  home: string;
+  work: string;
+  workers: number;
+  today_min: number;
+  with_plan_min: number;
+  saved_min: number;
+  drive_min: number | null;
+};
+export type Usefulness = {
+  job_minutes_saved: number;
+  commuters_any: number;
+  commuters_saving: Record<"10" | "20" | "30", number>;
+  rail_competitive_with_driving: Record<"1.5" | "2.0", number>;
+  top_pairs: UsefulPair[];
+};
 export type RailScenario = {
+  speed_mph: 20 | 30;
+  usefulness: Record<string, Usefulness>;
   id: string;
   cost_case: CostCase;
   overhead_min: number;
@@ -57,12 +76,21 @@ export type RailScenario = {
   }[];
 };
 export type RailPlan = {
+  commute_pairs: { columns: string[]; rows: (number | null)[][] };
+  reference_checks: {
+    scenario: string;
+    budget_musd: number;
+    home: string;
+    work: string;
+    ride_min: number | null;
+  }[];
   nodes: RailNode[];
   links: RailLink[];
   existing_links: { id: string; a: string; b: string; minutes: number }[];
   scenarios: RailScenario[];
   budgets_musd: number[];
   denominators: {
+    workers_with_drive_time?: number;
     workers_with_transit_option: number;
     workers_without_transit_option: number;
     note: string;
@@ -106,8 +134,9 @@ export const scenarioId = (
   overhead: number,
   measure: Measure,
   ratio: number,
+  speed: 20 | 30 = 20,
 ) =>
-  `${cost}-oh${overhead}-${measure === "minutes_saved" ? "minutes" : `connected-r${ratio.toFixed(1)}`}`;
+  `${cost}-oh${overhead}-${measure === "minutes_saved" ? "minutes" : `connected-r${ratio.toFixed(1)}`}${speed === 30 ? "-s30" : ""}`;
 export function networkAt(
   plan: RailPlan,
   scenario: RailScenario,
@@ -209,7 +238,13 @@ export function parseRailData(plan: RailPlan, equity: RailEquity): RailData {
       !nodes.has(l.b) ||
       l.a === l.b ||
       l.coords?.length !== 2 ||
-      ![l.length_km, l.minutes, l.cost_low_musd, l.cost_high_musd].every(finite)
+      ![
+        l.length_km,
+        l.minutes,
+        l.minutes_s30,
+        l.cost_low_musd,
+        l.cost_high_musd,
+      ].every(finite)
     )
       fail("invalid link");
     for (const [i, id] of [l.a, l.b].entries()) {
@@ -221,8 +256,16 @@ export function parseRailData(plan: RailPlan, equity: RailEquity): RailData {
   const ids = new Set<string>();
   for (const s of plan.scenarios) {
     if (
+      ![20, 30].includes(s.speed_mph) ||
       ids.has(s.id) ||
-      s.id !== scenarioId(s.cost_case, s.overhead_min, s.measure, s.ratio ?? 2)
+      s.id !==
+        scenarioId(
+          s.cost_case,
+          s.overhead_min,
+          s.measure,
+          s.ratio ?? 2,
+          s.speed_mph,
+        )
     )
       fail("duplicate or invalid scenario");
     ids.add(s.id);
@@ -275,6 +318,37 @@ export function parseRailData(plan: RailPlan, equity: RailEquity): RailData {
       )
         fail("budget summary mismatch");
     }
+    if (!s.usefulness || typeof s.usefulness !== "object")
+      fail("missing usefulness");
+    for (const u of Object.values(s.usefulness)) {
+      if (
+        !u.commuters_saving ||
+        !u.rail_competitive_with_driving ||
+        ![
+          u.job_minutes_saved,
+          u.commuters_any,
+          ...["10", "20", "30"].map((k) => u.commuters_saving[k as "10"]),
+          ...["1.5", "2.0"].map(
+            (k) => u.rail_competitive_with_driving[k as "1.5"],
+          ),
+        ].every(finite) ||
+        !Array.isArray(u.top_pairs)
+      )
+        fail("invalid usefulness");
+      for (const pair of u.top_pairs)
+        if (
+          !nodes.has(pair.home) ||
+          !nodes.has(pair.work) ||
+          ![
+            pair.workers,
+            pair.today_min,
+            pair.with_plan_min,
+            pair.saved_min,
+          ].every(finite) ||
+          (pair.drive_min !== null && !finite(pair.drive_min))
+        )
+          fail("invalid improved commute");
+    }
     for (const [b, r] of Object.entries(equity.scenarios[s.id] ?? {})) {
       if (r.stations !== networkAt(plan, s, Number(b)).stations.length)
         fail("equity station mismatch");
@@ -298,6 +372,36 @@ export function parseRailData(plan: RailPlan, equity: RailEquity): RailData {
     !finite(plan.denominators.workers_without_transit_option)
   )
     fail("invalid metadata");
+  if (
+    !plan.commute_pairs ||
+    ["home", "work", "workers", "transit_min", "drive_min"].some(
+      (c) => !plan.commute_pairs.columns.includes(c),
+    ) ||
+    !Array.isArray(plan.commute_pairs.rows)
+  )
+    fail("invalid commute lookup");
+  const cols = plan.commute_pairs.columns;
+  for (const row of plan.commute_pairs.rows) {
+    if (row.length !== cols.length) fail("invalid commute row");
+    for (const key of ["home", "work"]) {
+      const index = row[cols.indexOf(key)];
+      if (
+        index === null ||
+        !Number.isInteger(index) ||
+        index < 0 ||
+        index >= plan.nodes.length
+      )
+        fail("invalid commute node index");
+    }
+    for (const key of ["workers", "transit_min", "drive_min"]) {
+      const n = row[cols.indexOf(key)];
+      if ((key === "workers" || n !== null) && !finite(n as number))
+        fail("invalid commute value");
+    }
+  }
+  for (const l of plan.existing_links)
+    if (!nodes.has(l.a) || !nodes.has(l.b) || !finite(l.minutes))
+      fail("invalid existing rail link");
   return { plan, equity, core: coreNetwork(plan) };
 }
 let cached: Promise<RailData> | undefined;

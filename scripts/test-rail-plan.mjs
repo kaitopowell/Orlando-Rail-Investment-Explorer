@@ -17,7 +17,7 @@ const read = (n) => JSON.parse(readFileSync(`public/data/${n}`));
 const p = read("rail_network.json"),
   e = read("rail_equity_v2.json"),
   data = parseRailData(p, e);
-assert.equal(p.scenarios.length, 24);
+assert.equal(p.scenarios.length, 48);
 assert.equal(new Set(LINE_PALETTE).size, 12);
 for (const s of p.scenarios) {
   const owners = new Map(
@@ -48,10 +48,9 @@ for (const s of p.scenarios) {
       assert.equal(n.owner.get(l.id).color_index, owners.get(l.id).color_index);
     }
     previous = new Set(n.links.map((l) => l.id));
-    assert.equal(
-      equityAt(data, s, b.budget_musd).record.stations,
-      n.stations.length,
-    );
+    const equity = equityAt(data, s, b.budget_musd);
+    if (data.equity.scenarios[s.id]) assert.equal(equity.record.stations, n.stations.length);
+    else assert.equal(equity, null, "No invented equity for the new speed scenarios");
   }
 }
 const s = p.scenarios.find((s) => s.id === "low-oh20-minutes");
@@ -120,7 +119,7 @@ for (const mutate of [
   assert.throws(() => parseRailData(bad, e), /Invalid connected rail network/);
 }
 console.log(
-  "PASS connected network: 24 scenarios, published totals, unique ownership, visible failure on duplicates/missing owners, monotonic budgets/stable names and colors, core intersection, station roles, Mercator octilinearity/exact endpoints/reversal/straight-end rule",
+  "PASS connected network: 48 scenarios, published totals, unique ownership, visible failure on duplicates/missing owners, monotonic budgets/stable names and colors, core intersection, station roles, Mercator octilinearity/exact endpoints/reversal/straight-end rule",
 );
 
 const names = stationLabels([
