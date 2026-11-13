@@ -59,6 +59,15 @@ try {
     if (await p.getByRole("button", {name: "Expand rail controls"}).isVisible()) await p.getByRole("button", {name: "Expand rail controls"}).click();
     const close = p.getByRole("button", { name: "Collapse sidebar" });
     if (await close.isVisible()) await close.click();
+    await p.evaluate(() => window.map.jumpTo({ pitch: 0 }));
+    await p.waitForFunction(() => window.deck._deck.props.layers.flat(Infinity).find(l => l.id === 'population-hexagons')?.props.opacity === .6);
+    const popHeader = p.locator('[data-panel="population"] > h2 button');
+    await popHeader.click();
+    await p.getByText('Population display settings', {exact:true}).click();
+    await p.getByLabel('Population opacity', {exact:true}).fill('25');
+    await p.waitForFunction(() => window.deck._deck.props.layers.flat(Infinity).find(l => l.id === 'population-hexagons')?.props.opacity === .25);
+    await p.getByRole('button', {name:'Use automatic opacity'}).click();
+    await p.getByRole('button', {name:'Expand rail controls'}).click();
     await p.evaluate(() => window.map.jumpTo({ pitch: 45 }));
     await p.waitForFunction(
       () =>

@@ -21,6 +21,16 @@ export function overlayChannels(overlay: MapboxOverlay, labelLayerId?: string) {
         state.map((p) => p.layers),
         Boolean,
       ) as Layer<{ beforeId?: string }>[];
+      // Stable visual phases across channels: a later rail source must not
+      // paint over another source's station markers or labels.
+      const phase = (layer: Layer) => {
+        if (!/^(rail-plan-|sunshine-|transit-)/.test(layer.id)) return 0;
+        if (/labels$/.test(layer.id)) return 4;
+        if (/station|commute-ends/.test(layer.id)) return 3;
+        if (/casing$/.test(layer.id)) return 1;
+        return 2;
+      };
+      layers.sort((a, b) => phase(a) - phase(b));
       const pillars = layers.some(
         (layer) => layer.id === "population-hexagon-pillars" || layer.id === "employment-block-needles",
       );

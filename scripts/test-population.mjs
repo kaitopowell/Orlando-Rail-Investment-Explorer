@@ -211,3 +211,14 @@ for(const f of hexData.features) {
 }
 assert.equal(JSON.stringify(hexData),snapshot);
 console.log('PASS Population contrast: real-data quantiles, monotonic emphasis/scales, faint lows, capped highs, bounded overlap, small circles, original features/centers');
+
+const { population2DColor, POPULATION_2D } = await import('../src/map/populationDisplay.ts');
+assert.equal(POPULATION_2D.autoRailOpacity, .6);
+assert.equal(population2DColor(0)[3], 13);
+assert.equal(population2DColor(1)[3], 89);
+for (const t of [0, .002, .25, .5, 1]) {
+  const c = population2DColor(t);
+  assert.ok(Math.max(...c.slice(0, 3)) <= 137, '2D ramp stays muted, never neon or white');
+  assert.ok(c[2] > c[1], '2D ramp is violet-grey, not cyan');
+}
+console.log('PASS muted Population 2D ramp and opacity bounds');

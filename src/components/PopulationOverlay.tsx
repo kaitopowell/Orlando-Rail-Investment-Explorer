@@ -30,6 +30,7 @@ export default function PopulationOverlay({
   overlay,
   enabled,
   suppress3D = false,
+  railVisible = false,
   beforeId,
   onStatus,
 }: {
@@ -37,6 +38,7 @@ export default function PopulationOverlay({
   overlay: Pick<MapboxOverlay, "setProps">;
   enabled: boolean;
   suppress3D?: boolean;
+  railVisible?: boolean;
   beforeId?: string;
   onStatus: (status: PopulationStatus) => void;
 }) {
@@ -208,6 +210,7 @@ export default function PopulationOverlay({
       </label>
       {source === "hexagons" ? (
         <HexPopulation
+          railVisible={railVisible}
           suppress3D={suppress3D}
           overlay={overlay}
           is3D={is3D}

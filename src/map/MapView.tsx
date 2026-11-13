@@ -289,6 +289,7 @@ export default function MapView({
           map={scene.map}
           overlay={scene.overlay}
           enabled={populationVisible}
+          railVisible={railPlan.enabled}
           suppress3D={suppressPopulation3D}
           beforeId={scene.labelLayerId}
           onStatus={onPopulationStatus}

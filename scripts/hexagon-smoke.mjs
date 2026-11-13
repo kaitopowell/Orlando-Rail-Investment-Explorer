@@ -212,7 +212,7 @@ try {
       l.props.onHover({object:f});l.props.onClick({object:f});
       return {count:l.props.data.length, h3:f.properties.h3, before:l.props.beforeId, radius:l.props.getRadius(f), alpha:l.props.getFillColor(f)[3]};
     });
-    assert.equal(circles.count,7896);assert.equal(circles.before,'place_city');assert.ok(circles.radius>0);assert.ok(circles.alpha>=2 && circles.alpha<=185);
+    assert.equal(circles.count,7896);assert.equal(circles.before,'place_city');assert.ok(circles.radius>0);assert.ok(circles.alpha>=13 && circles.alpha<=89);
     assert.match(await page.getByLabel('Hexagon details',{exact:true}).innerText(),new RegExp(circles.h3));
     await page.getByRole('button',{name:'Close hexagon details'}).click();
     assert.match(

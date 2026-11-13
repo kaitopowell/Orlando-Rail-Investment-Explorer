@@ -4,7 +4,7 @@ import { DemandNeedles } from "./DemandNeedles";
 import { DEMAND_STYLE, demandAlphaBlend } from "./demandStyle";
 import { hexCenter, pillarDefaults } from "../data/kontur3d";
 import { type Hex, type HexData, type HexScale } from "../data/kontur";
-import { POPULATION_DISPLAY as STYLE, populationDisplayValue, populationDisplayHeight, populationDisplayColor, populationDisplayRadius, type PopulationDisplaySettings } from "./populationDisplay";
+import { POPULATION_DISPLAY as STYLE, population2DColor, populationDisplayValue, populationDisplayHeight, populationDisplayColor, populationDisplayRadius, type PopulationDisplaySettings } from "./populationDisplay";
 class SoftPopulationCircles extends ScatterplotLayer<Hex> {
   static layerName = "SoftPopulationCircles";
   getShaders() {
@@ -16,7 +16,7 @@ class SoftPopulationCircles extends ScatterplotLayer<Hex> {
 }
 export function hexPopulationLayers(data: HexData, is3D: boolean, zoom: number, settings: PopulationDisplaySettings,
   scale: HexScale, exaggeration: number, width: number, beforeId: string | undefined,
-  hover: (f: Hex | null) => void, select: (f: Hex) => void) {
+  hover: (f: Hex | null) => void, select: (f: Hex) => void, opacity2D = 1) {
   const display = (f: Hex) => populationDisplayValue(f.properties.population, settings, scale);
   const triggers = [settings.floor, settings.ceiling, settings.gamma, scale];
   // Keep every original feature in the pickable layer, including almost invisible lows.
@@ -36,9 +36,9 @@ export function hexPopulationLayers(data: HexData, is3D: boolean, zoom: number, 
     updateTriggers: {getElevation: [...triggers, exaggeration], getFillColor: triggers},
   };
   const circles = {
-    ...common, radiusUnits: "pixels" as const,
+    ...common, opacity: opacity2D, radiusUnits: "pixels" as const,
     getRadius: (f: Hex) => populationDisplayRadius(display(f), zoom),
-    getFillColor: (f: Hex) => populationDisplayColor(display(f), STYLE.circleAlpha),
+    getFillColor: (f: Hex) => population2DColor(display(f)),
     updateTriggers: {getRadius: [...triggers, zoom], getFillColor: triggers},
   };
   const glow = {
@@ -53,8 +53,6 @@ export function hexPopulationLayers(data: HexData, is3D: boolean, zoom: number, 
       radius: spikes.radius*STYLE.glowWidth}),
     new DemandNeedles<Hex>({...spikes, id: "population-hexagon-pillars"}),
   ] : [
-    new SoftPopulationCircles({...circles, ...glow, id: "population-hexagon-circle-glow",
-      getRadius: f => populationDisplayRadius(display(f),zoom)*STYLE.circleGlowWidth}),
     new SoftPopulationCircles({...circles, id: "population-hexagons"}),
   ];
 }
