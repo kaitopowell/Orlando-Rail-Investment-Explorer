@@ -1,10 +1,8 @@
 # SOL/R rail model: assumptions and implementation plan
 
-Status: **OD pipeline verified** end to end on 2026-10-30 (UTC), per the owner's Windows Python 3.14.6 run. **Stop-proximity coverage screen completed** (2026-11-01; [contract](../data/TRANSIT_COVERAGE_CONTRACT.md)); this does not establish usable transit trips. **Baseline computed** in the owner's Colab run; the committed CSV contents were audited here without running the routing script. **Next milestone: toy-graph score and greedy functions.** Optimization assumptions remain DRAFT for review; optimization implementation still requires approval of this document.
-Decisions in section 9 were made by the project owner on 2026-10-29; remaining TBDs need cited sources.
-Location in repo: `docs/rail-model-assumptions.md`
+Status: **Connected-network model and frontend implemented.** The repository includes 48 commute scenarios, named-line exports, usefulness summaries and the original 24-scenario equity export. The OD pipeline was verified on 2026-10-30 (UTC), according to the author's Windows Python 3.14.6 run; the completed Colab baseline was audited without rerouting. See the [README](../README.md) for the current implementation and findings.
 
-The README requires optimization data requirements and assumptions to be documented before a model is implemented. This is that document. Anything marked **TBD** must be filled with a cited source before use. Nothing here may be invented.
+The sections below retain the earlier design decisions and their evidence gaps. Proposed extensions and values marked **TBD** are not implemented or validated merely because they appear here. The current code and exported data take precedence over historical plans; unsourced choices remain assumptions.
 
 ---
 
@@ -52,7 +50,7 @@ Selection rule: greedy by **benefit gained per dollar**. Add the corridor with t
 | Population | ACS 2020-2024 and Kontur hexagons (modeled) | Context, accessibility cross-check | Loaded |
 | Equity indicators | ACS 2020-2024 (households with no vehicle, people below poverty, median household income) | Secondary equity score | Loaded |
 | Hexagon geography | H3 resolution 8 (verified from hexagon IDs, e.g. 8844a90e4dfffff) | Common geography for all layers and the model | Verified |
-| Existing transit | SunRail and Brightline GTFS, LYNX GTFS | Baseline travel times | r5py baseline computed; CSV audited, no routing rerun here |
+| Existing transit | SunRail and Brightline GTFS, LYNX GTFS | Baseline travel times | r5py baseline computed; CSV audited, routing not rerun during the audit |
 | Visitor demand | Hotel and attraction locations, airport passengers, visitor counts | Tourism scenario only | **TBD**: sources not yet chosen |
 | Rail construction costs | Published project cost datasets (for example NYU Marron Transit Costs Project, FTA filings) | Cost per mile by mode | **TBD**: cite exact table, year, and project list |
 | Candidate corridors | Existing rail rights-of-way, highway medians, major arterials, minus water and protected land | The set the algorithm chooses from | **TBD**: build and document |
@@ -61,11 +59,11 @@ LODES origin-destination data is at census-block level. **Decision: aggregate to
 
 ### Baseline travel times
 
-The owner computed existing-transit and driving times with **r5py for both
+The author computed existing-transit and driving times with **r5py for both
 modes** in Google Colab (Linux, Python 3.13, Java 21). The committed
 `data/processed/baseline_travel_times.csv.gz` matches the supplied SHA-256 and
 reconciles exactly with the LODES pairs/job weights; the routing script was
-**not run or imported here**. See the [contract](../data/BASELINE_TRAVEL_TIMES_CONTRACT.md)
+**not rerun as part of that audit**. See the [contract](../data/BASELINE_TRAVEL_TIMES_CONTRACT.md)
 for the audit, provenance, missingness definitions and discrepancies.
 
 Settings in the supplied script: **Wednesday 2026-11-04 08:00** (intended local
@@ -75,7 +73,7 @@ search limit **120 minutes**, car search limit **60 minutes**. The Florida OSM
 extract is clipped to **-82.1577,27.4431,-80.6732,29.4605**; map data timestamp is
 **TBD** for this completed run. **50-origin batches** imply **105 batches** for
 5,202 homes, with saved progress on the Colab-specific `DRIVE` path. Settings,
-actual batch logs and owner-reported runtime are not independently established
+actual batch logs and author-reported runtime are not independently established
 by the output CSV; dependencies remain unpinned in `requirements-routing.txt`.
 
 The search limits are **not strict output cutoffs**: observed maxima are
@@ -86,7 +84,7 @@ without altering the source data:
   usable drive time. Retain equality at the limit.
 - Exclude from time comparisons and report pairs whose home is
   in the **66 no-car-home cells**, or whose work is in the **32 no-car-work
-  cells**, as selected by the owner. Derive these lists from the unfiltered CSV,
+  cells**, as selected by the author. Derive these lists from the unfiltered CSV,
   before applying time cutoffs. This accounts for **3,863 jobs**. The
   corrected wording is **98 role entries across 86 distinct hexagons (66 as home
   ends, 32 as work ends, 12 in both lists)**. Treat placement failure as suspected,
@@ -108,9 +106,9 @@ stored-file summaries, not ridership predictions or a rerun of routing.
 Caveats: free-flow driving omits congestion and makes rail look worse; one
 fall-2026 departure snapshot, with LYNX ending 2026-12-12; center-to-center
 approximation; Brightline's “Event Train” agency not separated out; no routing
-outside the clip. The owner reports driving **4–5 seconds per origin**, transit
+outside the clip. The author reports driving **4–5 seconds per origin**, transit
 **under 10 seconds per batch**, and **about 6 hours** total on free Colab; the
-car cap helped runtime only slightly. Those timings were not verified here.
+car cap helped runtime only slightly. Those reported timings were not independently verified.
 
 ### Industry and earnings: what the OD file can identify
 
@@ -136,15 +134,14 @@ not identified workers, hourly wages, hours worked or household income:
 Cited specification: US Census Bureau, **LODES Dataset Structure, Format Version
 8.4**, [technical documentation](https://lehd.ces.census.gov/data/lodes/LODES8/LODESTechDoc8.4.pdf),
 OD file structure and workforce segments. These are source-defined bands, not
-new model thresholds. Source-access note: the sandbox could not retrieve the
+new model thresholds. Source-access note: the validation environment could not retrieve the
 Census PDF (proxy HTTP 403), so direct inspection of that primary document is
 not claimed. The exact earnings labels were checked against an accessible
 [OD/segment transcription citing Format Version 8.2](https://github.com/twgonzalez/csf-sandag/blob/018843807510ec64d3ded6726ec4e2e79869c78a/config.py#L118-L126)
 and the matching earnings and industry definitions in the
 [Format Version 8.4-derived schema](https://github.com/basedosdados/pipelines/blob/b8b85f20a1c81e6042f55a7d5f7f1f78ec1a9294/pipelines/datasets/us_census_lodes/constants.py).
-The original Census document remains the authority; direct PDF confirmation is
-still required to complete the requested primary-document lookup. This access
-limitation concerns the citation lookup, **not** the owner's verified OD run.
+The original Census document remains the authority; direct PDF confirmation remains an evidence gap. This access
+limitation concerns the citation lookup, **not** the author's verified OD run.
 
 ## 4. Assumptions (all must be cited or labeled)
 
@@ -167,10 +164,10 @@ Every parameter below shows in the UI as an assumption, with its source.
 
 Cost reference cities: Houston as a lower-cost light rail reference in a car-oriented region, Boston as an upper bound. Reasons for each choice must be stated in the presentation. Other peers worth considering: Charlotte, Salt Lake City, Dallas.
 
-### Modeling simplifications (state these on the limitations slide)
+### Modeling simplifications
 
 - Travel time between areas is computed centroid to centroid.
-- Transit benefits are not forecast ridership. Driving reference times were computed in the owner's r5py baseline run and the stored file was audited here; routing was not rerun. Free-flow driving excludes congestion and can make rail look worse in comparisons.
+- Transit benefits are not forecast ridership. Driving reference times were computed in the author's r5py baseline run and the stored file was audited during validation; routing was not rerun. Free-flow driving excludes congestion and can make rail look worse in comparisons.
 - No induced development or land-use change is modeled.
 - Costs are order-of-magnitude benchmarks, not engineering estimates.
 - Greedy selection is not guaranteed to be globally optimal.
@@ -266,9 +263,9 @@ For each run:
 
 ### Open items and resolutions
 
-1. Maximum value for the budget slider.
-2. Who marks this document approved (update the AGENTS.md wording to match).
-3. Confirm the model's block-location rule: the verified OD input pipeline currently uses Census block internal points, not centroids, for H3 assignment.
+1. **Implemented:** the budget slider spans $0–$30B, with $10B as the default.
+2. **Implemented:** the connected-network model is available; external validation of its assumptions remains open.
+3. **Implemented block-location rule:** the verified OD input pipeline currently uses Census block internal points, not centroids, for H3 assignment.
 4. Which cost datasets and peer cities are used, and the low/high bounds.
 5. How hospitality shares of jobs (LODES WAC workplace industry columns) are presented in the tourism story.
 6. **Resolved (2026-10-30):** no-vehicle and poverty measures are shares (percent of households / people in the poverty universe). High need is strictly above the equity layer's existing 80th-percentile break: **8.41136486219713%** for no-vehicle share and **18.970607565181936%** for poverty share. These exact strings are copied from the [Equity section of `analysis/README.md`](../analysis/README.md#equity); equality belongs to the lower class.

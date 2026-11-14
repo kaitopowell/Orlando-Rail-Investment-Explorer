@@ -1,282 +1,193 @@
 # SOL/R
 
-Seminole · Orange/Osceola · Lake · Rail
+SOL/R is an interactive map for exploring where new rail could serve Orlando and Orange, Seminole, Lake and Osceola counties under a budget. This UCF COP4283 final project combines workplace commute flows, existing transit travel times and a connected-network planner. It lets readers compare assumptions and inspect the resulting build order. It is not a ridership or traffic forecast, an engineering study, or a recommendation to construct the drawn lines.
 
-A UCF COP4283 geographic research project exploring future rail investment in Greater Orlando. The current milestone adds a constrained four-county map and Census boundary layer; it does not produce investment recommendations.
+![Rail plan with population as a quiet background](docs/screenshots/population-readability/after-1366.png)
+![Commute benefits and scenario controls](docs/screenshots/rail-usefulness/summary-1366.png)
 
-## Run
+Map data © OpenStreetMap contributors, basemap © CARTO.
 
-Use Node 22.12+ (validated with Node 24) and npm:
+## What you can do in the app
+
+Enable **Proposed rail network**, then use its accordion panel. Settings are assumptions, not estimates of how a future railway would operate.
+
+| Setting | Choices |
+| --- | --- |
+| Budget | $0–$30B, default $10B; published comparison budgets $2.5B, $5B, $10B, $15B, $20B and $30B, plus completed-build-step stops |
+| Objective | Minutes saved versus existing transit, or workers newly connected; never combined |
+| Construction cost | Low / high |
+| Wait/access overhead | 10 / 20 / 30 minutes per trip |
+| New-line speed | 20 mph default / 30 mph tested; existing rail times stay fixed |
+| Newly connected threshold | Rail time at most 1.5 / 2 / 3 times driving time |
+| Drawing | Schematic / Geographic; neither changes the analysis |
+
+- **How useful is this plan?** shows commuters saving 20+ minutes and trips within 2× driving time. Details adds cumulative 10+/20+/30+ bars, the 1.5× comparison, top improved commutes and **Pick a commute**. Selecting a pair highlights its rail path. Counts labeled “commuters” represent jobs, not unique people or predicted riders.
+- **Lines**, **Build order** and **Core network only** explain what gets built. Budget is a limit; actual spending can be lower. Named lines keep their colors as the budget changes.
+- **Who does this serve?** compares household, no-vehicle and poverty reach, plus income, at 0.8 km and 2 km. Equity is separate from commute scores. The committed equity export covers the 24 original 20 mph scenarios; missing 30 mph results are shown as unavailable.
+- **Sunshine Corridor (FDOT proposal)** is an independent light-red schematic overlay traced from the FDOT study figure. Its drawn 3B/3C segments are a reference, not model-selected or surveyed routes.
+- **Population**, **Employment** and **Equity** show modeled population, workplace jobs and ACS need indicators. Population has quiet 2D circles and 3D needles; its 2D opacity dims automatically with rail and can be overridden in its display settings. Employment remains independently inspectable. Population's 3D columns are hidden while Rail network is open unless **Show population** is checked.
+- **Candidate connections** and **Top commute flows** expose the underlying centers and large commute pairs. Place names are editorial labels. Existing SunRail/Brightline and LYNX layers provide context; optional train motion is illustrative, not real schedules.
+
+Controls and inspection panels share one scrolling accordion. Keyboard selectors provide access to features whose map labels are hidden to avoid collisions. The app supports flat and pitched views and reduced-motion preferences.
+
+## How the analysis works
+
+1. **Prepare commute demand.** [`od.py`](analysis/rail/od.py) assigns 2023 Florida LODES home/work blocks to H3 resolution-8 cells using Census internal points. Both ends must lie in the four counties. The authoritative [`lodes_od_hex8_2023.csv`](data/processed/lodes_od_hex8_2023.csv) contains 591,177 pairs and 1,006,088 jobs.
+2. **Find activity centers.** [`centers.py`](analysis/rail/centers.py) clusters adjacent cells in the top 5% by workplace jobs or modeled population, producing 146 centers. Jobs come from LODES WAC, population from Kontur. Each center connects to up to three nearest centers within 40 km. This initial candidate set is independent of transit plans; the later planner adds explicit hub connections and the documented Sunshine 3A candidate.
+3. **Establish travel-time baselines.** [`baseline_times.py`](analysis/rail/baseline_times.py) uses r5py with LYNX, SunRail and Brightline GTFS and a clipped Florida OpenStreetMap extract. The departure is November 4, 2026 at 08:00, intended as America/New_York time. The completed run's OSM extract date is **not recorded**. [`center_od.py`](analysis/rail/center_od.py) aggregates routed hexagon-pair times to centers, using a default 5 km assignment radius and 3/8 km sensitivity cases; access distance is recorded but not charged as time.
+4. **Price and time candidate links.** [`links.py`](analysis/rail/links.py) matches candidates to existing rail geometry; [`rail_params.py`](analysis/rail/rail_params.py) holds planning-level passenger-corridor costs of $4.4–10.9M/mile, freight-corridor costs of $30.9–51.1M/mile and new-alignment costs of $119–223M/mile. Corridor lengths/circuity inform costs and times even though map links are straight or schematic. New links use the selected speed, with one trip-level overhead.
+5. **Include existing rail.** [`stations.py`](analysis/rail/stations.py) and [`network.py`](analysis/rail/network.py) merge nearby centers into station nodes, including SunRail and Brightline at MCO. Existing SunRail links have zero **construction cost**, not zero travel time or fare. [`demand.py`](analysis/rail/demand.py) and [`score.py`](analysis/rail/score.py) keep time savings and new connections separate; planner gains are marginal to the existing rail network.
+6. **Grow a connected network.** [`run_network.py`](analysis/rail/run_network.py), [`routes.py`](analysis/rail/routes.py) and [`routegreedy.py`](analysis/rail/routegreedy.py) buy anchor-to-anchor routes by marginal gain per dollar, allowing loops. Greedy selection is not a proven optimum. The two speeds yield 48 scenarios: two cost cases × three overheads × four objective/ratio combinations × two speeds.
+7. **Export and inspect.** [`export_network.py`](analysis/rail/export_network.py) writes [`public/data/rail_network.json`](public/data/rail_network.json), including usefulness summaries. [`lines.py`](analysis/rail/lines.py) groups links by straightest continuation into named map lines. [`run_equity_network.py`](analysis/rail/run_equity_network.py) writes a separate equity analysis; the frontend reads [`public/data/rail_equity_v2.json`](public/data/rail_equity_v2.json).
+
+See [data contracts](data/) for schemas and reconciliation, and [model assumptions](docs/rail-model-assumptions.md) for the design history and unresolved evidence gaps.
+
+## Key findings under the model's assumptions
+
+These are results in the committed exports, not forecasts. The base case is **low cost, 20-minute overhead, minutes saved, 20 mph** at a **$10B budget**.
+
+- The base case builds **15 routes, 39 links and 10 visible named lines**, spending **$9.9972B**. **142,026** modeled commuters save at least 20 minutes, or **53.0% of 267,793** with a transit option in the modeled demand. This count rises to **162,292 at $15B** and **175,710 at $30B**: gains diminish after roughly $10–15B rather than reaching a hard ceiling.
+- Driving competitiveness remains low. At $10B, rail is within **2× driving for 24,095 of 763,549 modeled commuters (3.2%)**, and within **1.5× for 1,937 (0.25%)**. With 30 mph and otherwise the same assumptions, the counts are **61,268 (8.0%)** and **5,352 (0.7%)**. At $30B and 30 mph, **136,353 (17.9%)** meet the 2× comparison. This gives limited grounds to expect broad traffic relief; it does **not** establish how much traffic would change. There is no congestion or mode-choice simulation.
+- At $10B and 20 mph, the equity screen reaches **16.3% of households and 21.0% of no-vehicle households** at 2 km, versus **7.7% of households** for existing stations. “Reached” means the **tract centroid** lies within the radius; it is not a count of homes with a walkable path. Equity is never added to commute scores.
+- **Sunshine 3A, Meadow Woods–MCO**, is a documented candidate of **5.5 miles and $400M** in [`hub_links.py`](analysis/rail/hub_links.py), citing the FDOT TCAR and 2018 OIA study. No build step selects it in any of the **24 original 20 mph scenarios**, across either commute objective. Airport passenger and tourist trips are absent from the commute demand; non-selection is not an evaluation of those markets.
+
+The 763,549 comparison base equals the export's 267,793 jobs with transit plus 495,756 without transit. The app uses this base rather than summing its smaller commute-picker extract. It is not the entire regional workforce.
+
+## Limitations and assumptions
+
+- LODES counts **jobs, not unique people**. Confidentiality noise affects small flows, and a large employer's jobs can be concentrated at one workplace location.
+- Only jobs with both home and work inside the four counties enter the OD model: **1,006,088 of 1,467,549 jobs located there**. About **31%** have home ends outside the region and are excluded.
+- Scoring drops trips within one center or a merged station area. Other assignment, missing-time and routing-limit rules also narrow the modeled demand.
+- All assigned workers in a station's center are treated as served. This can overstate access: the separate 2 km equity screen reaches only about 16% of households in the base plan, and even that is a tract-centroid approximation.
+- There is no separate transfer penalty. The 10/20/30-minute overhead stands in for waiting and access; its decomposition into headway, access and transfer costs is not calibrated or sourced. Workers-connected results depend strongly on overhead and the competitiveness ratio.
+- “Minutes saved versus transit” compares available travel options, **not observed transit users**. LODES does not identify current travel mode, so the share of beneficiaries actually riding transit is unknown.
+- Driving is free-flow, without congestion, which can make rail compare less favorably. Parking, fuel costs and reliability are not modeled. Benefits for households without cars are reported through equity, not a combined score.
+- The baseline is one fall-2026 schedule snapshot. Blank router times do not prove no route exists; search limits, snapping and the clipped map extent matter. The Brightline feed's Event Train agency was not separated out.
+- Links are not surveyed alignments. Corridor matching, candidate centers, hub additions and station snapping are assumptions. Matches such as Conway and Taft need geographic review; they are not confirmed station sites.
+- Generic costs are planning-level and exclude stations, vehicles and station access; source dollar years are not fully harmonized. The documented **3A cost is an exception**, including right of way and trainsets. Comparing it with generic link costs is imperfect.
+- The Sunshine overlay is schematic, its Meadow Woods junction is inferred, and its 3B/3C segments have no commute scores. Neither this comparison nor the greedy build order establishes a preferred public project.
+- ACS estimates carry sampling error; tract-level values do not vary within a tract. Kontur population is a **modeled estimate, not a measured count**.
+
+## Data sources and rights
+
+[Data sources and provenance](docs/DATA_SOURCES.md) records filenames, vintages, hashes where available, processing and missing provenance. Principal sources are:
+
+- [Census LODES](https://lehd.ces.census.gov/data/) 8.4, 2023 OD and WAC jobs, and [ACS](https://www.census.gov/programs-surveys/acs) 2020–2024 population/equity estimates: public-domain US Census data.
+- [Kontur Population](https://data.humdata.org/organization/kontur), release 2023-11-01: modeled H3 population, CC BY attribution.
+- [LYNX GTFS](http://gtfsrt.golynx.com/gtfsrt/google_transit.zip), [SunRail GTFS](https://corporate.sunrail.com/about-sunrail/gtfs-data-download/) and [Brightline GTFS](http://feed.gobrightline.com/bl_gtfs.zip): agency terms apply; no blanket open license is recorded. Brightline acquisition also credits [Transitland](https://www.transit.land/).
+- [OpenStreetMap contributors](https://www.openstreetmap.org/copyright): ODbL; the routing extract was supplied through Geofabrik. [CARTO](https://carto.com/attributions) supplies the dark basemap.
+- **FDOT Sunshine Corridor TCAR Final Report (2024), Tables 13–15 and study-area figure**, and **SunRail Extension to OIA PD&E Study (2018)**: sources cited in the repository for the traced overlay and 3A candidate. Report URLs and a figure-reuse license are not recorded; these materials are not relicensed as project code.
+
+## Run it
+
+### Frontend
+
+Use **Node 22.12+** and npm. The committed `public/data/` exports let the map run without Python, a backend or an API key.
 
 ```sh
 npm ci
 npm run dev -- --host 0.0.0.0
 ```
 
+Open the local URL printed by Vite. A WebGL-capable browser and network access to CARTO's basemap resources are required; optional Google Fonts fall back to system fonts. Basemap/network failures are shown in the UI.
+
 ```sh
+npm run lint
 npm run check
+npm run test:usefulness
 npm run build
 npm run preview -- --host 0.0.0.0
 ```
 
-## Current milestone
+For browser tests, keep the dev server running in another terminal and install Playwright Chromium once:
 
-Full-screen MapLibre dark basemap constrained to Orange, Seminole, Lake, and Osceola counties, navigation and regional recenter controls, a default-on toggleable Census county layer, and an optional live Population layer and disabled placeholders for employment, income, and transit. Thin outlines have no visible fill; county names fade out between regional zoom and zoom 11. Hover or tap a county for its name and a subtle outline highlight. A persistent 99%-opaque dark mask hides the basemap and its labels outside the four counties. Turning the county layer off hides only outlines, county labels, and hover; the world mask and camera constraints stay active. The deck.gl Population overlay shows density-scaled columns, faint tract outlines, and click/tap inspection. Its legend documents the square-root height scale; zero-population tracts remain inspectable without a column. The population layer uses the supplied ACS dataset; no mock observations, rail optimization, or Gaussian splatting are included.
+```sh
+npx playwright install chromium
+npm run test:smoke
+npm run test:population
+npm run test:transit
+npm run test:hexagons
+npm run test:employment
+npm run test:equity
+npm run test:lynx
+npm run test:train-motion
+npm run test:candidates
+npm run test:flows
+npm run test:rail-plan
+npm run test:sunshine
+```
 
-The visual direction follows the supplied description of Common Ground: restrained typography, a dark geographic canvas, subtle cyan accents, and a compact research interface. The reference page was not accessible from the development environment.
+`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` can select an already-installed Chromium. Smoke suites use a controlled basemap fixture; they do not verify live tile availability. Vitest checks the browser router against exported reference ride times as well as speed selection and formatting.
 
-See [Data sources and provenance](docs/DATA_SOURCES.md) for current geographic sources.
+### Analysis
 
-## Architecture
+Run modules from the repository root. `python` below means the interpreter for the chosen environment; on Windows, `py -3.14` can be substituted. Scoring, corridor classification, network planning, named-line export and equity calculations use only the **Python standard library**. Data preparation additionally needs **h3 and dbfread**:
 
-- `src/components/`: interface components.
-- `src/map/`: MapLibre lifecycle and deck.gl overlay ownership.
-- `src/data/`: layer metadata, later data adapters.
-- `analysis/`: future Python/Pandas/GeoPandas pipelines.
-- `data/`: geographic data contracts and provenance guidance.
+```sh
+python -m pip install -r analysis/rail/requirements.txt
+# The legacy OD fixture in this discovery command also requires GDAL/OGR.
+python -m unittest discover -s analysis -p "test_rail*.py"
+```
 
-The basemap requires WebGL and external network access to CARTO (`basemaps.cartocdn.com`, `*.basemaps.cartocdn.com`) and resources referenced by its style. Map attribution is supplied by the provider (CARTO/OpenStreetMap). Optional Google Fonts use `fonts.googleapis.com` and `fonts.gstatic.com`; system fonts provide a fallback. Basemap labels are not project analytical datasets. Network/WebGL failures show an explicit message. No API key or backend is required.
+The requested rail-pattern test command still includes one legacy OD fixture that imports **GDAL/OGR**. It will fail without those bindings even though the OD reader and rail model are GDAL-free. For the model/center tests without that legacy fixture, use `python -m unittest discover -s analysis/rail -t . -p "test_rail*.py"`. The broader `python -m unittest discover -s analysis -p "test_*.py"` also requires GDAL for older county/tract preparation.
 
-## Next milestone
+Data-preparation entry points (these may download source files or write outputs; they are not needed to view the app):
 
-Document and acquire authoritative regional datasets, validate licenses/coverage/CRS and field meanings, then build reproducible Python ingestion and GeoJSON exports. Use the county layer as the geographic reference when adding the first validated demographic or transportation layer, with attribution and a legend, before analytical charts or optimization. Document model assumptions and data needs first. Linear regression is prohibited.
+```sh
+python -m analysis.rail.od --verify-only
+python -m analysis.rail.centers
+python -m analysis.rail.center_od
+```
 
-## Browser smoke checks
+`od --verify-only` downloads/caches the Census sources and checks the authoritative uncompressed reference without replacing it. Without that flag, OD writes `data/processed/lodes_od_hex8_2023.csv.gz` only after reconciliation. `centers` writes `candidate_centers.geojson`, `candidate_connections.geojson` and `candidate_connections_summary.json` in `data/processed/`. `center_od` writes `center_od_baseline.csv.gz`, `center_hex_access.csv.gz`, `center_od_unassigned.csv` and `center_od_sensitivity.json` there.
 
-With the dev server running, run `npx playwright install chromium` once, then `npm run test:smoke`, `npm run test:candidates`, `npm run test:flows`, `npm run test:rail-plan`, and `npm run test:sunshine`. To use an installed Chromium instead, run `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:smoke`.
+Routing needs a separate environment:
 
-The smoke check substitutes an empty test-only basemap style but loads the real generated Census geometry. It checks phone (390 px), laptop (1440 px), and ultrawide (2560 px) camera constraints, county toggle, hover, label fading, attribution, disabled analytical controls, sidebar keyboard access, and data/resource failures. It does **not** validate live geographic tiles. No fixture data appears in the application.
+```sh
+python -m pip install -r analysis/rail/requirements-routing.txt
+python -m analysis.rail.baseline_times
+```
 
-Current environment validation: TypeScript, production build, browser smoke checks, and four Python data checks passed. External CARTO tiles are not exercised by the smoke suite. Separately, live-basemap screenshots validated both presets at 390×844, 1440×900, and 2560×1080; capture used the platform proxy through TLS-verified curl resource forwarding. The county pipeline uses only the supplied local ZIP and no network requests. Vite reports a large mapping-library bundle; future performance work should measure and split it as needed.
+That command is **Colab-configured, not ready to run on an arbitrary checkout**: first supply the GTFS/OSM inputs and the mounted storage expected by `DRIVE` in the script. It requires Java 21+, r5py, geopandas, h3, shapely and pandas; routing dependency versions are unpinned. It saves batches and writes `data/processed/baseline_travel_times.csv.gz`. Full routing is slow, particularly driving. See the [baseline contract](data/BASELINE_TRAVEL_TIMES_CONTRACT.md); the committed baseline can be reused without rerouting.
 
-## Four-county Census boundaries
+With the committed preparation inputs, the current model commands are:
 
-Source: [U.S. Census Bureau 2025 cartographic county boundaries, 1:500,000](https://www2.census.gov/geo/tiger/GENZ2025/shp/cb_2025_us_county_500k.zip). Vintage: **2025**. Original download date: **October 12, 2026 at 11:11 PM America/New_York**, supplied by the repository owner. The raw ZIP is supplied on `data/county-boundaries`; the pipeline never downloads data.
+```sh
+python -m analysis.rail.links
+python -m analysis.rail.run_network
+python -m analysis.rail.run_network --grid
+python -m analysis.rail.run_network --grid30
+python -m analysis.rail.export_network
+python -m analysis.rail.run_equity_network
+```
 
-Run `/usr/bin/python3 analysis/prepare_counties.py` from the repository (Python with GDAL/OGR bindings required; the cloud image already provides them). It filters GEOID 12069 (Lake), 12095 (Orange), 12097 (Osceola), and 12117 (Seminole), reprojects to NAD83 / UTM zone 17N, simplifies at 75 metres while preserving each geometry's topology, validates geometries, and exports WGS84 GeoJSON plus source metadata and a SHA-256 of the input ZIP to `public/data`. This cartographic product is for regional visualization, not surveying.
+- `links` writes `data/processed/link_classes.csv` from the candidate connections, rail geometry and passenger shapes.
+- `run_network` prints a base-case comparison; `--grid` writes `data/processed/rail_scenarios_v2.json`, and `--grid30` writes `rail_scenarios_v2_s30.json`. Each grid evaluates 24 scenarios and can take minutes. The current `--grid` entry point also prints the base comparison after writing its grid.
+- `export_network` reads both grids and the existing preparation files, including legacy `public/data/rail_plan.json`, then writes `public/data/rail_network.json` and computes usefulness summaries. It does not recreate all upstream inputs.
+- `run_equity_network` reads the network, ACS tract data and raw ACS population input; it writes **`data/processed/rail_equity_v2.json`**. Publishing it to `public/data/` is a separate reviewed copy, not automatic. Recomputing against the current network would cover 48 scenarios; the committed frontend equity file contains 24.
 
-Map bounds are computed from the exported coordinates, with just 1% padding for `maxBounds`. The default Orlando camera fits named approximate anchors for downtown, UCF, MCO, Disney Springs, and International Drive in `src/config/mapViews.ts`; these are camera configuration, not analytical data. The “Orlando” button restores this view. “Four counties” flies to the regional overview at the dynamically calculated minimum zoom, accounting for viewport size and sidebar space. Resize and orientation changes recalculate the minimum. Mobile starts with the sidebar collapsed. Rotation/pitch are disabled.
+`stations.py` is an upstream helper, not a portable no-argument setup command: supply the plan JSON and the two extracted GTFS `stops.txt` paths as its three positional arguments. Raw feeds, map extracts and routing chunks are not all distributed with the repository. Contracts document required inputs; do not assume that a fresh checkout can regenerate the entire pipeline without obtaining them.
 
-MapLibre's supported `setTransformConstrain` hook constrains the camera center to the padded county bounds without its normal viewport-filling zoom adjustment. This allows the entire tall county region to fit an ultrawide viewport; extra screen space is darkly masked instead of expanding the explorable world. The minimum zoom remains the `cameraForBounds` result. User exploration is preserved across resize where possible; active preset views are refitted.
+## Repository map
 
-The same script unions the simplified counties and subtracts that union from a display-world rectangle to generate `outside-counties.geojson`; it does not draw substitute county boundaries. Labels use interior points derived from each county geometry. Simplification preserves each polygon's topology, but this is a cartographic display product, not a survey or a coverage suitable for geographic analysis.
+```text
+src/                 React controls, data adapters and MapLibre/deck.gl rendering
+analysis/rail/       Demand preparation, routing, scoring, planner and exports
+data/processed/     Prepared analytical inputs and outputs
+public/data/         Browser-delivered exports
+data/                Data contracts and editorial center labels
+scripts/             Node adapter tests and Playwright smoke checks
+docs/                Provenance, assumptions and screenshots
+```
 
-Run `/usr/bin/python3 analysis/test_counties.py` for four checks: exact FIPS/names, valid geometries and interior labels, mask exclusion of county interiors, and byte-for-byte reproducibility plus input checksum. Pipeline validated with GDAL 3.10.3. Outputs are committed, so frontend development requires no Python setup.
+## Credits and status
 
-Population validation (dev server running): `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium npm run test:population`. This verifies scale/centroid calculations and real-data inspection on phone and laptop, including the zero-population tract, toggle cleanup, load failure, and retry.
+A UCF COP4283 student project, built with **Codex-assisted development and Claude-assisted analysis**. The connected-network planner and interactive comparison are implemented; provenance gaps, service assumptions and geographic validation remain limitations rather than completed engineering work.
 
-Equity is an independent layer with ACS 2020–2024 no-vehicle household share,
-poverty share and median household income. Its five-class quantile choropleth
-stays flat in both camera modes, below Population/Employment and transit.
-Use the measure and tract selectors or click/tap a tract; collapse the Equity
-legend to make more room on small screens. Gray marks missing values, dimmer
-tracts have fewer than 100 households, and brighter colors indicate higher need
-(lower income for the income measure). Shares are estimates with sampling error.
+[GitHub Actions CI](.github/workflows/ci.yml) runs lint, Vitest usefulness tests, TypeScript and the production build on pull requests to `main` and pushes to `main`. Browser suites and Python tests are separate checks, not part of that workflow. ESLint currently covers selected rail/usefulness modules, not the entire legacy application.
 
-Kontur Population uses a display-only emphasis curve to reveal hotspots. The
-emphasis slider ranges from a 40th- to an 80th-percentile floor and power 1.6–4;
-default 50% uses the 60th-percentile floor and power 2.8. The ceiling is the
-95th percentile. Values below the floor map to at most 0.002; values above the
-ceiling map to 1. The selected linear, square-root or normalized-log transform
-is applied before the power curve. Height, color and opacity share that result.
-This changes the display, never the modeled population values.
+For Vercel, the build command is `npm run build` and the static output directory is `dist`. No live-site URL or Vercel deployment configuration is recorded in the repository; these are deployment settings, not confirmation of a running deployment.
 
-In 3D, tapered needles share Employment's tip-fading shader, with 0.8-pixel
-base radii at width 0.35. Height is 4,000 display metres × exaggeration × display
-value, with an 8 m × exaggeration floor for positive values; default exaggeration
-is 1×. Only the top 10% receive a faint halo. The 3D very-dark-teal → neon cyan-green ramp
-and bounded alpha blending prevent Population overlaps from clipping to white.
+## License
 
-Population's flat view uses a quiet blue-grey to violet-grey percentile-stretched ramp (lighter means more modeled people per hexagon), without glow. Its density opacity runs from 5% to 35%, multiplied by 60% while the proposed rail plan is visible. In Population → Population display settings, **Population opacity** overrides that multiplier; **Use automatic opacity** restores rail-aware dimming. The 3D palette and Employment styling are unchanged.
-In 2D, small soft circles use the same display value for radius and color.
-Basemap labels stay above the data. Controls and inspectors remain usable with
-Employment enabled. All 7,896 source hexagons remain inspectable, including faint
-low values; the H3 IDs, centers and data are unchanged. These are modeled estimates,
-not measured counts. The ACS tract rendering remains unchanged.
-
-### Illustrative train motion
-
-Turn on **Rail · SunRail / Brightline** under Existing transit to reveal the
-optional **Train motion** toggle and **Pause / Play** button. Motion starts off,
-including when `prefers-reduced-motion` is set. Use Space to toggle the checkbox
-and Space or Enter on the pause/play button. Enabling reduced motion while it
-runs switches motion off; explicit opt-in remains available. Hiding rail or
-turning motion off removes the animated layer; the underlying lines, stations
-and inspectors retain their existing behavior.
-
-**Illustrative train motion. Not real schedules.** Three short, translucent cyan
-trails per line path run in a simple one-way loop, restarting at the beginning.
-Their fixed decorative speed and spacing do not represent frequency, ridership,
-schedules or analysis. Settings are named in `src/map/trainMotion.ts`.
-Timestamps are precomputed from distances along the existing GeoJSON paths;
-no new data files are created. Motion sits above the rail lines and below
-station markers, labels and county outlines. Pause preserves position, hidden
-tabs do not advance the clock, and unmount cancels animation and clears layers.
-
-### Candidate connections
-
-Under **Model candidates**, enable **Candidate connections** (off by default).
-Amber circles are sized by the square root of workplace jobs, bounded to 3–11
-pixels; faint pale arcs have uniform width and do not encode importance. These
-static layers sit below labels, work in flat or pitched views, and can coexist
-with Population and Employment. Hover highlights; click a center or arc to open
-its sidebar inspection. The **Inspect candidate center** and **Inspect candidate
-connection** selectors offer the same information by keyboard, including each
-center’s neighbors and connected group. No animation or hover transitions run.
-
-Expand **Assumptions and sources** for the summary-derived parameters and source
-links. Counts and shares come from the supplied summary; disconnected groups are
-computed from the loaded connections. Population is a modeled estimate, not a
-measured count. These candidates are built independently of existing plans.
-Straight lines are not routes, ignore water and terrain, and imply no costs,
-speeds or ridership. The flagged Disney-area cell is preserved; the sidebar
-separately identifies the actual largest WAC cell from the summary rather than
-confusing it with the OD hotspot. Employer location assignment is a possibility
-to check, not a finding.
-
-The two candidate GeoJSON files and `candidate_connections_summary.json` in
-`public/data/` are byte-identical copies of PR #42’s processed outputs; no analysis
-is rerun. All three files are validated together. Missing or inconsistent files
-produce a visible sidebar error and Retry button, with no partial candidate
-layer. `npm run test:candidates` checks delivery, validation, graph topology,
-keyboard/pointer inspection, failures, cleanup and demand-layer coexistence on
-phone and laptop. Browser tests use a controlled basemap fixture; this does not
-verify live basemap availability.
-
-### Place names and top commute flows
-
-**Place names are editorial labels** supplied by the author in
-`data/center_labels.csv`. Names lead candidate selectors and panels; IDs remain
-secondary. Missing names display **Unnamed center**, with a sidebar report.
-Missing or invalid label files show an error and Retry without discarding valid
-map geometry. Notes/confidence are editorial metadata, not analytical findings.
-
-Enable **Top commute flows** under **Commute demand** independently of
-**Candidate connections**. Choose 5, 10 or 20 combined bidirectional pairs.
-Coral arc widths scale with √jobs; these are commute summaries, not routes or
-rail proposals. Intra-center jobs are reported but not drawn. Ordered-list ranks
-include intra-center pairs, so some numbers are skipped. Click a line or press
-Enter/Space on its ranked-list button to inspect both directions and a computed
-“Why it stands out” explanation. Expand the assignment-radius section to compare
-3/5/8 km coverage. Population, Employment and candidates can remain enabled in
-flat or pitched views; existing narrow-screen demand panels still occupy map space.
-
-Combined mean times use **usable-job counts for each mode**, not all jobs or an
-unweighted average of directions. Driving is free-flow, without congestion;
-“today” means the stored baseline snapshot, not live service. A blank time alone
-does not establish no route. Small flows carry Census privacy noise, and results
-depend on assignment radius. Jobs are not unique people or predicted riders.
-Access distance is not charged as time. The Disney caveat is based on center
-membership, and direct candidate linkage is looked up in the existing edges.
-
-Place labels are limited to top-flow endpoints and centers with at least 20,000
-workplace jobs, with zoom gates and screen-space collision handling that gives
-basemap symbols priority. Some map names are hidden to avoid clutter; all remain
-available in the controls. No animation or hover transitions are added.
-`npm run test:flows` (dev server running) validates the adapters and browser
-behavior. A modern browser supporting `DecompressionStream('gzip')` is required.
-See [the frontend data contract](data/TOP_COMMUTE_FLOWS_CONTRACT.md) for source
-schemas, denominators, display constants and limitations.
-
-### Connected rail network
-
-Enable **Proposed rail network** for a named-line transit map. The app reads
-`public/data/rail_network.json` and `rail_equity_v2.json`; the legacy `rail_plan.json`
-is retained but is no longer requested. Default: $10B, low cost, 20-minute wait/access
-overhead, minutes saved, **Schematic**. Budget stops include each completed build
-step and the published budgets. Budget and actual spend are shown separately.
-
-Right-side layer controls and inspection panels share one opaque, independently
-scrolling accordion, clear of the basemap badge and bottom map controls. Opening
-one section closes the others; Rail network opens by default when enabled. Layer
-settings remain intact when their section closes. With Rail network open,
-Population's 3D columns are hidden by default; **Show population** restores them.
-Closing Rail network restores the population display; its 2D rendering is unchanged.
-
-The **How useful is this plan?** headlines use the supplied `usefulness` snapshots:
-commuters saving 20+ minutes and rail trips within 2× free-flow driving time. This is
-not a traffic forecast. Details contains cumulative 10+/20+/30+ bars, the 1.5× driving
-comparison, top improved pairs (five initially, all eight on request), and a commute
-picker. Large counts round to the nearest hundred; percentages use exact counts.
-The transit base is 267,793. The supplied all-commuters base is 763,549, used as a
-named fallback until an explicit `workers_with_drive_time` denominator is supplied.
-The smaller lookup table is not used to derive that denominator.
-
-Select **Train speed** beside wait/access: 20 mph is the default assumption; 30 mph
-is the top tested speed. The latter selects a `-s30` scenario and `minutes_s30` for
-new links. Existing rail travel times stay fixed. Browser Dijkstra uses existing
-links plus fully built links, then adds wait/access overhead once per trip. Choosing
-a top pair or From/To draws the rail path and highlights both ends in either drawing
-style. No path is shown for disconnected pairs. Baseline times are worker-weighted
-means of repeated lookup rows; missing transit rows are excluded from the transit
-mean and their coverage is stated. An absent lookup does not prove no real-world
-route exists. Same-node trips have zero rail ride plus the selected overhead.
-
-The lookup currently has 8,938 rows totaling 415,048 workers; it is an extract, not
-the 763,549-worker percentage base. Top-pair values are shown as supplied, not
-recomputed. Summaries at unpublished slider stops are reused only for exactly the
-same built links; otherwise they are explicitly unavailable. The equity file has
-only the 24 original scenarios, so unavailable 30 mph equity is not invented.
-
-Station names retain parentheses when
-stripping them would make visible names ambiguous. Distinct station IDs remain
-separate, including Sand Lake Rd/Road; collision priority still suppresses labels.
-Proposed line cores are fully opaque except when another line is emphasized in
-Lines. Closing Lines or Rail network clears that emphasis.
-
-Line names and palette indices come from the scenario and stay fixed as the budget
-changes. The Lines list contains only lines with built links; hover or keyboard
-focus emphasizes a line. Core network only filters the drawing to built links in
-the intersection of all $10B minutes-saved scenarios. The summary still describes
-the full selected plan. Build-order buttons highlight/focus their new links; budget
-increases briefly emphasize additions, except with reduced motion enabled.
-
-Geographic links use the supplied straight geometry. Schematic links use an
-orthogonal/45-degree Web Mercator path with the straight run beside the smaller
-endpoint ID. Station coordinates never move, and geometry does not change scores,
-lengths, costs or travel times. Schematic mode uses the shared baseline rail
-renderer with slightly thicker rounded lines. Native basemap text is dimmed and
-its appearance delayed by two zoom levels; original settings return when changing
-to Geographic or disabling the plan.
-
-Existing stations remain small grey reference markers when not touched by built
-links. Interchanges (multiple lines, or existing stations touched by construction)
-are white rings; termini are filled markers and pass-through stations are small
-dots. Priority labels omit parenthetical text only when names remain unambiguous; pass-through labels wait until zoom
-12. Colliding labels can be hidden; the Details selector retains station names.
-
-The shared accordion keeps budget, assumptions and usefulness headlines together.
-Drawing style, the population override and the connected-objective ratio live in
-Details. One collapsed Details section contains bars, improved commutes, the picker, Lines,
-Build order, both equity radii, the existing-stations benchmark, caveats and source
-notes. Equity snapshots are used only for matching built networks, without
-interpolation. Equity and commute measures are never added together. No transfer
-penalties or surveyed routes are implied by the transit-map appearance.
-
-`npm run test:rail-plan` checks all 48 scenarios, reference totals, unique link/line
-ownership, monotonic budgets, exact schematic endpoints and octilinearity, core and
-station roles, controls, errors, compact layout and native-label restoration.
-Invalid link ownership produces a visible error and no proposed-network drawing.
-
-### Sunshine Corridor comparison
-
-**Sunshine Corridor (FDOT proposal)** remains light red, off by default, using the
-same baseline rail rendering and its existing inspection popup. When enabled, its
-compact comparison is in the network panel: four rows for cost, route miles,
-minutes saved and workers connected. Full wording is in tooltips and Details.
-Unscored Sunshine measures and inactive SOL/R objectives show **n/a**; switching
-objectives selects a different network rather than adding the two scores.
-
-FDOT's program cost is $3.543–4.787B, including undrawn 3A and 3D. Drawn 3B+3C
-mileage is 17.2 TCAR miles (17.0 traced miles), not full-program mileage. Costs are
-not directly comparable with SOL/R's per-link estimates. Full source notes,
-schematic-geometry caveats and the Sunshine selector now live in Details.
-Station cost/length fields remain explicitly unavailable. `npm run test:sunshine`
-checks the unchanged overlay and the compact comparison with the new network.
-
-Frontend usefulness validation: `npm run test:usefulness` runs Vitest against all
-12 supplied routing references (ride time tolerance 0.05 minutes), plus speed,
-formatting, disconnected, baseline-weighting and snapshot fixtures. CI runs this
-suite, `npm run lint`, TypeScript and the build. ESLint covers the new usefulness
-modules and the rail modules changed for this feature. `npm run test:rail-plan`
-also exercises the usefulness panel in Chromium on laptop and phone.
+Project code is available under the [MIT License](LICENSE). Data and map content retain their own rights: OpenStreetMap contributors under ODbL; LODES and ACS public domain; Kontur attribution under CC BY; GTFS per agency terms; and FDOT Sunshine Corridor figures cited as the source of the traced overlay. The MIT license does not grant rights to third-party datasets, tiles or report figures.
